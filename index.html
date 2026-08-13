@@ -603,20 +603,20 @@
     const evidenceClass = (evidence) => evidence.status === "verified" ? "verified" : "needs-check";
     const rentPrice = (location) => {
       const evidence = evidenceFor(location, "stay");
-      return evidenceHasAnyPrice(evidence) ? (evidence.status === "verified" ? evidence.price : "PARTIAL — " + evidence.price) : "NOT VERIFIED — open housing source";
+      return evidenceHasAnyPrice(evidence) ? (evidence.status === "verified" ? evidence.price : "PARTIAL — " + evidence.price) : "USD PRICE NOT VERIFIED — open housing source";
     };
     const movementPrice = (location) => /island|Philippines|Indonesia/i.test(location.area + " " + location.country) ? "$5–$20 / day local rides" : /Thailand|Vietnam|Cambodia|Georgia/i.test(location.country) ? "$3–$15 / day local rides" : "$4–$18 / day local rides";
     const socialPrice = (location) => {
       const evidence = evidenceFor(location, "social");
-      return evidenceHasAnyPrice(evidence) ? (evidence.status === "verified" ? evidence.price : "PARTIAL — " + evidence.price) : "NOT VERIFIED — open social source";
+      return evidenceHasAnyPrice(evidence) ? (evidence.status === "verified" ? evidence.price : "PARTIAL — " + evidence.price) : "USD PRICE NOT VERIFIED — open social source";
     };
     const sampleDayPrice = (location) => {
       const food = evidenceFor(location, "food");
       const activity = evidenceFor(location, "activity");
-      if (!evidenceHasPrice(food) || !evidenceHasPrice(activity)) return "NOT VERIFIED — live anchors missing";
+      if (!evidenceHasPrice(food) || !evidenceHasPrice(activity)) return "USD PRICE NOT VERIFIED — live anchors missing";
       const foodValue = Number((food.price.match(/\$([0-9]+(?:\.[0-9]+)?)/) || [0, 0])[1]);
       const activityValue = Number((activity.price.match(/\$([0-9]+(?:\.[0-9]+)?)/) || [0, 0])[1]);
-      return "$" + Math.round(foodValue + activityValue).toLocaleString() + " live food + activity anchors";
+      return "DERIVED PLANNING TOTAL — $" + Math.round(foodValue + activityValue).toLocaleString() + " (food + activity only)";
     };
     const priceChip = (label, value) => '<div class="slide-price"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></div>';
     const sourceButtons = (location, kind) => {
@@ -653,7 +653,7 @@
     };
     const photoSlide = (location, kind, title, copy, labels, price) => labels.map((label, index) => {
       const evidence = evidenceFor(location, kind);
-      const livePrice = evidenceHasAnyPrice(evidence) ? evidence.price : "NOT VERIFIED — open source";
+      const livePrice = evidenceHasAnyPrice(evidence) ? evidence.price : "USD PRICE NOT VERIFIED — open source";
       const qualifier = evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ";
       const chipLabel = qualifier + (kind === "stay" ? "HOUSING" : kind === "social" ? "SOCIAL" : kind === "food" ? "MEAL" : kind === "gym" ? "GYM" : "ACTIVITY");
       return '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / MEETUP" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + labels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, label, index) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(title) + '</h2>' + priceChip(chipLabel, livePrice) + '<p class="slide-copy">' + escapeHtml(copy) + '</p>' + evidenceCard(location, kind, label) + '</div></div></div></article>';
@@ -702,14 +702,14 @@
       return '<div class="budget-card"><h3><span>$' + total.toLocaleString() + '</span><span>' + (total === 2000 ? location.scores.budget2k.toFixed(1) : location.scores.budget3k.toFixed(1)) + '/10</span></h3><div class="budget-lines"><div class="budget-line"><span>' + rentLabel + '</span><strong>' + money(rent) + '</strong></div><div class="budget-line"><span>food / cafes plan</span><strong>' + money(food) + '</strong></div><div class="budget-line"><span>transport plan</span><strong>' + money(transport) + '</strong></div><div class="budget-line"><span>gym / training plan</span><strong>' + money(gym) + '</strong></div><div class="budget-line"><span>phone + misc plan</span><strong>' + money(phone) + '</strong></div><div class="budget-line"><span>medical reserve</span><strong>' + money(medical) + '</strong></div><div class="budget-line remaining"><span>trips / buffer / upgrades</span><strong>' + money(buffer) + '</strong></div></div></div>';
     };
     const budgetSlide = (location) => '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">This is a transparent planning model: a housing input plus food, transport, training, phone/misc, and a $500 medical reserve. Only housing is replaced with a source-backed input when one exists; the other lines remain planning estimates.</p>' + priceChip("MONTHLY PLAN", "$2,000 or $3,000 modeled") + '<div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Budget scores answer “how much margin remains?” They do not mean the lifestyle is guaranteed at that spend. Unverified categories are deliberately not presented as live prices.</p></div></article>';
-    const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p>' + priceChip("LIVE ANCHORS", sampleDayPrice(location)) + '<div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' This setup is a lead to test against the live source cards, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a><a class="source-link secondary" href="' + escapeHtml(evidenceFor(location,"activity").url) + '" target="_blank" rel="noopener noreferrer">Open activity source ↗</a></div></div></div></article>';
+    const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p>' + priceChip("DERIVED / PLANNING", sampleDayPrice(location)) + '<div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' This setup is a lead to test against the live source cards, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a><a class="source-link secondary" href="' + escapeHtml(evidenceFor(location,"activity").url) + '" target="_blank" rel="noopener noreferrer">Open activity source ↗</a></div></div></div></article>';
 
     const buildSlides = (location) => ratingSlide(location)
       + photoSlide(location,"stay","A house that gives the life a chance","Listing: " + location.stay + ". The source card tells you whether the current place and price are verified for the selected window.",["living room / furnished base","bedroom / long-stay feel","kitchen / work surface","terrace / outside space"],rentPrice(location))
       + photoSlide(location,"social","The people are part of the address","Lead: " + location.social + ". The social source is shown as verified only when a dated event/venue image and current cost are available.",["run / climbing / surf visual","community / hangout visual"],socialPrice(location))
       + photoSlide(location,"food","Good food without turning every meal into a project","Named lead: " + location.restaurant + ". The meal card carries the source menu price in USD when available.",["restaurant interior visual","dish / menu visual"],location.dishPrice)
       + photoSlide(location,"gym","Train hard, recover intelligently","Named lead: " + location.gym + ". Gym imagery and membership price stay visibly unresolved until a current source pair is found.",["training floor visual","recovery / outdoor fitness visual"],location.gymPrice)
-      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked. The base map is real geography; the pins are named planning leads with an OpenStreetMap link each.</p>' + priceChip("LOCAL MOVEMENT", movementPrice(location)) + makeMap(location) + '</div></article>'
+      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked. The base map is real geography; the pins are named planning leads with an OpenStreetMap link each.</p>' + priceChip("LOCAL MOVEMENT", "PLANNING ESTIMATE — " + movementPrice(location)) + makeMap(location) + '</div></article>'
       + budgetSlide(location)
       + daySlide(location);
 
@@ -783,15 +783,22 @@
     autoButton.addEventListener("click", () => { state.mode = state.mode === "auto" ? "paused" : "auto"; updateControls(); if (state.mode === "auto") startTimer(); else stopTimer(); });
     progress.addEventListener("click", (event) => { const dot = event.target.closest(".dot"); if (dot) goTo(Number(dot.dataset.slide), true); });
     const clearHold = () => { if (holdTimer) window.clearTimeout(holdTimer); holdTimer = null; };
-    viewport.addEventListener("pointerdown", (event) => {
+    const startHold = (event) => {
       if (event.target.closest("button,a")) return;
+      if (holdTimer) return;
       holdFired = false;
-      clearHold();
       holdTimer = window.setTimeout(() => { holdFired = true; pauseForHold(); }, 450);
-    });
+    };
+    viewport.addEventListener("pointerdown", startHold);
+    viewport.addEventListener("mousedown", startHold);
+    viewport.addEventListener("touchstart", startHold, {passive:true});
     viewport.addEventListener("pointerup", clearHold);
+    viewport.addEventListener("mouseup", clearHold);
+    viewport.addEventListener("touchend", clearHold);
     viewport.addEventListener("pointercancel", clearHold);
+    viewport.addEventListener("touchcancel", clearHold);
     viewport.addEventListener("pointerleave", clearHold);
+    viewport.addEventListener("mouseleave", clearHold);
     viewport.addEventListener("keydown", (event) => { if (event.key === "ArrowRight") goTo(state.slide + 1, true); if (event.key === "ArrowLeft") goTo(state.slide - 1, true); if (event.key === " ") { event.preventDefault(); autoButton.click(); } });
     document.addEventListener("keydown", (event) => { if (cinema.hidden) return; if (event.key === "Escape") closeCinema(); });
     window.addEventListener("hashchange", () => { const slug = window.location.hash.slice(1); if (slug) openLocation(slug); else closeCinema(); });
