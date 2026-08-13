@@ -258,7 +258,17 @@
       .cinema-controls { padding-inline: 12px; }
       .control-button { min-width: 0; flex: 1; font-size: 12px; }
       .map-frame, .map-stage, .osm-embed, .static-map { min-height: 0; }
-      .map-side { grid-template-columns: 1fr; }
+      .map-side { grid-template-columns: repeat(2, minmax(0,1fr)); overflow: visible; }
+      .map-legend { min-height: 35px; padding: 4px; gap: 4px; }
+      .map-legend .marker { width: 18px; height: 18px; font-size: 8px; }
+      .map-legend strong { font-size: 8px; }
+      .map-legend span { font-size: 7px; line-height: 1.08; }
+      .map-side .source-link { grid-column: 1 / -1; }
+      .slide[data-slide-kind="map"] .map-note { display: none; }
+      .slide[data-slide-kind="map"] .map-frame { flex: 0 0 170px; }
+      .slide[data-slide-kind="map"] .map-frame,
+      .slide[data-slide-kind="map"] .map-stage,
+      .slide[data-slide-kind="map"] .osm-embed { height: 170px; max-height: 170px; }
       .evidence-card { grid-template-columns: 1fr; }
     }
   </style>
