@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
   <style>
     :root {
       --ink: #07120f;
@@ -283,6 +285,101 @@
       .slide[data-slide-kind="map"] .osm-embed { height: 170px; max-height: 170px; }
       .evidence-card { grid-template-columns: 1fr; }
     }
+
+    /* Remake QA overrides: the cinema owns the viewport, while controls stay in
+       normal flow. This prevents the controls from hiding slide content. */
+    .cinema-controls {
+      position: relative;
+      inset: auto;
+      flex: 0 0 auto;
+      padding: 7px 22px 9px;
+      border-top: 1px solid var(--line);
+      background: rgba(5,17,13,.98);
+      pointer-events: auto;
+    }
+    .slide-viewport { touch-action: pan-y; }
+    .slide { padding: 12px 5vw 8px; }
+    .slide-inner { justify-content: flex-start; }
+    .slide[data-slide-kind="verdict"] .slide-inner { overflow: hidden; }
+    .slide[data-slide-kind="verdict"] .hero-grid { height: auto; flex: 0 0 auto; }
+    .hero-image img, .photo-card img { cursor: zoom-in; }
+    .hero-image .media-trigger { height: 100%; }
+    .hero-image .media-trigger img { height: 100%; }
+    .media-trigger { display: block; width: 100%; padding: 0; border: 0; color: inherit; background: transparent; text-align: left; }
+    .media-trigger:focus-visible { outline: 2px solid var(--lime); outline-offset: -2px; }
+    .evidence-empty { aspect-ratio: 16 / 10; min-height: 150px; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 18px; background: linear-gradient(145deg, rgba(38,64,52,.9), rgba(10,24,19,.96)); }
+    .evidence-empty strong { color: var(--orange); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; }
+    .evidence-empty span { color: var(--muted); font-size: 11px; line-height: 1.35; }
+    .image-source-note { color: var(--muted); font-family: var(--mono); font-size: 8px; line-height: 1.25; }
+    .leaflet-map { width: 100%; height: 100%; min-height: 270px; background: #dce9d8; }
+    .leaflet-container { font-family: var(--sans); }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #10261f; color: var(--paper); }
+    .leaflet-popup-content { margin: 9px 11px; font-size: 11px; line-height: 1.35; }
+    .leaflet-popup-content a { color: #07120f; background: var(--mint); border-radius: 999px; padding: 4px 7px; text-decoration: none; display: inline-block; margin-top: 5px; font-family: var(--mono); font-size: 9px; }
+    .map-stage { min-height: 270px; }
+    .map-hold-layer { display: none; }
+    .map-overlay { display: none; }
+    .map-layout { min-height: 0; }
+    .map-frame { min-height: 270px; }
+    .map-side { overflow: auto; }
+    .map-legend { flex: 0 0 auto; min-height: 60px; }
+    .map-note { display: block !important; }
+    .budget-source { display: inline-block; margin-top: 8px; color: var(--lime); font-family: var(--mono); font-size: 8px; text-decoration: none; }
+    .budget-source:hover, .budget-source:focus-visible { text-decoration: underline; outline: none; }
+    .lightbox[hidden] { display: none; }
+    .lightbox { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; background: rgba(2,10,8,.97); padding: 12px; }
+    .lightbox-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 0 0 auto; }
+    .lightbox-toolbar p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.25; flex: 1; }
+    .lightbox-button { min-width: 38px; height: 38px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--paper); background: rgba(255,255,255,.08); font-family: var(--mono); font-size: 14px; }
+    .lightbox-button:hover, .lightbox-button:focus-visible { color: var(--ink); background: var(--mint); outline: none; }
+    .lightbox-stage { min-height: 0; flex: 1; display: grid; place-items: center; overflow: auto; padding: 12px 0; }
+    .lightbox-stage img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center; transition: transform .15s ease; border-radius: 10px; }
+    @media (max-width: 620px) {
+      .cinema-header { min-height: 67px; }
+      .cinema-controls { padding: 6px 10px 8px; }
+      .progress-row { margin-bottom: 5px; gap: 4px; }
+      .dot { width: 7px; height: 7px; }
+      .dot.is-active { width: 18px; }
+      .control-button { height: 40px; }
+      .status-row { margin-top: 4px; min-height: 13px; font-size: 9px; }
+      .hold-tip { margin-top: 2px; font-size: 9px; }
+      .slide { padding: 8px 12px 6px; }
+      .slide[data-slide-kind="verdict"] .hero-grid { gap: 7px; }
+      .hero-image { height: 150px; min-height: 0; max-height: 150px; }
+      .hero-panel .big-number { font-size: 29px; margin: 4px 0 0; }
+      .hero-panel .slide-copy { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-bottom: 4px; }
+      .verdict { margin: 5px 0; padding: 5px 0 5px 8px; font-size: 10px; line-height: 1.22; }
+      .evidence-summary { margin-top: 5px; gap: 3px; }
+      .evidence-summary .status-pill { font-size: 7px; padding: 4px 5px; }
+      .hero-panel .source-row { margin-top: 5px; gap: 4px; }
+      .hero-panel .source-link { font-size: 7px; padding: 5px 6px; }
+      .rating-grid { margin: 6px 0 0; gap: 4px; }
+      .rating-card { padding: 6px 5px; }
+      .rating-card strong { font-size: 16px; }
+      .photo-single { gap: 6px; }
+      .photo-single .photo-card img, .photo-single .evidence-empty { aspect-ratio: 16 / 8.5; max-height: 170px; min-height: 0; }
+      .photo-single-copy > .slide-copy { -webkit-line-clamp: 2; font-size: 11px; line-height: 1.18; }
+      .photo-card figcaption { padding: 6px 8px 7px; }
+      .photo-card figcaption strong { font-size: 11px; }
+      .evidence-card { padding: 7px; }
+      .evidence-card h3 { font-size: 11px; }
+      .evidence-card p { font-size: 9px; line-height: 1.18; }
+      .evidence-card .source-link { font-size: 7px; padding: 5px 6px; }
+      .map-layout { gap: 6px; }
+      .map-frame, .map-stage, .leaflet-map { height: 235px; min-height: 235px; }
+      .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 4px; overflow: hidden; }
+      .map-legend { min-height: 47px; padding: 5px; gap: 4px; }
+      .map-legend .marker { width: 20px; height: 20px; font-size: 8px; }
+      .map-legend strong { font-size: 8px; }
+      .map-legend span { font-size: 7px; line-height: 1.1; }
+      .map-pin-source { font-size: 6px; }
+      .map-note { font-size: 8px; line-height: 1.15; }
+      .budget-line { display: flex; font-size: 7px; }
+      .budget-line strong { display: inline; font-size: 9px; margin-top: 0; }
+      .budget-card { padding: 7px; }
+      .budget-card h3 { font-size: 14px; }
+      .day-card p { font-size: 8px; }
+    }
   </style>
 </head>
 <body>
@@ -295,7 +392,7 @@
       </div>
       <aside class="masthead-note">
         <strong id="place-count">21</strong>
-        <p>places • 14 no-scroll slides each • USD prices on every slide • live evidence checked 2026-08-12 • unverified gaps are visible</p>
+        <p>places • 14 no-scroll slides each • USD prices on every slide • source snapshot 2026-08-13 • unverified gaps are visible</p>
       </aside>
     </header>
 
@@ -344,6 +441,17 @@
     </div>
   </section>
 
+  <section id="media-lightbox" class="lightbox" hidden aria-modal="true" role="dialog" aria-label="Enlarged source image">
+    <div class="lightbox-toolbar">
+      <button id="lightbox-close" class="lightbox-button" type="button" aria-label="Close enlarged image">×</button>
+      <p id="lightbox-caption"></p>
+      <button id="lightbox-minus" class="lightbox-button" type="button" aria-label="Zoom out">−</button>
+      <button id="lightbox-reset" class="lightbox-button" type="button" aria-label="Reset zoom">1×</button>
+      <button id="lightbox-plus" class="lightbox-button" type="button" aria-label="Zoom in">+</button>
+    </div>
+    <div class="lightbox-stage"><img id="lightbox-image" alt="" referrerpolicy="no-referrer"></div>
+  </section>
+
   <script>
     "use strict";
 
@@ -365,7 +473,7 @@
       { name:"Baguio, Philippines", area:"Camp John Hay / central hills", country:"Philippines", key:"baguio philippines", rent:[350,900], coords:[16.402,120.596], accent:"#607e9e", verdict:"Cool air and mountain trails instead of beaches: a comfortable reading base with a real city behind it and a more local rhythm.", social:"Baguio runners / Camp John Hay fitness", schedule:"Running and university/community leads; verify current group pages.", gym:"Camp John Hay clubs + local training", gymPrice:"$25–$70 / month planning", gymMonthly:45, restaurant:"Hill Station + Cordilleran markets", dish:"strawberry taho / local comfort food", dishPrice:"$3–$18 planning", activity:"Camp John Hay + pine ridges", stay:"furnished condo or house near Camp John Hay", scores:{overall:7.7,value:8.4,social:6.8,nature:8.5,training:7.0,food:7.5,access:7.0,budget2k:8.7,budget3k:8.9} },
       { name:"Boracay, Philippines", area:"Station 3 / Bulabog", country:"Philippines", key:"boracay philippines", rent:[600,1200], coords:[11.967,121.924], accent:"#55a9ad", verdict:"Easy beauty and easy social access, but tourist pricing means the $3K version is the one that really breathes.", social:"beach runs, kite groups, and expat meetups", schedule:"Beach and kite communities are recurring leads; seasonality matters.", gym:"Boracay fitness clubs / hotel gyms", gymPrice:"$30–$85 / month planning", gymMonthly:55, restaurant:"Los Indios Bravos + Station 3 seafood", dish:"seafood plate / Filipino grill", dishPrice:"$5–$22 planning", activity:"White Beach + Bulabog water sports", stay:"monthly studio in Station 3 or Bulabog", scores:{overall:7.9,value:6.9,social:8.7,nature:9.3,training:7.8,food:8.0,access:6.5,budget2k:6.1,budget3k:8.4} },
       { name:"Siquijor, Philippines", area:"San Juan", country:"Philippines", key:"siquijor philippines", rent:[500,1000], coords:[9.168,123.521], accent:"#6da977", verdict:"The magical quiet island: excellent nature and low daily costs, with a smaller social funnel you need to enter intentionally.", social:"dive, yoga, surf, and expat gatherings", schedule:"Dive and wellness communities are the best recurring leads.", gym:"small local gyms / hotel wellness", gymPrice:"$20–$55 / month planning", gymMonthly:35, restaurant:"Baha Bar + roadside grills", dish:"fresh fish / Filipino breakfast", dishPrice:"$3–$15 planning", activity:"Cambugahay Falls + reef roads", stay:"monthly bungalow or studio in San Juan", scores:{overall:7.8,value:8.5,social:6.5,nature:9.2,training:6.4,food:7.5,access:5.5,budget2k:8.0,budget3k:8.7} },
-      { name:"Florianópolis, Brazil", area:"Campeche / Lagoa", country:"Brazil", key:"florianopolis brazil", rent:[900,1300], coords:[-27.675,-48.478], accent:"#3e9ca3", verdict:"The strongest tropical all-rounder: real beach life, a substantial city, active locals, and recovery options that can support a serious routine.", social:"Floripa Runners / RUN & BASS Campeche", schedule:"Floripa Runners and local event leads; confirm current days and meeting points.", gym:"JOY Wellness Club / premium local gyms", gymPrice:"$25–$70 local; premium recovery quote", gymMonthly:55, restaurant:"Ostradamus / Freguesia Oyster Bar", dish:"oysters / shrimp pastel", dishPrice:"$8–$35 planning", activity:"Campeche Beach + Lagoa trails", stay:"furnished apartment in Campeche or Lagoa", scores:{overall:8.8,value:7.7,social:8.9,nature:9.3,training:9.0,food:8.6,access:8.0,budget2k:6.6,budget3k:8.8}, sources:[["Nomad Almanac: Florianópolis","https://www.nomadalmanac.com/countries/brazil/cities/florianopolis"],["Floripa social lead","https://www.instagram.com/p/DUbuPwukkzH/"],["Freguesia Oyster Bar","https://www.tripadvisor.com/Restaurant_Review-g303576-d5009975-Reviews-Freguesia_Oyster_Bar-Florianopolis_State_of_Santa_Catarina.html"]] },
+      { name:"Florianópolis, Brazil", area:"Novo Campeche / island-wide", country:"Brazil", key:"florianopolis brazil", rent:[570,1045], coords:[-27.675,-48.493], accent:"#3e9ca3", verdict:"The strongest tropical all-rounder: a real beach base, a substantial city, active locals, and serious training. The honest trade is that the island-wide venues are a mix of nearby anchors and planned rides.", social:"Floripa Runners", schedule:"Floripa Runners publishes Tue/Thu run-walk sessions at Parque de Coqueiros and Av. Beira Mar Norte; check the current calendar before joining.", gym:"Believe Fitness Center", gymPrice:"$55 / month · BRL 305 for 2x/week annual plan", gymMonthly:55, restaurant:"Garapuvu Café", dish:"Lindo Garapuvu / filet mignon plate", dishPrice:"$16.47 · BRL 85", activity:"Projeto Tamar Visitor Center", stay:"furnished 2BR loft in Novo Campeche", logistics:"Novo Campeche is the stay anchor. Garapuvu and Believe are city-side rides; Tamar is a Barra da Lagoa outing, so the map shows a truthful island-wide circuit rather than pretending every pin is walkable.", scores:{overall:8.8,value:7.7,social:8.9,nature:9.3,training:9.0,food:8.6,access:8.0,budget2k:6.6,budget3k:8.8}, sources:[["Novo Campeche OLX listing","https://sc.olx.com.br/florianopolis-e-regiao/imoveis/loft-2-quartos-piscina-garagem-mensal-ate-dezembro-novo-campeche-1509902288"],["Believe Fitness Center","https://believefcenter.com/"],["Floripa Runners plans","https://www.floriparunners.com.br/treinos-e-planos/"],["Garapuvu Café menu","https://www.garapuvucafe.com.br/es/cardapiogeral"]] },
       { name:"Bariloche, Argentina", area:"Centro / Playa Bonita", country:"Argentina", key:"bariloche argentina", rent:[700,1200], coords:[-41.133,-71.310], accent:"#5d7fa6", verdict:"The lake-and-Andes fantasy: cool-weather apartments, trail running, coffee, steak, and the most cinematic weekend nature in the set.", social:"trail runners / Open Work Bariloche community", schedule:"Trail and coworking leads; ask for current group runs and seasonal events.", gym:"Summit Training Center", gymPrice:"$30–$90 / month planning", gymMonthly:55, restaurant:"Alto El Fuego + lake-view dining", dish:"Patagonian steak / chocolate", dishPrice:"$12–$40 planning", activity:"Cerro Lindo + Nahuel Huapi shore", stay:"lake-view apartment near Centro or Playa Bonita", scores:{overall:8.5,value:8.1,social:7.7,nature:9.8,training:8.3,food:8.5,access:7.1,budget2k:7.4,budget3k:8.8}, sources:[["Summit Training Center","https://summittrainingcenter.com.ar/"],["Open Work Bariloche","https://www.instagram.com/openworkbariloche/"],["Living in Bariloche research lead","https://travelingjackie.com/living-bariloche-argentina/"]] },
       { name:"Santiago, Chile", area:"Providencia / Ñuñoa", country:"Chile", key:"santiago chile", rent:[800,1300], coords:[-33.426,-70.611], accent:"#6b7db0", verdict:"Big-city infrastructure with the Andes in the background: a strong choice if healthcare, restaurants, and serious weekend mountains matter.", social:"Parque Metropolitano runners and cyclists", schedule:"Park running is the recurring anchor; verify group schedules before arrival.", gym:"Energy Fitness / Smart Fit / premium clubs", gymPrice:"$35–$110 / month planning", gymMonthly:70, restaurant:"Boragó lane + neighborhood restaurants", dish:"Chilean tasting menu / empanada", dishPrice:"$5–$55 planning", activity:"Cerro San Cristóbal + Andes weekends", stay:"furnished apartment in Providencia or Ñuñoa", scores:{overall:8.1,value:7.5,social:8.4,nature:8.9,training:8.7,food:8.5,access:9.0,budget2k:6.5,budget3k:8.5}, sources:[["Expat.cl neighborhood guide","https://www.expat.cl/es/santiago/comunas-donde-instalarse/"],["Parque Metropolitano","https://www.parquemet.cl/"]] },
       { name:"Mexico City, Mexico", area:"Condesa / Roma", country:"Mexico", key:"mexico city condesa", rent:[1000,1700], coords:[19.416,-99.169], accent:"#b66f7d", verdict:"The restaurant-and-social heavyweight: Parque México becomes your daily circuit, but beautiful furnished housing makes $2K deliberate.", social:"Parque México run groups / expat circles", schedule:"Park running and community event leads; verify current weekly schedules.", gym:"Sports World / neighborhood boutique gyms", gymPrice:"$45–$130 / month planning", gymMonthly:85, restaurant:"Contramar / Mercado Medellín / taco circuit", dish:"tostada de atún / tacos", dishPrice:"$5–$35 planning", activity:"Parque México + Chapultepec", stay:"furnished apartment in Condesa or Roma", scores:{overall:8.6,value:6.8,social:9.2,nature:7.8,training:8.8,food:9.6,access:8.8,budget2k:5.6,budget3k:8.2}, sources:[["Mexico City rental context","https://rentremote.com/travel-guide/mexico-city/activities/short-term-rentals-mexico-city-where-to-stay-and-what-to-expect"],["Condesa housing context","https://staykukun.com/blog/hospedaje-condesa"]] },
@@ -403,7 +511,7 @@
     // Live evidence is deliberately separate from the editorial shortlist. A location can
     // still be a good idea without having a bookable listing, menu, ticket, or venue photo
     // verified on the check date. Those gaps render as gaps; they never fall back to stock.
-    const evidenceCheckedAt = "2026-08-12";
+    const evidenceCheckedAt = "2026-08-13";
     const stayWindow = "Oct 13–Nov 12, 2026 · 1 guest · 30 nights";
     const liveEvidence = {
       "siargao-philippines": {
@@ -505,11 +613,11 @@
         gym:{status:"needs-check",title:"San Juan gym membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Siquijor+San+Juan+gym+membership",images:[]}
       },
       "florianopolis-brazil": {
-        stay:{status:"needs-check",title:"Monthly Florianópolis rental search",price:"PRICE NOT EXPOSED",source:"OLX monthly rental lead",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/aluguel-mensal-em-pousada-florianopolis-santinho-1478695177",window:"Listing identified; concrete current price was not exposed.",images:[]},
-        food:{status:"verified",title:"Garapuvu Café — Mignon Garapuvu",price:"$16.47 · BRL 85",source:"Garapuvu Café menu",url:"https://www.garapuvucafe.com.br/CardapioGeral",images:["https://lirp.cdn-website.com/138690bf/dms3rep/multi/opt/142886585_705385383670289_8718961543555169862_n-c1045b63-540w.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
+        stay:{status:"verified",title:"Novo Campeche furnished 2BR loft with pool + rooftop view",price:"$900 / month rent · BRL 5,000 + BRL 800 condo",source:"OLX listing 1509902288",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/loft-2-quartos-piscina-garagem-mensal-ate-dezembro-novo-campeche-1509902288",window:"Listing states availability through Dec 15, 2026; the Oct 13–Nov 12 window fits inside that stated period. Seller confirmation is still required because marketplace inventory changes.",availability:"2BR, furnished, about 200 m from the beach; exact unit/location is shown at the listing’s building-level address.",images:["https://img.olx.com.br/images/80/809695052656242.jpg","https://img.olx.com.br/images/32/326680174980400.jpg","https://img.olx.com.br/images/79/790652652820460.jpg","https://img.olx.com.br/images/79/793673537943057.jpg"]},
+        food:{status:"verified",title:"Garapuvu Café — Lindo Garapuvu filet mignon plate",price:"$16.47 · BRL 85",source:"Garapuvu Café menu",url:"https://www.garapuvucafe.com.br/es/cardapiogeral",images:["https://lirp.cdn-website.com/138690bf/dms3rep/multi/opt/142886585_705385383670289_8718961543555169862_n-c1045b63-540w.jpg"],availability:"The official menu lists the Lindo Garapuvu at BRL 85; the displayed source image is the venue’s own café image, not a claim that it is a photograph of the plated dish."},
         activity:{status:"verified",title:"Projeto Tamar visitor center",price:"$8.53 · BRL 44 adult",source:"Projeto Tamar",url:"https://www.tamar.org.br/centros_visitantes.php?cod=8",images:["https://www.tamar.org.br/fotos_news/images/Tanques%20e%20aquarios.JPG","https://www.tamar.org.br/fotos_news/images/fundacao_projeto_tamar_dia_bioday_2025_06.jpg"],availability:"Published adult ticket; check center hours before visiting."},
-        social:{status:"needs-check",title:"Floripa Runners / Campeche calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Floripa+Runners+Campeche+schedule",images:[]},
-        gym:{status:"needs-check",title:"JOY Wellness / local gym membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Florianopolis+JOY+Wellness+Club+membership+price",images:[]}
+        social:{status:"verified",title:"Floripa Runners — coached run/walk sessions",price:"$38.00 / month · BRL 209 semestral plan",source:"Floripa Runners plans",url:"https://www.floriparunners.com.br/treinos-e-planos/",images:["https://www.floriparunners.com.br/wp-content/uploads/capa10.jpg","https://www.floriparunners.com.br/wp-content/uploads/capa09.jpeg"],availability:"Official page lists Tue/Thu coached sessions and a BRL 209/month semestral plan plus BRL 150 signup; both images are from the club’s own site; checked 2026-08-13."},
+        gym:{status:"verified",title:"Believe Fitness Center — 2x/week annual plan",price:"$55.00 / month · BRL 305",source:"Believe Fitness Center",url:"https://believefcenter.com/",images:["https://believefcenter.com/assets/images/people.webp","https://believefcenter.com/assets/space/cross.jpeg"],availability:"Official page lists the BRL 305/month annual 2x/week plan and the Itacorubi address; both images are from the gym’s own site; checked 2026-08-13."}
       },
       "bariloche-argentina": {
         stay:{status:"partial",title:"Apart Del Lago",price:"$418.59 / 3-night example",source:"Booking.com",url:"https://www.booking.com/hotel/ar/apart-del-lago-san-carlos-de-bariloche11.en-gb.html",window:"Current short-stay example; not the requested Oct 13–Nov 12 monthly quote.",images:[]},
@@ -569,13 +677,144 @@
       }
     };
 
+    // Housing is the one category where the two budgets can legitimately need
+    // different homes. These are separate source records, not repeated copies
+    // of one listing. If a location has no second source-backed option, the UI
+    // says so instead of inventing an upgrade.
+    const housingOptionsBySlug = {
+      "florianopolis-brazil": [
+        {budget:"$3K",status:"verified",title:"Novo Campeche furnished 2BR loft with pool + rooftop view",price:"$900 / month rent · BRL 5,000 + BRL 800 condo",source:"OLX listing 1509902288",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/loft-2-quartos-piscina-garagem-mensal-ate-dezembro-novo-campeche-1509902288",window:"Listing states availability through Dec 15, 2026; seller confirmation is still required.",availability:"2BR, furnished, about 200 m from the beach; pool, jacuzzi, gym, balcony, and rooftop view are stated in the listing.",images:["https://img.olx.com.br/images/80/809695052656242.jpg","https://img.olx.com.br/images/32/326680174980400.jpg","https://img.olx.com.br/images/79/790652652820460.jpg","https://img.olx.com.br/images/79/793673537943057.jpg"]},
+        {budget:"$2K",status:"verified",title:"Campeche furnished 1BR temporary apartment",price:"$567 / month rent · BRL 3,150 + BRL 80 water",source:"OLX listing 1496210878",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/contrato-temporario-no-campeche-maio-ate-dezembro-1496210878",window:"Listing states availability May–Dec 1, 2026, so the requested window fits except for the final checkout date; confirm the seller’s exact dates.",availability:"40 m² furnished 1BR with Wi-Fi, air conditioning, kitchen, shared outdoor area, and a stated Campeche address.",images:["https://img.olx.com.br/images/66/667614152751879.jpg","https://img.olx.com.br/images/66/665644514573618.jpg","https://img.olx.com.br/images/66/668683390097991.jpg","https://img.olx.com.br/images/66/669619751402108.jpg"]}
+      ]
+    };
+    const housingOptionFor = (location, index) => {
+      const options = housingOptionsBySlug[location.slug];
+      if (!Array.isArray(options) || !options.length) return evidenceFor(location, "stay");
+      return options[Math.min(options.length - 1, Math.floor(Number(index || 0) / 2))];
+    };
+
+    // Venue evidence is kept separate from the editorial shortlist for the same
+    // reason housing is: a good destination description is not proof that a
+    // specific gym or social venue has a current photo and price. These records
+    // are dated source snapshots. "partial" means the place is real and the
+    // source is live, but the public price or the requested date window still
+    // needs a final check.
+    const venueEvidenceOverrides = {
+      "uluwatu-bali": {
+        social:{status:"verified",title:"Single Fin Bali — recurring surf / music community",price:"$0 entry · food and drinks extra",source:"Single Fin Bali / Project Black",url:"https://www.projectblack.co/singlefin",images:["https://www.singlefinbali.com/wp-content/uploads/2024/06/hero-homepage.webp","https://static.wixstatic.com/media/585521_974fdc5b90e2464fa4cea7465a9cd673~mv2.jpg/v1/fill/w_549%2Ch_730%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/SF%20-%20EVENT%20-%20SFC26%20-%20WEB%20BANNERS%20-%201440x1080%20%281%29.jpg"],availability:"Official venue page lists recurring live music and the 2026 Single Fin Classic; entry is not a ticketed meetup. Confirm the week’s program."},
+        gym:{status:"verified",title:"360 MOVE Uluwatu — open gym",price:"$78.00 / 30 days · IDR 1,275,000",source:"360 Move membership",url:"https://360moveuluwatu.com/schedule-and-membership/",images:["https://360moveuluwatu.com/wp-content/uploads/2024/11/Untitled-design-1-300x210.jpg","https://360moveuluwatu.com/wp-content/uploads/2024/11/360move-MainLockUp-FINAL_whiteontransparent-1024x1024.png"],availability:"Official price table lists the 30-day open-gym lane and the Pecatu/Uluwatu address; the first image is the facility photo and the second is the official brand mark. Confirm the latest table at signup."}
+      },
+      "da-lat-vietnam": {
+        social:{status:"partial",title:"One More Coworking — café community lead",price:"PRICE NOT EXPOSED",source:"One More Coworking",url:"https://included.co/join/onemorecoworking/",images:["https://included.co/wp-content/uploads/formidable/9/20190809_154354-scaled.jpg","https://included.co/wp-content/uploads/formidable/inc-square-500-trans.png"],availability:"The current venue page is a real community/coworking lead, but it does not publish a dated meetup price or a second event photograph."},
+        gym:{status:"partial",title:"Da Lat training — Ladalat / local gym leads",price:"PRICE NOT EXPOSED",source:"Ladalat Hotel Fitness Center",url:"https://www.ladalathotel.com.vn/en/experience/gym-center",images:["https://www.ladalathotel.com.vn/storage/app/uploads/public/685/8de/973/thumb_466_1200_630_0_0_crop.jpg","https://transformkid.vn/wp-content/uploads/2026/01/575810605_122110066611021188_3822038746222809204_n.webp"],availability:"Both images are from named Da Lat training venues. Ladalat publishes the facility but not a public day/month price; the second image is a current Da Lat gym promotion lead that needs final membership confirmation."}
+      },
+      "siargao-philippines": {
+        social:{status:"partial",title:"Tawhay No Hangover Run Club — Sunday community run",price:"PRICE NOT EXPOSED",source:"Tawhay No Hangover Run Club",url:"https://www.tawhaysiargao.com/service-page/no-hangover-run-club",images:["https://static.wixstatic.com/media/59ff36_496f69ff25d24a96b63e7f38efc49262~mv2.jpg/v1/fit/w_1284,h_964,al_c,q_85/59ff36_496f69ff25d24a96b63e7f38efc49262~mv2.jpg","https://static.wixstatic.com/media/59ff36_effe4cb66f7f4d49b2a5a35708a47c72~mv2.png/v1/fill/w_372%2Ch_520%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Untitled%20design%20(39)%20copy%2018.png"],availability:"Official page lists a Sunday 8:00 AM, 5 km run from Bamboo Padel Cafe to Tawhay; the page does not expose a current fee."},
+        gym:{status:"verified",title:"Tawhay Siargao — premium gym / recovery",price:"$117.48 / month · PHP 6,990",source:"Tawhay memberships",url:"https://www.tawhaysiargao.com/memberships",images:["https://static.wixstatic.com/media/806657_ed18d45fb57b4c0ebf3e0e5f6a1a2fee~mv2.jpg/v1/crop/x_0%2Cy_64%2Cw_1078%2Ch_1286/fill/w_491%2Ch_591%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/806657_ed18d45fb57b4c0ebf3e0e5f6a1a2fee~mv2.jpg","https://static.wixstatic.com/media/806657_2afd062abaa9477293a3c30dcbce58ca~mv2.jpg/v1/fill/w_956%2Ch_537%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cquality_auto/806657_2afd062abaa9477293a3c30dcbce58ca~mv2.jpg"],availability:"Official membership page publishes the monthly and multi-month rates; confirm visitor eligibility and current availability."}
+      },
+      "kuta-lombok": {
+        social:{status:"partial",title:"Tumbao Lombok — beach-club social anchor",price:"PRICE NOT EXPOSED",source:"Tumbao Lombok",url:"https://tumbaolombok.com/",images:["https://tumbaolombok.com/wp-content/themes/tumbao-theme/assets/landing/images/tumbao-beach-club-tanjung-aan-from-the-water.webp","https://tumbaolombok.com/wp-content/themes/tumbao-theme/assets/landing/images/tumbao-beach-club-lombok-sundowner-cheers.webp"],availability:"Official venue page confirms the Tanjung Aan beach-club setting and current venue program; entry and minimum-spend rules vary by date."},
+        gym:{status:"verified",title:"XENO Lombok — tourist membership",price:"$106.25 / month · IDR 1,700,000",source:"XENO Lombok",url:"https://xenolombok.com/",images:["https://xenolombok.com/wp-content/uploads/2026/06/Xeno-Experience-scaled.jpg","https://xenolombok.com/wp-content/uploads/2026/06/Tropical-lifestyle.webp"],availability:"Current XENO tourist table lists the one-month price plus classes/community; confirm the active table at signup."}
+      },
+      "siem-reap-cambodia": {
+        social:{status:"partial",title:"Cambodia Events — current race / community calendar",price:"PRICE NOT EXPOSED · event entry varies",source:"Cambodia Events",url:"https://cambodia-events.org/",images:["https://photostockhdd.sgp1.cdn.digitaloceanspaces.com/cambodiaevent.org/6-1600x900.jpg","https://photostockhdd.sgp1.cdn.digitaloceanspaces.com/cambodiaevent.org/2-1-1600x900.jpg"],availability:"The 2026 calendar is live and the images are from the event publisher; individual race entry must be checked on the selected event."},
+        gym:{status:"partial",title:"Angkor Fitness — 1,800 m² gym / sauna",price:"$55 / month · reported May 2026 guide price",source:"Angkor Fitness + current Siem Reap guide",url:"https://angkorfitness.com/our-journey/",images:["https://angkorfitness.com/wp-content/uploads/2021/12/com01-4.png","https://angkorfitness.com/wp-content/uploads/2021/12/com01-3.png"],availability:"Official venue page confirms the gym and sauna; the public monthly price is from a current local guide rather than the gym’s own rate table. Reconfirm before paying."}
+      },
+      "valencia-philippines": {
+        social:{status:"partial",title:"Dumaguete running community — service-area social anchor",price:"PRICE NOT EXPOSED",source:"LFT Dumaguete / current race lead",url:"https://lftdumaguete.com/",images:["https://images.runph.org/wrkpod-half-marathon-2026/image_1.jpg","https://images.runph.org/wrkpod-half-marathon-2026/image_2.jpg"],availability:"Valencia borrows Dumaguete for social density. These are real 2026 running-event images, but a weekly recurring meetup and current fee still need confirmation."},
+        gym:{status:"partial",title:"TM Fitness Hub — Valencia training lead",price:"PRICE NOT EXPOSED",source:"TM Fitness Hub",url:"https://tmfitnesshub.com/contact/",images:["https://tmfitnesshub.com/assets/images/banners/contact-banner-tm-fitness-hub-valencia-negros-oriental-1536w.webp","https://tmfitnesshub.com/assets/images/og-image.jpg"],availability:"Official page gives the named Balabag East gym address and the source exposes a facility banner plus venue image, but no public current membership price was exposed."}
+      },
+      "dumaguete-philippines": {
+        social:{status:"partial",title:"WRKPod Half Marathon 2026 — current running event",price:"$20.83 · PHP 1,250 starting entry",source:"RunPH event page",url:"https://runph.org/events/wrkpod-half-marathon-2026",images:["https://images.runph.org/wrkpod-half-marathon-2026/image_1.jpg","https://images.runph.org/wrkpod-half-marathon-2026/image_2.jpg"],availability:"The event page publishes the entry starting price and real event photography; this is an event anchor, not proof of a weekly club."},
+        gym:{status:"partial",title:"P&E Fitness Gym — one-day trial / local gym",price:"PRICE NOT EXPOSED · free 1-day tryout stated",source:"P&E Fitness Gym",url:"https://dumaguetefitness.wixsite.com/dumaguetegym",images:["https://static.wixstatic.com/media/7e45e5_bced4816e463c0a163028b981a8558b8.jpg/v1/fill/w_620,h_844,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/7e45e5_bced4816e463c0a163028b981a8558b8.jpg","https://static.wixstatic.com/media/7e45e5_d8a4c4d610e481801eab1883d168f2e7.jpg/v1/fill/w_864,h_506,al_c,lg_1,q_85,enc_avif,quality_auto/7e45e5_d8a4c4d610e481801eab1883d168f2e7.jpg"],availability:"Official gym page states a free one-day tryout; membership pricing is not published on the page."}
+      },
+      "canggu-bali": {
+        social:{status:"verified",title:"FINNS Beach Club — recurring social venue",price:"$0 entry · venue spend extra",source:"FINNS Beach Club",url:"https://finnsbeachclub.com/location/",images:["https://finnsbeachclub.com/wp-content/uploads/2023/11/Copy-of-2026.04.18_Absolut_Brand_Activation_Drone_Shoot_FJR_-2-1-Large.jpeg","https://finnsbeachclub.com/wp-content/uploads/2026/06/Finns-Beach-Club-3.webp"],availability:"Official venue page and current site imagery; entry policy can change for events, so check the selected date."},
+        gym:{status:"partial",title:"Wanderlust Fitness Village — training / retreat base",price:"PRICE NOT EXPOSED",source:"Wanderlust Fitness Village",url:"https://wanderlustfitnessvillage.com/hotel/",images:["https://wanderlustfitnessvillage.com/wp-content/uploads/2023/06/11-FEB-22-of-35-1024x769.jpg","https://wanderlustfitnessvillage.com/wp-content/uploads/2023/06/Fitness-Retreats-1024x575.jpg"],availability:"Official site publishes the fitness-village concept and real facility imagery, but no current monthly gym price was exposed."}
+      },
+      "phu-quoc-vietnam": {
+        social:{status:"partial",title:"Phu Quoc Night Market — real social / food corridor",price:"PRICE NOT EXPOSED · free to enter, food extra",source:"Phu Quoc tourism portal",url:"https://dulichphuquoc.gov.vn/iv/chodempq",images:["https://www.vietnamonline.com/media/uploads/facts/phu-quoc-night-market.jpg","https://www.vietnamonline.com/media/uploads/facts/phu-quoc-night-market-1.jpg"],availability:"The official tourism portal identifies the real night market; these venue photos are a real market-photo source, while food spend varies by stall."},
+        gym:{status:"partial",title:"Trung Anh Gym — Duong Dong",price:"PRICE NOT EXPOSED",source:"Trung Anh Gym / Modunfit listing",url:"https://modunfit.com/dia-diem/trung-anh-gym",images:["https://modunfit.com/wp-content/uploads/2025/02/z6340869434147_c9064f33542c96d37383e1037c04254c.jpg","https://modunfit.com/wp-content/uploads/2025/02/trung-anh-gym-center.jpg"],availability:"Current venue listing gives the real Duong Dong gym and facility photos; public day/month pricing was not exposed."}
+      },
+      "baguio-philippines": {
+        social:{status:"partial",title:"Mission Strong / Baguio running events",price:"$26.31 VIP entry · PHP 1,500",source:"Mission Strong Baguio event",url:"https://www.oneofakindasia.com/",images:["https://www.oneofakindasia.com/images/speed_series.jpg","https://i0.wp.com/ubaguio.edu/wp-content/uploads/2026/03/639145543_1435285838629381_7676031277144395210_n.jpg"],availability:"Official event sources show 2026 Baguio running activity and entry information; this is an event lead, not a promise of a weekly club."},
+        gym:{status:"verified",title:"Camp John Hay Hotels Fitness Center",price:"$50 / day",source:"John Hay Hotels fitness center",url:"https://johnhayhotels.com/services/fitness-center/",images:["https://johnhayhotels.com/wp-content/uploads/2018/10/shutterstock_337161530.jpg?wsr","https://johnhayhotels.com/wp-content/uploads/2018/10/shutterstock_337161530.jpg?wsr=2"],availability:"Official page publishes the day rate and Camp John Hay location. The source currently exposes one facility photograph; the second card is the same official image at a separate source URL."}
+      },
+      "boracay-philippines": {
+        social:{status:"verified",title:"Station X Boracay — activities / community venue",price:"$0 entry · event spend extra",source:"Station X activities",url:"https://www.stationx.ph/activities",images:["https://static.wixstatic.com/media/6715c2_099c8a385a76451b85a3e28a5a1b59f2~mv2.jpg/v1/fill/w_1936,h_1291,al_c/6715c2_099c8a385a76451b85a3e28a5a1b59f2~mv2.jpg","https://static.wixstatic.com/media/6715c2_ef7822eceaba42809e6927ab0e1ddf43~mv2.jpg/v1/crop/x_0,y_113,w_948,h_407/fill/w_948,h_407,al_c,q_85,enc_avif,quality_auto/station%20x%20homepage.jpg"],availability:"Official site says monthly activities and no entrance fee; event details vary by date."},
+        gym:{status:"partial",title:"Legacy Gym Boracay — fitness / BJJ / Muay Thai",price:"PRICE NOT EXPOSED",source:"Legacy Gym Boracay",url:"https://www.legacygymphilippines.com/",images:["https://images.squarespace-cdn.com/content/v1/6508073b9af5c125793c0314/0f09b024-2cfb-4931-8e1d-eb41054a58d2/3.jpg","https://images.squarespace-cdn.com/content/v1/6508073b9af5c125793c0314/0f09b024-2cfb-4931-8e1d-eb41054a58d2/3.jpg?width=1200"],availability:"Official gym site gives the Diniwid Road location and real facility photo, but no public current membership rate or second distinct photo was exposed."}
+      },
+      "siquijor-philippines": {
+        social:{status:"partial",title:"Eden Coworking — community / work hangout",price:"$3.17 / hour · PHP 150 shared desk",source:"Eden Coworking Siquijor",url:"https://www.siquijorcoworkingspace.com/",images:["https://static.wixstatic.com/media/cb1f94_e13d57bafbd44194b781d5f55a6cfd9a~mv2.jpg/v1/fit/w_2500,h_1330,al_c/cb1f94_e13d57bafbd44194b781d5f55a6cfd9a~mv2.jpg","https://static.wixstatic.com/media/7fcfde_178c675b36294f1581c9cf7525b81042~mv2.png"],availability:"Official current rate card lists shared-desk access; this is a community/coworking hangout rather than a recurring sports club."},
+        gym:{status:"verified",title:"Golden Gorilla Gym Siquijor",price:"$25.21 / month · PHP 1,400 local rate",source:"Golden Gorilla Gym",url:"https://siquijorgym.com/",images:["https://siquijorgym.com/siquijor-gym.jpg","https://siquijorgym.com/siquijor-fitness.webp"],availability:"Official rate card lists unlimited monthly access and walk-in/session prices; confirm the local/visitor tier before joining."}
+      },
+      "florianopolis-brazil": {
+        social:{status:"verified",title:"Floripa Runners — coached run/walk sessions",price:"$38.00 / month · BRL 209 semestral plan",source:"Floripa Runners plans",url:"https://www.floriparunners.com.br/treinos-e-planos/",images:["https://www.floriparunners.com.br/wp-content/uploads/capa10.jpg","https://www.floriparunners.com.br/wp-content/uploads/capa09.jpeg"],availability:"Official page lists Tue/Thu sessions and the semestral plan; meeting point varies by session, so the map point is approximate."},
+        gym:{status:"verified",title:"Believe Fitness Center — 2x/week annual plan",price:"$55.00 / month · BRL 305",source:"Believe Fitness Center",url:"https://believefcenter.com/",images:["https://believefcenter.com/assets/images/people.webp","https://believefcenter.com/assets/space/cross.jpeg"],availability:"Official page lists the BRL 305/month plan and Itacorubi address; both images are from the gym’s own site."},
+        food:{status:"verified",title:"Garapuvu Café — current menu and real dish gallery",price:"$16.47 · BRL 85",source:"Garapuvu Café menu + restaurant gallery",url:"https://www.garapuvucafe.com.br/es/cardapiogeral",images:["https://img02.restaurantguru.com/c6ee-Garapuvu-Cafe-and-Bistro-Florianopolis-food-1.jpg","https://img02.restaurantguru.com/c4f9-Garapuvu-Cafe-and-Bistro-Florianopolis-risotto.jpg"],availability:"The official menu lists the Lindo Garapuvu at BRL 85. The two displayed food photos are real Garapuvu dishes from the restaurant gallery; they are not presented as an exact plated-match claim."}
+      },
+      "bariloche-argentina": {
+        social:{status:"partial",title:"The Station Patagonia — lake-area events / coworking",price:"PRICE NOT EXPOSED",source:"The Station Patagonia",url:"https://www.thestationpatagonia.com/",images:["https://www.thestationpatagonia.com/wp-content/uploads/2025/02/MOO_5057-1-scaled.jpg","https://www.thestationpatagonia.com/wp-content/uploads/2025/02/MOO_5125-scaled.jpg"],availability:"Official venue site shows real coworking/event imagery and current programming; specific event fees are not published on the landing page."},
+        gym:{status:"verified",title:"Club Nahuel Huapi gym",price:"$13.68 / month · ARS 19,000",source:"Club Nahuel Huapi gym",url:"https://clubnahuelhuapi.com/actividades/gimnasio",images:["https://clubnahuelhuapi.com/_next/image?q=75&url=https%3A%2F%2Fimages.ctfassets.net%2Fo8irudj4bl90%2F4IUHGJ0xGZkkA7mI7Ny5Hm%2F4019eec3aa58aa2c602ab33c1f693409%2Fgym3.jpg&w=1920","https://clubnahuelhuapi.com/_next/image?q=75&url=https%3A%2F%2Fimages.ctfassets.net%2Fo8irudj4bl90%2F3n3xJA4wsc8IPlNXlbKwOl%2F5ea031ec3e71b92d6c5a22e17f778dd4%2Fgym2.jpg&w=1920"],availability:"Official club page publishes the monthly price and Luelmo 43 location; it is the priced replacement for the older Summit-only lead."}
+      },
+      "santiago-chile": {
+        social:{status:"partial",title:"Patio Bellavista — nightlife / restaurant courtyard",price:"PRICE NOT EXPOSED · venue spend varies",source:"Patio Bellavista",url:"https://patiobellavista.cl/contacto/",images:["https://patiobellavista.cl/wp-content/uploads/2024/02/patio-bellavista.jpg","https://patiobellavista.cl/wp-content/uploads/2024/02/patio-bellavista-1.jpg"],availability:"Official site confirms the real Constitución 30–70 complex and current venue directory; no current event/cover price was exposed."},
+        gym:{status:"verified",title:"Smart Fit Vivo Panorámico — Black plan",price:"$38.38 / month · CLP 34,900",source:"Smart Fit Chile",url:"https://www.smartfit.cl/gimnasios/vivo-panoramico",images:["https://pictures.smartfit.com.br/12289/big/Imagen-web-preventa-2024_Ya-abrimos.jpg?1709666538=","https://pictures.smartfit.com.br/12290/big/Imagen-web-preventa-2024_Ya-abrimos.jpg?1709666551="],availability:"Current Chile plan/address source lists the Providencia club and Black monthly price; confirm the active promotion at checkout."}
+      },
+      "mexico-city-mexico": {
+        social:{status:"verified",title:"The Club Coworking Condesa — community terrace",price:"$21.99 / day · MXN 400",source:"The Club Coworking memberships",url:"https://theclubcowork.mx/membresias/",images:["https://theclubcowork.mx/wp-content/uploads/2025/07/group-1341-1-scaled.jpg","https://theclubcowork.mx/wp-content/uploads/2025/07/oficina-provada-cowork-2.jpg"],availability:"Official membership page lists the day pass and monthly plans; images are from the same coworking site and the exact Condesa branch should be selected."},
+        gym:{status:"partial",title:"Sports World Condesa — full fitness club",price:"$176.15 / month · MXN 3,180 reported current rate",source:"Sports World + current local gym listing",url:"https://www.sportsworld.com.mx/",images:["https://www.sportsworld.com.mx/uploads/es/images/documents/sw_video_home_poster.webp","https://www.sportsworld.com.mx/uploads/es/images/sportsworld_home_back_image.webp?v=2025-01-16-14-38-04"],availability:"Official site supplies the current venue imagery; the public monthly price comes from a current local listing rather than the official checkout, so reconfirm."}
+      },
+      "bangkok-thailand": {
+        social:{status:"verified",title:"Tulum Sky Bar — rooftop social / DJ venue",price:"$0 entry · drinks and food extra",source:"Tulum Sky Bar",url:"https://tulum.asia/",images:["https://tulum.asia/wp-content/uploads/2024/12/R3_09424-%ED%8E%B8%EC%9E%91.jpg","https://tulum.asia/wp-content/uploads/2024/12/R3_09447.jpg"],availability:"Official venue site lists the Ekkamai rooftop, DJs, views, and current opening information; cover rules can vary on event nights."},
+        gym:{status:"verified",title:"Fitness First Terminal 21 — Home Club plan",price:"$61.04 / month · THB 2,011.60",source:"Fitness First Thailand",url:"https://www.fitnessfirst.com/th/en/membership",images:["https://www.fitnessfirst.com/th/en/-/media/project/evolution-wellness/fitness-first/shared/base/open-graph/fitness-first-ogimage.jpg","https://www.fitnessfirst.com/th/en/-/media/project/evolution-wellness/fitness-first/thailand/clubs/terminal-21/terminal-21.jpg"],availability:"Current Thailand membership page publishes the Home Club price range; Terminal 21 page supplies the named Asok club. Confirm the chosen plan."}
+      },
+      "buenos-aires-argentina": {
+        social:{status:"partial",title:"Bestial Fly Bar — rooftop DJs / sunset social",price:"PRICE NOT EXPOSED · cover and menu vary",source:"Bestial Fly Bar",url:"https://bestialflybar.com.ar/",images:["https://mesa.express/cms/IMGupload/uploads/ngav_0.06483400%201707605413.jpg","https://mesa.express/cms/IMGupload/uploads/ngav_0.20224700%201707605411.jpg"],availability:"Official venue and gallery identify the Humboldt 2495 rooftop, nightly DJ program, and current hours; cover/menu costs change and must be checked on the date."},
+        gym:{status:"partial",title:"Megatlon Recoleta — full gym / classes",price:"PRICE NOT EXPOSED",source:"Megatlon Recoleta",url:"https://megatlon.com/sedes/recoleta/",images:["https://megatlon.com/wp-content/uploads/2024/04/Musculacion-Recoleta-Escritorio.jpg","https://megatlon.com/wp-content/uploads/2024/04/Musculacion-Recoleta-Escritorio.jpg?view=mobile"],availability:"Official Recoleta page supplies the named venue and facility photo but no public current membership price or second distinct photo."}
+      },
+      "mendoza-argentina": {
+        social:{status:"partial",title:"Gómez Rooftop — city-view nightlife",price:"PRICE NOT EXPOSED",source:"Gómez Rooftop",url:"https://www.isitfunky.com/mendoza/g-mez-rooftop-piso-10",images:["https://www.isitfunky.com/og-image.jpg","https://www.isitfunky.com/og-image.jpg?venue=gomez"],availability:"Current venue listing confirms the rooftop address and city-view concept, but no public cover/menu price or second distinct photo was exposed."},
+        gym:{status:"partial",title:"Mendoza gym lane — municipal training base",price:"PRICE NOT EXPOSED",source:"Mendoza municipal sports directory",url:"https://ciudaddemendoza.gob.ar/area-municipal/direccion-de-deportes-y-recreacion/",images:[],availability:"The map identifies the real Gimnasio Municipal Nº1, but the public directory does not expose a current price or source photo. This card stays visibly unresolved rather than borrowing a photo from another gym."}
+      },
+      "tbilisi-georgia": {
+        social:{status:"verified",title:"Fabrika — coworking / courtyard community",price:"$0 venue entry · food and drinks extra",source:"Fabrika Tbilisi coworking",url:"https://fabrikatbilisi.com/resident/co-working/",images:["https://fabrikatbilisi.com/wp-content/uploads/2017/06/hub-2-3.jpg","https://fabrikatbilisi.com/wp-content/uploads/2017/03/tenants-4.jpg"],availability:"Official site lists the coworking/cultural courtyard and current resident programming; individual event spend varies."},
+        gym:{status:"verified",title:"Vake Pool — gym, pool, sauna",price:"$167.10 / month · GEL 450 fixed plan",source:"Vake Swimming Pool",url:"https://vsp.ge/about-us/",images:["https://vsp.ge/wp-content/uploads/2021/12/1-1.jpg","https://vsp.ge/wp-content/uploads/2021/12/2-1.jpg"],availability:"Official rate table lists fixed/unlimited plans and the Ilia Chavchavadze Avenue address; confirm registration fee and current schedule."}
+      },
+      "krabi-thailand": {
+        social:{status:"partial",title:"iRest Ao Nang — coworking / live-event hangout",price:"PRICE NOT EXPOSED",source:"iRest Ao Nang",url:"https://irestaonang.com/",images:[],availability:"The named Ao Nang venue is real and the source lists pool-table, garden, live-event, and coworking uses, but a source image and current event price were not exposed."},
+        gym:{status:"partial",title:"Aonang Phu Pi Maan fitness room",price:"PRICE NOT EXPOSED",source:"Aonang Phu Pi Maan",url:"https://www.aonangphupimaan.com/facilities/fitness-room",images:["https://aonangphupimaan.com/images/3702.jpg","https://www.aonangphupimaan.com/images/3703.jpg"],availability:"Official resort page supplies real fitness-room images and the named Ao Nang property; no public gym-only price was exposed."}
+      }
+    };
+
+    // Final source-quality corrections: keep a venue card from showing a logo,
+    // duplicate query-string image, or unrelated promotional placeholder as its
+    // second "photo". A missing second source is rendered as missing.
+    Object.assign(venueEvidenceOverrides, {
+      "dumaguete-philippines": {
+        gym:{status:"verified",title:"Fit24 Fitness Gym & Café — Dumaguete",price:"$33.29 / month · PHP 1,999 standard plan",source:"Fit24 Dumaguete memberships",url:"https://www.fit24.life/",images:["https://fit24.life/seo/images_optimized/beyond_expectations/gym/sauna01-1200w.webp","https://fit24.life/seo/images_optimized/beyond_expectations/gym/treadmills-400w.webp"],availability:"Current official page publishes PHP 250 walk-in, PHP 1,500 student, PHP 1,999 standard, and PHP 3,000 premium plans; the venue is at Silliman Portal East on Silliman Avenue."}
+      },
+      "santiago-chile": {
+        social:{status:"partial",title:"Patio Bellavista — nightlife / restaurant courtyard",price:"PRICE NOT EXPOSED · venue spend varies",source:"Patio Bellavista",url:"https://patiobellavista.cl/contacto/",images:["https://dicaschile.com.br/wp-content/uploads/sites/13/2016/11/santiago-patio-bellavista.jpg","https://canalhoreca.cl/wp-content/uploads/2024/04/PATIO-BELLAVISTA-16.jpg"],availability:"Official site confirms the real Constitución 30–70 complex and current venue directory; the two images are real venue photography, but no current event/cover price was exposed."}
+      },
+      "buenos-aires-argentina": {
+        gym:{status:"partial",title:"Megatlon Recoleta — full gym / classes",price:"PRICE NOT EXPOSED",source:"Megatlon Recoleta",url:"https://megatlon.com/sedes/recoleta/",images:["https://megatlon.com/wp-content/uploads/2024/04/Musculacion-Recoleta-Escritorio.jpg"],availability:"Official Recoleta page supplies the named venue and one facility photo but no public current membership price or second distinct photo; the second gym card is intentionally marked unresolved."}
+      },
+      "mendoza-argentina": {
+        social:{status:"partial",title:"Gómez Rooftop — city-view nightlife",price:"PRICE NOT EXPOSED",source:"Gómez Rooftop",url:"https://www.isitfunky.com/mendoza/g-mez-rooftop-piso-10",images:["https://www.isitfunky.com/og-image.jpg"],availability:"Current venue listing confirms the rooftop address and city-view concept, but no public cover/menu price or second distinct photo was exposed; the second social card is intentionally marked unresolved."}
+      },
+      "boracay-philippines": {
+        gym:{status:"partial",title:"Legacy Gym Boracay — fitness / BJJ / Muay Thai",price:"PRICE NOT EXPOSED",source:"Legacy Gym Boracay",url:"https://www.legacygymphilippines.com/",images:["https://images.squarespace-cdn.com/content/v1/6508073b9af5c125793c0314/091839ea-71b2-43d7-a96a-2505332f8247/BJJ.jpg","https://images.squarespace-cdn.com/content/v1/6508073b9af5c125793c0314/7bb8dd58-120a-4e9f-b1e9-a673607efa12/Muay+Thai.jpg"],availability:"Official gym site gives the Diniwid Road location and distinct BJJ/Muay Thai facility photos, but no public current membership rate was exposed."}
+      }
+    });
+
     // Real venue/property coordinates are populated from dated source research below.
     // A missing entry intentionally falls back to the old planning offsets and is
     // visibly labeled as a planning lead; it is never presented as an exact venue.
     const realMapPins = {
       "uluwatu-bali": [
         {type:"stay",label:"Modern 2BR Villa, Bukit / Pecatu",address:"Bingin / Pecatu",lat:-8.8100,lng:115.1030,precision:"approximate",source:"https://balihousing.com/en/pecatu/rent-65124-villa-2-bedrooms-pool-near-the-sea",note:"private pool + rooftop terrace with ocean views; availability warning remains visible"},
-        {type:"gym",label:"Uluwatu Hub",address:"Jalan Goa Lempeh No. 27A, Pecatu",lat:-8.8075,lng:115.1125,precision:"approximate",source:"https://uluwatuhub.com/",note:"open-air gym, pool, coworking, and sea proximity"},
+        {type:"gym",label:"360 MOVE Uluwatu",address:"Pantai Suluban St, Pecatu",lat:-8.8187,lng:115.0885,precision:"approximate",source:"https://360moveuluwatu.com/gym-uluwatu-contact/",note:"same named gym as the priced evidence card; exact pin is approximate to the published Pecatu address"},
         {type:"food",label:"The Loft Bali",address:"Bingin",lat:-8.8065,lng:115.1070,precision:"approximate",source:"https://www.theloft-bali.com/menu",note:"Bingin café with current menu and cliffside neighborhood feel"},
         {type:"social",label:"Single Fin Bali",address:"Pantai Suluban, Jalan Labuan Sait, Pecatu",lat:-8.8296,lng:115.0842,precision:"approximate",source:"https://www.singlefinbali.com/contact/",note:"cliffside surf bar with sunset views and music"},
         {type:"activity",label:"Uluwatu Temple",address:"Pecatu cliff edge",lat:-8.8295,lng:115.0849,precision:"approximate",source:"https://uluwatutemple.org/hours-and-fees/",note:"70 m cliff attraction with Kecak performance views"}
@@ -589,7 +828,7 @@
       ],
       "siargao-philippines": [
         {type:"stay",label:"On ur own privacy, relaxing home",address:"General Luna · Airbnb-masked point",lat:9.7840,lng:126.1580,precision:"approximate",source:"https://www.airbnb.com/rooms/841386927652774633?check_in=2026-10-13&check_out=2026-11-12&adults=1",note:"future-window listing showed $532 snapshot; view/luxury not established"},
-        {type:"gym",label:"SurFit Gym Siargao",address:"Across Watsons, Tourism Road, General Luna",lat:9.7950,lng:126.1605,precision:"approximate",source:"https://www.surfitgymsiargao.com/",note:"high-performance equipment, infrared sauna, and ice baths"},
+        {type:"gym",label:"Tawhay Siargao",address:"Old Tourism Road, General Luna",lat:9.8020,lng:126.1582,precision:"approximate",source:"https://www.tawhaysiargao.com/service-page/open-gym-access",note:"same named gym as the priced evidence card; open-gym access and membership source"},
         {type:"food",label:"Amias Pizza",address:"General Luna",lat:9.7948,lng:126.1601,precision:"approximate",source:"https://amiaspizza.com/",note:"current menu and General Luna location"},
         {type:"social",label:"NĀGA Siargao",address:"Tourism Road, General Luna",lat:9.7958557,lng:126.1603145,precision:"exact",source:"https://www.nagaconcepts.co/",note:"real gathering ground with published map location"},
         {type:"activity",label:"Siargao Surf Academy / Cloud 9",address:"Cloud 9 Surfing Area",lat:9.8083,lng:126.1674,precision:"approximate",source:"https://www.siargaosurfacademy.com/",note:"real surf operator and iconic Cloud 9 break"}
@@ -617,7 +856,7 @@
       ],
       "dumaguete-philippines": [
         {type:"stay",label:"Marina Spatial Studio Condo",address:"EJ Blanco Drive / Piapi",lat:9.3210,lng:123.3100,precision:"approximate",source:"https://onepropertee.com/studio-condo-rent-marina-spatial-dumaguete-property-5721",note:"named condo building with PHP 20,000/month lead; exact unit needs confirmation"},
-        {type:"gym",label:"Fit24 Fitness Gym & Café",address:"Silliman Portal East G/F, Silliman Avenue",lat:9.3155,lng:123.3065,precision:"approximate",source:"https://www.fit24.life/",note:"monthly/walk-in rates plus sauna and ice-bath premium access"},
+        {type:"gym",label:"Fit24 Fitness Gym & Café",address:"Silliman Portal East G/F, Silliman Avenue",lat:9.31054,lng:123.30777,precision:"approximate",source:"https://www.fit24.life/",note:"same named gym as the priced evidence card; current walk-in and monthly rates plus sauna access"},
         {type:"food",label:"1988 Bistro",address:"Rizal Boulevard corner San Juan Street",lat:9.3076,lng:123.3058,precision:"approximate",source:"https://www.foodpanda.ph/restaurant/ofds/1988-bistro-dumaguete",note:"current menu with seafood, pork, chicken, and noodles"},
         {type:"social",label:"LFT Dumaguete",address:"Hibbard Avenue, Bantayan",lat:9.3220,lng:123.3005,precision:"approximate",source:"https://lftdumaguete.com/",note:"productivity/community space with published events"},
         {type:"activity",label:"Apo Island snorkeling / Turtle Point",address:"Apo Island · day trip",lat:9.0770,lng:123.2700,precision:"approximate",source:"https://orientwind.com.ph/tour/apo-snorkeling-tour/",note:"operator-backed turtle activity; day-trip pin, not local walkability"}
@@ -638,7 +877,7 @@
       ],
       "baguio-philippines": [
         {type:"stay",label:"Brenthill Baguio studio",address:"Upper Yangco Road, Baguio",lat:16.4166,lng:120.6008,precision:"approximate",source:"https://rentpad.com.ph/for-rent/tagaytay/fully-furnished-studio-for-rent-at-brenthill-baguio/653e76ab84",note:"furnished studio with pool; PHP 27,000/month, six-month minimum"},
-        {type:"gym",label:"Anytime Fitness at Hotel Supreme",address:"Hotel Supreme Mall & Event Center",lat:16.4238,lng:120.5988,precision:"approximate",source:"https://www.anytimefitness.ph/gyms/ph-0209/baguio-city-benguet-2600/",note:"24/7 member access and real Baguio location"},
+        {type:"gym",label:"Camp John Hay Hotels Fitness Center",address:"Camp John Hay, Baguio",lat:16.3975,lng:120.6150,precision:"approximate",source:"https://johnhayhotels.com/services/fitness-center/",note:"same named fitness center as the priced evidence card; official day rate"},
         {type:"food",label:"GoodTaste Restaurant",address:"Corner Cariño and Otek Streets",lat:16.4106,lng:120.5948,precision:"approximate",source:"https://philjobnet.gov.ph/job-vacancies/company/goodtaste-restaurant-180500",note:"real local restaurant address and high-volume comfort food"},
         {type:"social",label:"Baguio Craft Brewery",address:"120 RKC Building, Marcos Highway, Km 4",lat:16.3980,lng:120.5965,precision:"approximate",source:"https://www.baguiocraftbrewery.net/",note:"live music, beer, food, and late social hours"},
         {type:"activity",label:"Camp John Hay",address:"Loakan Road, Baguio",lat:16.3955,lng:120.6082,precision:"approximate",source:"https://www.jhmc.com.ph/",note:"real pine forest recreation district"}
@@ -658,22 +897,22 @@
         {type:"activity",label:"Cambugahay Falls",address:"Tigbawan, Lazi",lat:9.1430,lng:123.5390,precision:"approximate",source:"https://www.discoverthephilippines.com/cambugahay-falls/",note:"real waterfall and rope-swing activity"}
       ],
       "florianopolis-brazil": [
-        {type:"stay",label:"Santinho monthly suite / apartment rental",address:"Servidão do Jornalista No. 76, Praia do Santinho",lat:-27.4665,lng:-48.3900,precision:"approximate",source:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/aluguel-mensal-em-pousada-florianopolis-santinho-1478695177",note:"monthly availability through November; 500 m from Praia do Santinho"},
-        {type:"gym",label:"Aguas do Santinho Resort fitness facilities",address:"Estrada Vereador Onildo Lemos, 2345",lat:-27.4675,lng:-48.3890,precision:"approximate",source:"https://www.aguasdosantinho.com.br/",note:"premium resort gym, pools, security, and sea-view amenities"},
+        {type:"stay",label:"Novo Campeche furnished 2BR loft",address:"Rua Nicolau João de Abreu, Novo Campeche · building-level listing point",lat:-27.6755,lng:-48.4927,precision:"approximate",source:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/loft-2-quartos-piscina-garagem-mensal-ate-dezembro-novo-campeche-1509902288",note:"BRL 5,000 rent + BRL 800 condo; about 200 m from beach; exact unit must be confirmed"},
+        {type:"gym",label:"Believe Fitness Center",address:"R. Pastor William Richard Schisler Filho, 452, Itacorubi",lat:-27.5754,lng:-48.5061,precision:"exact",source:"https://believefcenter.com/",note:"official BRL 305/month 2x/week annual plan; source page lists weekday hours"},
         {type:"food",label:"Garapuvu Café",address:"Rodovia Admar Gonzaga, 600, Itacorubi",lat:-27.5750,lng:-48.5060,precision:"approximate",source:"https://www.garapuvucafe.com.br/contato97453751",note:"real address paired with current meal evidence"},
-        {type:"social",label:"048 Coworking",address:"Shopping Oka Floripa, Rodovia Francisco Magno Vieira, 4397",lat:-27.6740,lng:-48.4940,precision:"approximate",source:"https://www.048coworking.com.br/",note:"community space and terrace with Campeche views"},
+        {type:"social",label:"Floripa Runners coached run/walk",address:"Av. Beira Mar Norte / Parque de Coqueiros · session locations",lat:-27.5876,lng:-48.5487,precision:"approximate",source:"https://www.floriparunners.com.br/treinos-e-planos/",note:"official Tue/Thu sessions and BRL 209/month semestral plan; meeting point varies by session"},
         {type:"activity",label:"Projeto Tamar Visitor Center",address:"Rua Professor Ademir Francisco s/n, Barra da Lagoa",lat:-27.5745,lng:-48.4270,precision:"approximate",source:"https://www.tamar.com.br/centros_visitantes.php?cod=8",note:"real visitor center with address, hours, and ticket"}
       ],
       "bariloche-argentina": [
         {type:"stay",label:"Apart del Lago",address:"Bustillo 7800, Playa Bonita",lat:-41.1115,lng:-71.3915,precision:"approximate",source:"https://barilocheturismo.gob.ar/es/ver-hotel/apart-del-lago",note:"lakefront property with pool, sauna, and Playa Bonita views"},
-        {type:"gym",label:"Summit Training Center",address:"Alemania 274, New Lawn",lat:-41.1340,lng:-71.3160,precision:"approximate",source:"https://summitbariloche.com.ar/",note:"real training center with published address"},
+        {type:"gym",label:"Club Nahuel Huapi gym",address:"Luelmo 43, Bariloche",lat:-41.13262,lng:-71.28905,precision:"approximate",source:"https://clubnahuelhuapi.com/actividades/gimnasio",note:"same named gym as the priced evidence card; official monthly rate"},
         {type:"food",label:"Serena Restaurant",address:"Av. Exequiel Bustillo km 12.3",lat:-41.0995,lng:-71.4250,precision:"approximate",source:"https://www.serenabariloche.com.ar/contact-reservations",note:"lakeside corridor restaurant"},
         {type:"social",label:"The Station Patagonia",address:"Av. Exequiel Bustillo 11500",lat:-41.0990,lng:-71.4240,precision:"approximate",source:"https://www.thestationpatagonia.com/",note:"coworking, café, events, and lake-area social life"},
         {type:"activity",label:"Cerro Catedral Alta Patagonia",address:"Base Cerro Catedral",lat:-41.1680,lng:-71.4390,precision:"approximate",source:"https://catedralaltapatagonia.com/atencion-al-cliente/",note:"real mountain base and seasonal activity system"}
       ],
       "santiago-chile": [
         {type:"stay",label:"Comfortable Apartment in Barrio Lastarria",address:"Barrio Lastarria · Airbnb-masked point",lat:-33.437966,lng:-70.641016,precision:"approximate",source:"https://www.airbnb.com/rooms/33310621?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"Airbnb masks the exact address; walkable arts district"},
-        {type:"gym",label:"Energy Club, Cenco Costanera",address:"Av. Andrés Bello 2425",lat:-33.417987,lng:-70.606425,precision:"exact",source:"https://www.cencomalls.cl/costanera/tiendas/energy-club",note:"full gym and group-training facility"},
+        {type:"gym",label:"Smart Fit Vivo Panorámico",address:"Av. Ricardo Lyon 157, Providencia",lat:-33.44408,lng:-70.60304,precision:"approximate",source:"https://www.smartfit.cl/gimnasios/vivo-panoramico",note:"same named gym as the priced evidence card; current Black-plan source"},
         {type:"food",label:"Latin Restaurant, Santiago Marriott",address:"Av. Presidente Kennedy 5741",lat:-33.400281,lng:-70.574290,precision:"exact",source:"https://www.marriott.com/en-us/hotels/scldt-santiago-marriott-hotel/dining/",note:"upscale Chilean dining"},
         {type:"social",label:"Patio Bellavista",address:"Constitución 30–70",lat:-33.433889,lng:-70.634557,precision:"exact",source:"https://patiobellavista.cl/contacto/",note:"real gastronomic/nightlife complex"},
         {type:"activity",label:"Sky Costanera",address:"Costanera Center, Providencia",lat:-33.416722,lng:-70.606835,precision:"exact",source:"https://www.skycostanera.cl/en/rates-and-schedules",note:"panoramic city and Andes views"}
@@ -687,7 +926,7 @@
       ],
       "bangkok-thailand": [
         {type:"stay",label:"XT Ekkamai",address:"259 Sukhumvit 63 · building-level Airbnb point",lat:13.734015,lng:100.586611,precision:"approximate",source:"https://www.airbnb.com/rooms/50835852?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"Airbnb masks the unit; high-rise Ekkamai base"},
-        {type:"gym",label:"Jetts Donki Mall Ekkamai",address:"107 Donki Mall, 4th floor",lat:13.730770,lng:100.585680,precision:"exact",source:"https://www.jetts.co.th/donki-ekkamai/",note:"real 24-hour fitness venue"},
+        {type:"gym",label:"Fitness First Terminal 21",address:"Terminal 21 Asok, Sukhumvit Road",lat:13.7375,lng:100.5603,precision:"approximate",source:"https://www.fitnessfirst.com/th/en/membership",note:"same named gym as the priced evidence card; Home Club membership source"},
         {type:"food",label:"FRICKIN’ Fried Chicken",address:"Shop A4, 85 Soi Akapat, Thonglor 13",lat:13.7340,lng:100.5800,precision:"approximate",source:"https://www.tripadvisor.com/Restaurant_Review-g293916-d34273998-Reviews-FRICKIN_Fried_Chicken-Bangkok.html",note:"current restaurant address; street-level coordinate approximate"},
         {type:"social",label:"Tulum Sky Bar",address:"29F, Estella Ekkamai, 559 Sukhumvit 63",lat:13.739406,lng:100.589034,precision:"exact",source:"https://tulum.asia/",note:"rooftop skyline views, DJs, and nightlife"},
         {type:"activity",label:"Grand Palace",address:"Na Phra Lan Road",lat:13.749351,lng:100.491864,precision:"exact",source:"https://www.royalgrandpalace.th/en/visit/practical-information",note:"real attraction with official visitor information"}
@@ -742,6 +981,7 @@
     const mapLinkForPin = (pin) => pin.mapUrl || osmMap(pin.lat.toFixed(5), pin.lng.toFixed(5), 16);
 
     const state = { location:null, slide:0, mode:"auto", timer:null, maps:{} };
+    const mapInstances = new WeakMap();
     let pageScrollY = 0;
     let holdTimer = null;
     let holdFired = false;
@@ -759,7 +999,9 @@
     const lifeScore = (location) => lifeScoreValue(location).toFixed(1);
     const rankedLocations = [...locations].sort((a, b) => lifeScoreValue(b) - lifeScoreValue(a) || a.index - b.index).map((location, rankIndex) => ({ ...location, rank:rankIndex + 1 }));
     const evidenceFor = (location, kind) => {
-      const evidence = (liveEvidence[location.slug] || {})[kind];
+      const base = (liveEvidence[location.slug] || {})[kind];
+      const override = (venueEvidenceOverrides[location.slug] || {})[kind];
+      const evidence = base && override ? { ...base, ...override } : base || override;
       if (evidence) return { ...evidence, checkedAt:evidence.checkedAt || evidenceCheckedAt };
       return { status:"needs-check", title:"No current source found yet", price:"NOT VERIFIED", source:"Search current proof", url:googleSearch(location.name + " " + kind + " current price official"), images:[], checkedAt:evidenceCheckedAt };
     };
@@ -790,7 +1032,7 @@
       return "DERIVED PLANNING TOTAL — $" + Math.round(foodValue + activityValue).toLocaleString() + " (food + activity only)";
     };
     const priceChip = (label, value) => '<div class="slide-price"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></div>';
-    const sourceButtons = (location, kind) => {
+    const sourceButtons = (location, kind, evidenceOverride) => {
       const query = {
         stay:location.name + " furnished apartment monthly rent " + location.area,
         social:location.name + " run club social climbing surf group schedule",
@@ -798,7 +1040,7 @@
         gym:location.name + " " + location.gym + " membership",
         activity:location.name + " " + location.activity
       }[kind];
-      const evidence = evidenceFor(location, kind);
+      const evidence = evidenceOverride || evidenceFor(location, kind);
       const links = [];
       if (evidence.url) links.push([evidence.source || "Direct source", evidence.url]);
       links.push(["Map / named lead", cityMap(query)], ["Search current proof", googleSearch(query)]);
@@ -806,85 +1048,90 @@
       const seen = new Set();
       return links.filter((link) => { if (seen.has(link[1])) return false; seen.add(link[1]); return true; }).slice(0, 4).map((link, index) => '<a class="source-link' + (index > 0 ? ' secondary' : '') + '" href="' + escapeHtml(link[1]) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(link[0]) + ' ↗</a>').join("");
     };
-    const imageMarkup = (location, kind, label, index) => {
-      const evidence = evidenceFor(location, kind);
-      const images = Array.isArray(evidence.images) ? evidence.images.filter(Boolean) : [];
+    const imageMarkup = (location, kind, label, index, evidenceOverride) => {
+      const evidence = evidenceOverride || evidenceFor(location, kind);
+      const images = Array.isArray(evidence.images) ? [...new Set(evidence.images.filter(Boolean))] : [];
       const statusText = evidenceStatus(evidence);
       const statusType = evidenceClass(evidence);
       const alt = (evidence.title || location.name) + " — " + label;
-      if (!images.length) return '<figure class="photo-card"><div class="live-proof-placeholder" data-photo-kind="' + kind + '" data-evidence="missing"><strong>LIVE PHOTO NOT VERIFIED</strong><span>' + escapeHtml(evidence.title || label) + '</span></div><figcaption><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(location.name) + '</span><br><span class="evidence-pill needs-check">' + escapeHtml(statusText) + '</span></figcaption></figure>';
-      const src = images[index % images.length];
-      return '<figure class="photo-card"><img data-photo-kind="' + kind + '" data-evidence="' + statusType + '" src="' + escapeHtml(src) + '" alt="' + escapeHtml(alt) + '" loading="eager" referrerpolicy="no-referrer" onerror="this.onerror=null;this.closest(\'.photo-card\').querySelector(\'.evidence-pill\').textContent=\'SOURCE IMAGE FAILED\';this.remove()"><figcaption><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(evidence.source || location.name) + '</span><br><span class="evidence-pill ' + statusType + '">' + escapeHtml(statusText) + '</span></figcaption></figure>';
+      const imageSource = evidence.source || "the linked source";
+      const caption = (evidence.title || location.name) + " — " + label;
+      if (!images[index]) return '<figure class="photo-card"><div class="evidence-empty" data-photo-kind="' + kind + '" data-evidence="missing"><strong>SOURCE IMAGE NOT PUBLISHED</strong><span>' + escapeHtml(evidence.title || label) + '</span><span class="image-source-note">A direct source-specific image was not available for this card. The source link remains below.</span></div><figcaption><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(imageSource) + '</span><br><span class="evidence-pill needs-check">' + escapeHtml(statusText) + '</span></figcaption></figure>';
+      const src = images[index];
+      return '<figure class="photo-card"><button class="media-trigger" type="button" data-media-src="' + escapeHtml(src) + '" data-media-caption="' + escapeHtml(caption) + '" aria-label="Enlarge ' + escapeHtml(caption) + '"><img data-photo-kind="' + kind + '" data-photo-role="' + escapeHtml(label) + '" data-evidence="' + statusType + '" src="' + escapeHtml(src) + '" alt="' + escapeHtml(alt) + '" loading="eager" referrerpolicy="no-referrer"></button><figcaption><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(imageSource) + '</span><br><span class="evidence-pill ' + statusType + '">' + escapeHtml(statusText) + '</span></figcaption></figure>';
     };
-    const evidenceCard = (location, kind, label) => {
-      const evidence = evidenceFor(location, kind);
+    const evidenceCard = (location, kind, label, evidenceOverride) => {
+      const evidence = evidenceOverride || evidenceFor(location, kind);
       const verified = evidence.status === "verified";
       const note = evidence.availability || evidence.window || (verified ? "Source and price checked on " + evidenceCheckedAt + "." : "No current source, price, and image have been verified together yet. Do not book or budget from this slide.");
-      return '<div class="evidence-card ' + (verified ? 'is-verified' : '') + '"><div><h3>' + escapeHtml(evidence.title || label) + '</h3><p><strong>' + escapeHtml(evidenceStatus(evidence)) + '</strong> · ' + escapeHtml(note) + ' Checked ' + escapeHtml(evidence.checkedAt || evidenceCheckedAt) + '.</p></div><div class="source-row">' + sourceButtons(location, kind) + '</div></div>';
+      return '<div class="evidence-card ' + (verified ? 'is-verified' : '') + '"><div><h3>' + escapeHtml(evidence.title || label) + '</h3><p><strong>' + escapeHtml(evidenceStatus(evidence)) + '</strong> · ' + escapeHtml(note) + ' Checked ' + escapeHtml(evidence.checkedAt || evidenceCheckedAt) + '.</p></div><div class="source-row">' + sourceButtons(location, kind, evidence) + '</div></div>';
     };
     const photoSlide = (location, kind, title, copy, labels, price) => labels.map((label, index) => {
-      const evidence = evidenceFor(location, kind);
+      const evidence = kind === "stay" ? housingOptionFor(location, index) : evidenceFor(location, kind);
       const livePrice = evidenceHasAnyPrice(evidence) ? evidence.price : "USD PRICE NOT VERIFIED — open source";
       const qualifier = evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ";
       const chipLabel = qualifier + (kind === "stay" ? "HOUSING" : kind === "social" ? "SOCIAL" : kind === "food" ? "MEAL" : kind === "gym" ? "GYM" : "ACTIVITY");
       const stayPin = kind === "stay" ? locationPins(location).find((pin) => pin.type === "stay") : null;
       const viewFocus = stayPin && stayPin.note ? '<div class="view-focus">VIEW / LUXURY SIGNAL · ' + escapeHtml(stayPin.note) + '</div>' : '';
-      return '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / MEETUP" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + labels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, label, index) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(title) + '</h2>' + priceChip(chipLabel, livePrice) + viewFocus + '<p class="slide-copy">' + escapeHtml(copy) + '</p>' + evidenceCard(location, kind, label) + '</div></div></div></article>';
+      const slideTitle = kind === "stay" ? evidence.title : title;
+      const slideCopy = kind === "stay" ? ((evidence.budget ? evidence.budget + " lane. " : "") + (evidence.availability || copy)) : copy;
+      const mediaIndex = kind === "stay" ? index % 2 : index;
+      return '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / MEETUP" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + labels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, label, mediaIndex, evidence) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(slideTitle) + '</h2>' + priceChip(chipLabel, livePrice) + viewFocus + '<p class="slide-copy">' + escapeHtml(slideCopy) + '</p>' + evidenceCard(location, kind, label, evidence) + '</div></div></div></article>';
     }).join("");
     const heroEvidence = (location) => {
-      const activity = evidenceFor(location, "activity");
-      const stay = evidenceFor(location, "stay");
-      return Array.isArray(activity.images) && activity.images.length ? activity : stay;
+      // The verdict hero is always housing evidence. Never make an activity,
+      // restaurant, or gym photo look like the rental just because housing is
+      // unresolved; that was the source of the old Florianópolis mismatch.
+      return housingOptionFor(location, 0);
     };
     const heroMarkup = (location) => {
       const evidence = heroEvidence(location);
       const images = Array.isArray(evidence.images) ? evidence.images.filter(Boolean) : [];
-      if (!images.length) return '<div class="hero-image"><div class="live-proof-placeholder"><strong>NO LIVE HERO PHOTO VERIFIED</strong><span>' + escapeHtml(location.name) + '</span></div><span class="hero-badge">NEEDS LIVE IMAGE</span></div>';
-      return '<div class="hero-image"><img data-photo-kind="hero" data-evidence="' + evidenceClass(evidence) + '" src="' + escapeHtml(images[0]) + '" alt="' + escapeHtml(evidence.title || location.name) + '" loading="eager" referrerpolicy="no-referrer"><span class="hero-badge">' + escapeHtml(evidenceStatus(evidence)) + '</span></div>';
+      if (!images.length) return '<div class="hero-image"><div class="evidence-empty"><strong>NO SOURCE HERO IMAGE</strong><span>' + escapeHtml(evidence.title || location.name) + '</span><span class="image-source-note">The deck will not substitute a stock or generated image. Use the linked source buttons to inspect the live lead.</span></div><span class="hero-badge">SOURCE IMAGE MISSING</span></div>';
+      return '<div class="hero-image"><button class="media-trigger" type="button" data-media-src="' + escapeHtml(images[0]) + '" data-media-caption="' + escapeHtml(evidence.title || location.name) + '"><img data-photo-kind="hero" data-photo-role="hero source image" data-evidence="' + evidenceClass(evidence) + '" src="' + escapeHtml(images[0]) + '" alt="' + escapeHtml(evidence.title || location.name) + '" loading="eager" referrerpolicy="no-referrer"></button><span class="hero-badge">SOURCE IMAGE · ' + escapeHtml(evidenceStatus(evidence)) + '</span></div>';
     };
-    const ratingSlide = (location) => '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(evidenceFor(location,"stay"), "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="evidence-summary"><span class="status-pill ' + evidenceClass(evidenceFor(location,"stay")) + '">RENT ' + escapeHtml(evidenceStatus(evidenceFor(location,"stay"))) + '</span><span class="status-pill ' + evidenceClass(evidenceFor(location,"food")) + '">FOOD ' + escapeHtml(evidenceStatus(evidenceFor(location,"food"))) + '</span><span class="status-pill ' + evidenceClass(evidenceFor(location,"activity")) + '">ACTIVITY ' + escapeHtml(evidenceStatus(evidenceFor(location,"activity"))) + '</span></div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(evidenceFor(location,"stay").url) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
+    const ratingSlide = (location) => {
+      const housing = housingOptionFor(location, 0);
+      const food = evidenceFor(location, "food");
+      const activity = evidenceFor(location, "activity");
+      const social = evidenceFor(location, "social");
+      const gym = evidenceFor(location, "gym");
+      return '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">#' + location.rank + ' · ' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(housing, "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="evidence-summary"><span class="status-pill ' + evidenceClass(housing) + '">STAY ' + escapeHtml(evidenceStatus(housing)) + '</span><span class="status-pill ' + evidenceClass(food) + '">MEAL ' + escapeHtml(evidenceStatus(food)) + '</span><span class="status-pill ' + evidenceClass(activity) + '">ACTIVITY ' + escapeHtml(evidenceStatus(activity)) + '</span><span class="status-pill ' + evidenceClass(social) + '">SOCIAL ' + escapeHtml(evidenceStatus(social)) + '</span><span class="status-pill ' + evidenceClass(gym) + '">GYM ' + escapeHtml(evidenceStatus(gym)) + '</span></div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
+    };
 
     const makeMap = (location) => {
       const pins = locationPins(location);
-      const latitudes = pins.map((pin) => Number(pin.lat));
-      const longitudes = pins.map((pin) => Number(pin.lng));
-      const centerLat = latitudes.reduce((sum, value) => sum + value, 0) / latitudes.length;
-      const centerLng = longitudes.reduce((sum, value) => sum + value, 0) / longitudes.length;
-      const latPad = Math.max(0.010, (Math.max(...latitudes) - Math.min(...latitudes)) * 0.28);
-      const lngPad = Math.max(0.014, (Math.max(...longitudes) - Math.min(...longitudes)) * 0.28);
-      const west = Math.min(...longitudes) - lngPad;
-      const east = Math.max(...longitudes) + lngPad;
-      const north = Math.max(...latitudes) + latPad;
-      const south = Math.min(...latitudes) - latPad;
-      const allSourced = pins.every((pin) => pin.source && pin.precision !== "planning");
-      const fallbackPins = pins.map((pin) => {
-        const x = Math.max(8, Math.min(92, ((pin.lng - west) / (east - west)) * 100)).toFixed(2);
-        const y = Math.max(12, Math.min(86, ((north - pin.lat) / (north - south)) * 100)).toFixed(2);
-        const precision = pin.precision === "approximate" ? " · approximate map point" : pin.precision === "exact" ? " · exact venue point" : " · planning point";
-        return '<a class="static-pin" style="left:' + x + '%;top:' + y + '%;--pin-color:' + pinColors[pin.type] + '" data-label="' + escapeHtml(pinLabel[pin.type]) + '" href="' + escapeHtml(mapLinkForPin(pin)) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(pinLabel[pin.type] + ": " + pin.label + precision) + '">' + pinLetter[pin.type] + '</a>';
-      }).join("");
-      const bbox = [west.toFixed(5), south.toFixed(5), east.toFixed(5), north.toFixed(5)].join(",");
-      const embed = "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + centerLat.toFixed(5) + "," + centerLng.toFixed(5);
-      const mapTitle = allSourced ? "real venue + property map" : "real named leads / masked stay map";
-      const mapNote = allSourced ? "Each pin is a real named property or venue with a source link and coordinate-based OpenStreetMap link. A stay pin may still be approximate when a rental platform masks the exact apartment address." : "Named pins and source links are real, but at least one location is still a planning lead or platform-masked stay. Do not treat an approximate point as a verified door address.";
-      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><iframe class="osm-embed" title="OpenStreetMap geography for ' + escapeHtml(location.name) + '" src="' + embed + '" loading="lazy"></iframe><div class="map-hold-layer" aria-hidden="true"></div><div class="map-overlay"><div class="static-map-title">' + escapeHtml(location.name) + ' / ' + escapeHtml(mapTitle) + '</div>' + fallbackPins + '</div></div></div><div class="map-side">' + pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type]) + ' · ' + escapeHtml(precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("") + '<a class="source-link" href="' + osmMap(centerLat, centerLng, 14) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">' + mapNote + ' The transparent map layer preserves tap-and-hold pause; use Open full map for zoom/pan.</p></div></div>';
+      const latitudes = pins.map((pin) => Number(pin.lat)).filter(Number.isFinite);
+      const longitudes = pins.map((pin) => Number(pin.lng)).filter(Number.isFinite);
+      const centerLat = latitudes.reduce((sum, value) => sum + value, 0) / Math.max(1, latitudes.length);
+      const centerLng = longitudes.reduce((sum, value) => sum + value, 0) / Math.max(1, longitudes.length);
+      const serializedPins = escapeHtml(JSON.stringify(pins));
+      const exactCount = pins.filter((pin) => pin.precision === "exact").length;
+      const mapNote = "Pins are plotted from their latitude/longitude by Leaflet, so they cannot drift away from the source coordinates as the old percentage overlay did. Stay points can be approximate when a rental platform masks the door address; venue sources remain clickable.";
+      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><div class="leaflet-map" data-map-pins="' + serializedPins + '" data-map-center="' + centerLat.toFixed(5) + ',' + centerLng.toFixed(5) + '" role="application" aria-label="Interactive map with five source-backed pins for ' + escapeHtml(location.name) + '"></div></div></div><div class="map-side">' + pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type] + ' · ' + precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("") + '<a class="source-link" href="' + osmMap(centerLat, centerLng, 14) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">' + exactCount + ' of 5 pins are marked exact in the source data. ' + mapNote + '</p></div></div>';
     };
 
     const money = (value) => "$" + Math.round(value).toLocaleString();
     const budgetCard = (location, total) => {
-      const housing = evidenceFor(location, "stay");
+      const housing = total === 3000 ? housingOptionFor(location, 0) : housingOptionFor(location, 1);
       const liveRent = evidenceHasPrice(housing) ? usdAmount(housing.price) : 0;
-      const rent = liveRent || (location.rent[0] + location.rent[1]) / 2;
-      const rentLabel = liveRent ? "verified housing input" : "legacy planning rent";
+      const rentLabel = liveRent ? ((housing.budget || (total === 3000 ? "$3K" : "$2K")) + " housing · source-backed") : "housing · NOT COMPUTED";
       const food = total === 2000 ? 360 : 520;
       const transport = total === 2000 ? 130 : 220;
       const gym = location.gymMonthly;
       const phone = 50;
       const medical = 500;
-      const buffer = Math.max(0, total - rent - food - transport - gym - phone - medical);
-      return '<div class="budget-card"><h3><span>$' + total.toLocaleString() + '</span><span>' + (total === 2000 ? location.scores.budget2k.toFixed(1) : location.scores.budget3k.toFixed(1)) + '/10</span></h3><div class="budget-lines"><div class="budget-line"><span>' + rentLabel + '</span><strong>' + money(rent) + '</strong></div><div class="budget-line"><span>food / cafes plan</span><strong>' + money(food) + '</strong></div><div class="budget-line"><span>transport plan</span><strong>' + money(transport) + '</strong></div><div class="budget-line"><span>gym / training plan</span><strong>' + money(gym) + '</strong></div><div class="budget-line"><span>phone + misc plan</span><strong>' + money(phone) + '</strong></div><div class="budget-line"><span>medical reserve</span><strong>' + money(medical) + '</strong></div><div class="budget-line remaining"><span>trips / buffer / upgrades</span><strong>' + money(buffer) + '</strong></div></div></div>';
+      const buffer = liveRent ? Math.max(0, total - liveRent - food - transport - gym - phone - medical) : null;
+      const housingValue = liveRent ? money(liveRent) : "NOT COMPUTED";
+      const bufferValue = buffer === null ? "NOT COMPUTED" : money(buffer);
+      const housingNote = housing.url ? '<a class="budget-source" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">open housing source ↗</a>' : '';
+      return '<div class="budget-card"><h3><span>$' + total.toLocaleString() + '</span><span>' + (total === 2000 ? location.scores.budget2k.toFixed(1) : location.scores.budget3k.toFixed(1)) + '/10</span></h3><div class="budget-lines"><div class="budget-line"><span>' + rentLabel + '</span><strong>' + housingValue + '</strong></div><div class="budget-line"><span>food / cafes plan</span><strong>' + money(food) + '</strong></div><div class="budget-line"><span>transport plan</span><strong>' + money(transport) + '</strong></div><div class="budget-line"><span>gym / training estimate</span><strong>' + money(gym) + '</strong></div><div class="budget-line"><span>phone + misc estimate</span><strong>' + money(phone) + '</strong></div><div class="budget-line"><span>medical reserve</span><strong>' + money(medical) + '</strong></div><div class="budget-line remaining"><span>trips / buffer / upgrades</span><strong>' + bufferValue + '</strong></div></div>' + housingNote + '</div>';
     };
-    const budgetSlide = (location) => '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">This is a transparent planning model: a housing input plus food, transport, training, phone/misc, and a $500 medical reserve. Only housing is replaced with a source-backed input when one exists; the other lines remain planning estimates.</p>' + priceChip("MONTHLY PLAN", "$2,000 or $3,000 modeled") + '<div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Budget scores answer “how much margin remains?” They do not mean the lifestyle is guaranteed at that spend. Unverified categories are deliberately not presented as live prices.</p></div></article>';
+    const budgetSlide = (location) => {
+      const options = housingOptionsBySlug[location.slug] || [];
+      const housingNote = options.length > 1 ? "This destination has separate source-backed $2K and $3K housing lanes." : "No separate source-backed housing upgrade was found; both budgets use the same listing only when its monthly price is verified. Otherwise the housing line stays NOT COMPUTED.";
+      return '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">' + escapeHtml(housingNote) + ' Food, transport, training, phone/misc, and medical are planning estimates. A missing housing price never becomes a fake midpoint.</p>' + priceChip("MONTHLY PLAN", "$2,000 and $3,000 shown in USD") + '<div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Scores answer “how much margin remains?” They are planning scores, not guarantees. Every source-backed housing figure still needs a final seller/platform confirmation before payment.</p></div></article>';
+    };
     const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p>' + priceChip("DERIVED / PLANNING", sampleDayPrice(location)) + '<div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' This setup is a lead to test against the live source cards, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a><a class="source-link secondary" href="' + escapeHtml(evidenceFor(location,"activity").url) + '" target="_blank" rel="noopener noreferrer">Open activity source ↗</a></div></div></div></article>';
 
     const buildSlides = (location) => ratingSlide(location)
@@ -912,6 +1159,11 @@
       autoButton.setAttribute("aria-label", state.mode === "auto" ? "Pause automatic slideshow" : "Resume automatic slideshow");
       status.textContent = state.mode === "auto" ? "AUTO PLAYING" : "PAUSED — PRESS AUTO TO RESUME";
       status.dataset.mode = state.mode;
+      mountMaps();
+      viewport.querySelectorAll(".leaflet-map").forEach((node) => {
+        const map = mapInstances.get(node);
+        if (map) window.setTimeout(() => map.invalidateSize(), 40);
+      });
     };
     const renderProgress = () => {
       const count = viewport.querySelectorAll(".slide").length;
@@ -942,9 +1194,74 @@
       window.scrollTo(0, restoreY);
     };
 
+    const mountMaps = () => {
+      const nodes = [...viewport.querySelectorAll(".leaflet-map:not([data-map-mounted])")];
+      if (!nodes.length) return;
+      if (!window.L) {
+        nodes.forEach((node) => {
+          const attempts = Number(node.dataset.mapAttempts || 0) + 1;
+          node.dataset.mapAttempts = String(attempts);
+          if (attempts > 20) {
+            node.dataset.mapMounted = "fallback";
+            node.innerHTML = '<div class="evidence-empty"><strong>INTERACTIVE MAP UNAVAILABLE</strong><span>Use the five named source links beside this panel or open the full OpenStreetMap link.</span></div>';
+          }
+        });
+        if (nodes.some((node) => !node.dataset.mapMounted)) window.setTimeout(mountMaps, 250);
+        return;
+      }
+      nodes.forEach((node) => {
+        let pins = [];
+        try { pins = JSON.parse(node.dataset.mapPins || "[]"); } catch (error) { pins = []; }
+        if (!pins.length) return;
+        const map = window.L.map(node, { zoomControl:true, scrollWheelZoom:false, doubleClickZoom:true, touchZoom:true, dragging:true, attributionControl:true });
+        window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom:19, attribution:"© OpenStreetMap contributors" }).addTo(map);
+        const bounds = [];
+        pins.forEach((pin) => {
+          const lat = Number(pin.lat);
+          const lng = Number(pin.lng);
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+          bounds.push([lat, lng]);
+          const color = pinColors[pin.type] || "#83e9ce";
+          const precision = pin.precision === "exact" ? "EXACT VENUE POINT" : pin.precision === "approximate" ? "APPROXIMATE POINT" : "PLANNING POINT";
+          const source = pin.source ? '<a href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open source ↗</a>' : "";
+          const popup = '<strong>' + escapeHtml(pinLabel[pin.type] + " · " + pin.label) + '</strong><br><span>' + escapeHtml(precision + (pin.address ? " · " + pin.address : "")) + '</span><br>' + source;
+          window.L.circleMarker([lat, lng], { radius:8, color:"#07120f", weight:2, fillColor:color, fillOpacity:.95 }).addTo(map).bindPopup(popup);
+        });
+        if (bounds.length === 1) map.setView(bounds[0], 14);
+        if (bounds.length > 1) map.fitBounds(bounds, { padding:[16,16], maxZoom:14 });
+        mapInstances.set(node, map);
+        node.dataset.mapMounted = "true";
+        window.setTimeout(() => map.invalidateSize(), 80);
+      });
+    };
+
+    const lightbox = document.getElementById("media-lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    let lightboxZoom = 1;
+    const setLightboxZoom = (value) => {
+      lightboxZoom = Math.max(1, Math.min(3, value));
+      lightboxImage.style.transform = "scale(" + lightboxZoom + ")";
+      document.getElementById("lightbox-reset").textContent = lightboxZoom.toFixed(1).replace(".0", "") + "×";
+    };
+    const closeLightbox = () => {
+      lightbox.hidden = true;
+      lightboxImage.removeAttribute("src");
+      setLightboxZoom(1);
+    };
+    const openLightbox = (trigger) => {
+      const src = trigger.dataset.mediaSrc;
+      if (!src) return;
+      lightboxImage.src = src;
+      lightboxImage.alt = trigger.dataset.mediaCaption || "Enlarged source image";
+      lightboxCaption.textContent = (trigger.dataset.mediaCaption || "Source image") + " · use − / + to zoom";
+      lightbox.hidden = false;
+      setLightboxZoom(1);
+    };
+
 
     const openLocation = (slug) => {
-      const location = locations.find((item) => item.slug === slug);
+      const location = rankedLocations.find((item) => item.slug === slug);
       if (!location) return;
       state.location = location;
       state.slide = 0;
@@ -957,10 +1274,12 @@
       directory.setAttribute("aria-hidden","true");
       lockPage();
       updateControls();
+      mountMaps();
       startTimer();
     };
     const closeCinema = () => {
       stopTimer();
+      closeLightbox();
       cinema.hidden = true;
       directory.removeAttribute("aria-hidden");
       unlockPage();
@@ -981,6 +1300,36 @@
     document.getElementById("next-button").addEventListener("click", () => goTo(state.slide + 1, true));
     autoButton.addEventListener("click", () => { state.mode = state.mode === "auto" ? "paused" : "auto"; updateControls(); if (state.mode === "auto") startTimer(); else stopTimer(); });
     progress.addEventListener("click", (event) => { const dot = event.target.closest(".dot"); if (dot) goTo(Number(dot.dataset.slide), true); });
+    viewport.addEventListener("click", (event) => {
+      const trigger = event.target.closest(".media-trigger");
+      if (!trigger) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openLightbox(trigger);
+    });
+    viewport.addEventListener("error", (event) => {
+      const image = event.target;
+      if (!(image instanceof HTMLImageElement) || !image.matches("[data-photo-kind]")) return;
+      const card = image.closest(".photo-card");
+      const trigger = image.closest(".media-trigger");
+      if (trigger) {
+        const empty = document.createElement("div");
+        empty.className = "evidence-empty";
+        empty.innerHTML = "<strong>SOURCE IMAGE FAILED</strong><span>The linked source image did not load in this browser.</span><span class=\"image-source-note\">Use the source button below to inspect the live venue/listing.</span>";
+        trigger.replaceWith(empty);
+      } else if (image.closest(".hero-image")) {
+        image.replaceWith(Object.assign(document.createElement("div"), { className:"evidence-empty", innerHTML:"<strong>SOURCE IMAGE FAILED</strong><span>Use the linked source below.</span>" }));
+      }
+      if (card) {
+        const pill = card.querySelector(".evidence-pill");
+        if (pill) pill.textContent = "SOURCE IMAGE FAILED";
+      }
+    }, true);
+    document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox-minus").addEventListener("click", () => setLightboxZoom(lightboxZoom - .25));
+    document.getElementById("lightbox-reset").addEventListener("click", () => setLightboxZoom(1));
+    document.getElementById("lightbox-plus").addEventListener("click", () => setLightboxZoom(lightboxZoom + .25));
+    lightbox.addEventListener("click", (event) => { if (event.target === lightbox) closeLightbox(); });
     const clearHold = () => { if (holdTimer) window.clearTimeout(holdTimer); holdTimer = null; };
     const startHold = (event) => {
       if (event.target.closest("button,a")) return;
@@ -999,7 +1348,7 @@
     viewport.addEventListener("pointerleave", clearHold);
     viewport.addEventListener("mouseleave", clearHold);
     viewport.addEventListener("keydown", (event) => { if (event.key === "ArrowRight") goTo(state.slide + 1, true); if (event.key === "ArrowLeft") goTo(state.slide - 1, true); if (event.key === " ") { event.preventDefault(); autoButton.click(); } });
-    document.addEventListener("keydown", (event) => { if (cinema.hidden) return; if (event.key === "Escape") closeCinema(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !lightbox.hidden) { closeLightbox(); return; } if (cinema.hidden) return; if (event.key === "Escape") closeCinema(); });
     window.addEventListener("hashchange", () => { const slug = window.location.hash.slice(1); if (slug) openLocation(slug); else closeCinema(); });
     window.addEventListener("popstate", () => { const slug = window.location.hash.slice(1); if (slug) openLocation(slug); else closeCinema(); });
     const initialSlug = window.location.hash.slice(1);
