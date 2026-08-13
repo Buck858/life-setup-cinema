@@ -58,6 +58,7 @@
     .location-card:hover, .location-card:focus-visible { transform: translateY(-4px); border-color: var(--mint); background: linear-gradient(145deg, rgba(24,67,52,.95), rgba(9,24,19,.95)); outline: none; }
     .card-top, .card-bottom, .card-meta, .score-row, .source-row, .control-row, .cinema-header { display: flex; align-items: center; }
     .card-top { justify-content: space-between; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .1em; }
+    .rank-badge { display: inline-flex; align-items: center; padding: 5px 8px; border-radius: 999px; color: var(--ink); background: var(--lime); font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: .06em; }
     .location-card h2 { margin: 16px 0 0; font-size: 29px; letter-spacing: -.06em; line-height: .95; max-width: 230px; }
     .location-card p { color: #c4dcd1; line-height: 1.4; font-size: 13px; min-height: 56px; margin-bottom: 15px; }
     .card-bottom { justify-content: space-between; gap: 10px; position: relative; z-index: 1; }
@@ -316,7 +317,7 @@
         <div class="eyebrow">THE SHORTLIST</div>
         <h2>Twenty-one lives to compare</h2>
       </div>
-      <p>Open a card. The show starts automatically.<br>Touch and hold any slide to pause.</p>
+      <p>Tiles are ordered by weighted life-fit rank.<br>Open a card; touch and hold any slide to pause.</p>
     </section>
     <section id="location-grid" class="location-grid" aria-label="Choose a destination"></section>
     <p class="directory-footer">The wildcard from the old conversation is <strong>Tbilisi, Georgia</strong>. Krabi remains in the set as the climbing-forward addition. This remake uses the old research as a starting point, then turns it into a consistent decision system with explicit uncertainty.</p>
@@ -751,7 +752,9 @@
     const counter = document.getElementById("slide-counter");
 
     const scoreCard = (label, value) => '<div class="rating-card"><strong>' + Number(value).toFixed(1) + '</strong><span>' + escapeHtml(label) + '</span></div>';
-    const lifeScore = (location) => (location.scores.value * .18 + location.scores.social * .18 + location.scores.nature * .18 + location.scores.training * .16 + location.scores.food * .12 + location.scores.access * .18).toFixed(1);
+    const lifeScoreValue = (location) => location.scores.value * .18 + location.scores.social * .18 + location.scores.nature * .18 + location.scores.training * .16 + location.scores.food * .12 + location.scores.access * .18;
+    const lifeScore = (location) => lifeScoreValue(location).toFixed(1);
+    const rankedLocations = [...locations].sort((a, b) => lifeScoreValue(b) - lifeScoreValue(a) || a.index - b.index).map((location, rankIndex) => ({ ...location, rank:rankIndex + 1 }));
     const evidenceFor = (location, kind) => {
       const evidence = (liveEvidence[location.slug] || {})[kind];
       if (evidence) return { ...evidence, checkedAt:evidence.checkedAt || evidenceCheckedAt };
@@ -892,7 +895,7 @@
 
     const liveCategoryCount = (location) => ["stay","food","activity","social","gym"].filter((kind) => evidenceFor(location, kind).status === "verified").length;
     const renderDirectory = () => {
-      grid.innerHTML = locations.map((location) => '<a class="location-card" href="#' + location.slug + '" data-number="' + String(location.index).padStart(2,"0") + '" style="--accent:' + location.accent + '" aria-label="Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span>' + String(location.index).padStart(2,"0") + ' / ' + locations.length + '</span><span>14 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10</span><span class="pill">' + escapeHtml(location.area) + '</span><span class="pill">' + liveCategoryCount(location) + ' / 5 live</span></div><div class="card-score">' + location.scores.budget2k.toFixed(1) + '<small> $2K</small></div></div></div></a>').join("");
+      grid.innerHTML = rankedLocations.map((location) => '<a class="location-card" href="#' + location.slug + '" data-rank="' + location.rank + '" style="--accent:' + location.accent + '" aria-label="#' + location.rank + ' overall — Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span class="rank-badge">#' + location.rank + ' OVERALL</span><span>14 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10</span><span class="pill">' + escapeHtml(location.area) + '</span><span class="pill">' + liveCategoryCount(location) + ' / 5 live</span></div><div class="card-score">' + location.scores.budget2k.toFixed(1) + '<small> $2K</small></div></div></div></a>').join("");
     };
 
     const stopTimer = () => { if (state.timer) window.clearInterval(state.timer); state.timer = null; };
