@@ -96,6 +96,7 @@
     .slide-price { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 8px; width: fit-content; margin: 10px 0 3px; padding: 8px 10px; border: 1px solid rgba(201,241,126,.36); border-radius: 10px; background: rgba(201,241,126,.08); }
     .slide-price span { color: var(--lime); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
     .slide-price strong { color: var(--paper); font-size: 16px; letter-spacing: -.02em; }
+    .view-focus { display: inline-block; max-width: 100%; margin: 6px 0 8px; padding: 4px 7px; border: 1px solid rgba(255,207,134,.65); border-radius: 999px; color: var(--lime); font-family: var(--mono); font-size: 9px; line-height: 1.2; letter-spacing: .04em; white-space: normal; box-sizing: border-box; }
     .slide[data-slide-kind="verdict"] .hero-grid { height: auto; flex: 1; min-height: 0; }
     .slide[data-slide-kind="verdict"] .rating-grid { flex: 0 0 auto; }
     .verdict { border-left: 3px solid var(--orange); padding: 12px 0 12px 14px; margin: 22px 0; color: #f5dec8; font-size: 15px; line-height: 1.45; }
@@ -158,6 +159,9 @@
     .marker { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--marker); font-style: normal; font-family: var(--mono); font-size: 12px; font-weight: 700; }
     .map-legend strong { display: block; font-size: 12px; }
     .map-legend span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; line-height: 1.25; }
+    .map-pin-source { display: block; color: var(--lime); font-family: var(--mono); font-size: 8px; margin-top: 4px; text-decoration: none; }
+    .map-pin-source:hover, .map-pin-source:focus-visible { text-decoration: underline; outline: none; }
+    .map-pin-note { display: block; color: var(--lime); font-size: 9px; line-height: 1.2; margin-top: 3px; }
     .static-map { height: 100%; min-height: 460px; position: relative; overflow: hidden; background: radial-gradient(circle at 25% 30%, rgba(146,207,189,.45), transparent 20%), linear-gradient(135deg, #dce9d8, #9dc3ad); }
     .static-map::before { content: ""; position: absolute; inset: 0; opacity: .32; background-image: linear-gradient(30deg, transparent 47%, #fff 48%, transparent 50%), linear-gradient(120deg, transparent 47%, #fff 48%, transparent 50%); background-size: 90px 90px; }
     .static-map-title { position: absolute; top: 16px; left: 18px; z-index: 2; color: #234136; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
@@ -225,6 +229,7 @@
       .photo-single .photo-card figcaption strong { font-size: 12px; margin-bottom: 2px; }
       .slide-price { margin: 4px 0 5px; padding: 6px 8px; }
       .slide-price strong { font-size: 14px; }
+      .view-focus { margin: 3px 0 5px; padding: 3px 5px; font-size: 7px; }
       .evidence-card { padding: 9px; gap: 7px; }
       .evidence-card h3 { font-size: 12px; margin-bottom: 3px; }
       .evidence-card p { font-size: 10px; line-height: 1.25; }
@@ -241,6 +246,8 @@
       .map-legend .marker { width: 22px; height: 22px; font-size: 9px; }
       .map-legend strong { font-size: 9px; }
       .map-legend span { font-size: 7px; line-height: 1.1; margin-top: 1px; }
+      .map-pin-source { font-size: 6px; margin-top: 2px; }
+      .map-pin-note { font-size: 6px; line-height: 1.05; margin-top: 1px; }
       .map-side .source-link, .map-note { grid-column: 1 / -1; }
       .map-note { font-size: 9px; line-height: 1.2; margin: 0; }
       .budget-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; margin: 8px 0; }
@@ -263,6 +270,8 @@
       .map-legend .marker { width: 18px; height: 18px; font-size: 8px; }
       .map-legend strong { font-size: 8px; }
       .map-legend span { font-size: 7px; line-height: 1.08; }
+      .map-pin-source { font-size: 6px; margin-top: 2px; }
+      .map-pin-note { font-size: 6px; line-height: 1.05; margin-top: 1px; }
       .map-side .source-link { grid-column: 1 / -1; }
       .slide[data-slide-kind="map"] .map-note { display: none; }
       .slide[data-slide-kind="map"] .map-frame { flex: 0 0 170px; }
@@ -299,7 +308,7 @@
 
     <section class="rule-card" aria-labelledby="rules-heading">
       <h2 id="rules-heading">The rules this remake follows</h2>
-      <p><strong>Every place gets fourteen no-scroll slides:</strong> verdict + rating, four stay slides, two social slides, two meal slides, two gym/recovery slides, a readable map with five named pins, itemized $2K/$3K budgets, and a sample day. Live price chips are shown in U.S. dollars. A category is called <strong>LIVE SOURCE VERIFIED</strong> only when the source, dated price, and source-specific image were found together; partial or missing evidence is labeled on-slide and never replaced with stock photography. The short-stay check window is <strong>Oct 13–Nov 12, 2026 for one guest</strong>; prices and availability are snapshots, not guarantees. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
+      <p><strong>Every place gets fourteen no-scroll slides:</strong> verdict + rating, four stay slides, two social slides, two meal slides, two gym/recovery slides, a readable map with five named real property/venue pins, itemized $2K/$3K budgets, and a sample day. Live price chips are shown in U.S. dollars. A category is called <strong>LIVE SOURCE VERIFIED</strong> only when the source, dated price, and source-specific image were found together; partial or missing evidence is labeled on-slide and never replaced with stock photography. Map pins carry a direct venue/property source and mark exact versus approximate coordinates; rental platforms often mask the exact apartment address. The short-stay check window is <strong>Oct 13–Nov 12, 2026 for one guest</strong>; prices and availability are snapshots, not guarantees. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
     </section>
 
     <section class="directory-head">
@@ -557,6 +566,158 @@
       }
     };
 
+    // Real venue/property coordinates are populated from dated source research below.
+    // A missing entry intentionally falls back to the old planning offsets and is
+    // visibly labeled as a planning lead; it is never presented as an exact venue.
+    const realMapPins = {
+      "uluwatu-bali": [
+        {type:"stay",label:"Modern 2BR Villa, Bukit / Pecatu",address:"Bingin / Pecatu",lat:-8.8100,lng:115.1030,precision:"approximate",source:"https://balihousing.com/en/pecatu/rent-65124-villa-2-bedrooms-pool-near-the-sea",note:"private pool + rooftop terrace with ocean views; availability warning remains visible"},
+        {type:"gym",label:"Uluwatu Hub",address:"Jalan Goa Lempeh No. 27A, Pecatu",lat:-8.8075,lng:115.1125,precision:"approximate",source:"https://uluwatuhub.com/",note:"open-air gym, pool, coworking, and sea proximity"},
+        {type:"food",label:"The Loft Bali",address:"Bingin",lat:-8.8065,lng:115.1070,precision:"approximate",source:"https://www.theloft-bali.com/menu",note:"Bingin café with current menu and cliffside neighborhood feel"},
+        {type:"social",label:"Single Fin Bali",address:"Pantai Suluban, Jalan Labuan Sait, Pecatu",lat:-8.8296,lng:115.0842,precision:"approximate",source:"https://www.singlefinbali.com/contact/",note:"cliffside surf bar with sunset views and music"},
+        {type:"activity",label:"Uluwatu Temple",address:"Pecatu cliff edge",lat:-8.8295,lng:115.0849,precision:"approximate",source:"https://uluwatutemple.org/hours-and-fees/",note:"70 m cliff attraction with Kecak performance views"}
+      ],
+      "da-lat-vietnam": [
+        {type:"stay",label:"5-bedroom house, Phan Chu Trinh Street",address:"Ward 9",lat:11.9460,lng:108.4640,precision:"approximate",source:"https://www.oneday.com.vn/en_VN/bds/cho-thue-nha-mat-pho-lam-dong-da-lat-phuong-9-cho-thue-nha-5-phong-ngu-duong-phan-chu-trinh-da-lat-gia-12-trieu/",note:"large long-term house; view quality is not confirmed"},
+        {type:"gym",label:"Ladalat Hotel Fitness Center",address:"106A Mai Anh Dao Street",lat:11.9810,lng:108.4425,precision:"approximate",source:"https://www.ladalathotel.com.vn/en/experience/gym-center",note:"premium fitness center with advanced equipment"},
+        {type:"food",label:"Zen Valley Da Lat",address:"38 Khe Sanh, Ward 10",lat:11.9308,lng:108.4544,precision:"approximate",source:"https://zenvalleydalat.vn/menu/",note:"pine-forest resort restaurant with infinity-pool scenery"},
+        {type:"social",label:"One More Coworking",address:"One More Café, 77 Hai Ba Trung",lat:11.9470,lng:108.4390,precision:"approximate",source:"https://included.co/join/onemorecoworking/",note:"real coworking community and café hangout"},
+        {type:"activity",label:"Crazy House",address:"03 Huynh Thuc Khang Street",lat:11.9407,lng:108.4305,precision:"exact",source:"https://crazyhouse.vn/public/en/tham-quan",note:"architectural attraction with official admission"}
+      ],
+      "siargao-philippines": [
+        {type:"stay",label:"On ur own privacy, relaxing home",address:"General Luna · Airbnb-masked point",lat:9.7840,lng:126.1580,precision:"approximate",source:"https://www.airbnb.com/rooms/841386927652774633?check_in=2026-10-13&check_out=2026-11-12&adults=1",note:"future-window listing showed $532 snapshot; view/luxury not established"},
+        {type:"gym",label:"SurFit Gym Siargao",address:"Across Watsons, Tourism Road, General Luna",lat:9.7950,lng:126.1605,precision:"approximate",source:"https://www.surfitgymsiargao.com/",note:"high-performance equipment, infrared sauna, and ice baths"},
+        {type:"food",label:"Amias Pizza",address:"General Luna",lat:9.7948,lng:126.1601,precision:"approximate",source:"https://amiaspizza.com/",note:"current menu and General Luna location"},
+        {type:"social",label:"NĀGA Siargao",address:"Tourism Road, General Luna",lat:9.7958557,lng:126.1603145,precision:"exact",source:"https://www.nagaconcepts.co/",note:"real gathering ground with published map location"},
+        {type:"activity",label:"Siargao Surf Academy / Cloud 9",address:"Cloud 9 Surfing Area",lat:9.8083,lng:126.1674,precision:"approximate",source:"https://www.siargaosurfacademy.com/",note:"real surf operator and iconic Cloud 9 break"}
+      ],
+      "kuta-lombok": [
+        {type:"stay",label:"Soluna Bungalows, Green Oasis with Big Pool",address:"Kuta / Mandalika · Airbnb-masked point",lat:-8.8910,lng:116.2760,precision:"approximate",source:"https://www.airbnb.com/rooms/1272817468502975356?check_in=2026-10-13&check_out=2026-11-12&adults=1",note:"future-window availability found; pool/greenery, not guaranteed view"},
+        {type:"gym",label:"XENO FIT",address:"Kuta town",lat:-8.8910,lng:116.2760,precision:"approximate",source:"https://xenolombok.com/contact/",note:"bamboo-built gym with classes and tourist monthly pricing"},
+        {type:"food",label:"Da Nonna",address:"Plus Code 475H+RJ, Kuta",lat:-8.8925,lng:116.2780,precision:"approximate",source:"https://danonna.id/",note:"current menu, dishes, prices, and published Plus Code"},
+        {type:"social",label:"Tumbao Beach Club",address:"Jalan Tanjung Aan, Pantai Tanjung Aan",lat:-8.9070,lng:116.3180,precision:"approximate",source:"https://tumbaolombok.com/",note:"white-sand beach club with sunset cocktails and DJs"},
+        {type:"activity",label:"Kuta Lombok Surf School",address:"Kuta Lombok",lat:-8.8681404,lng:116.2643579,precision:"exact",source:"https://www.kutalomboksurfschool.com/",note:"operator publishes surf prices and embedded map"}
+      ],
+      "siem-reap-cambodia": [
+        {type:"stay",label:"Rose Apple Square one-bedroom residence",address:"Rose Apple Road",lat:13.3505,lng:103.8515,precision:"approximate",source:"https://www.roseapplesquare.com/residences/one-bedroom",note:"balcony residence project; individual rental availability must be reconfirmed"},
+        {type:"gym",label:"Angkor Fitness",address:"Mondol I Village, Svay Dangkum Quarter",lat:13.3475,lng:103.8505,precision:"approximate",source:"https://angkorfitness.com/",note:"modern equipment, steam, sauna, and trainers"},
+        {type:"food",label:"Sambo Restaurant",address:"Wat Damnak, behind the Art Centre / Night Market",lat:13.3475,lng:103.8565,precision:"approximate",source:"https://sambosiemreap.com/food-drink/",note:"current USD menu with Khmer and Thai dishes"},
+        {type:"social",label:"The Space Restaurant / Empier VII Club",address:"Street 11",lat:13.3515,lng:103.8535,precision:"approximate",source:"https://thespacerestaurant.com/",note:"restaurant, café, sport bar, and club venue"},
+        {type:"activity",label:"Angkor Wat / Archaeological Park",address:"Angkor Archaeological Park",lat:13.4125,lng:103.8670,precision:"approximate",source:"https://www.angkorenterprise.gov.kh/en/faqs",note:"real attraction with Cambodian government ticket system"}
+      ],
+      "valencia-philippines": [
+        {type:"stay",label:"60 sqm furnished 2-bedroom apartment",address:"Luzurriaga · owner-confirm exact address",lat:9.2830,lng:123.2440,precision:"approximate",source:"https://onepropertee.com/60-00-sqm-2-bedroom-apartment-rent-valencia-luzurriaga-negros-oriental-property",note:"PHP 25,000/month listing with three units shown; exact address needs owner confirmation"},
+        {type:"gym",label:"TM Fitness Hub",address:"2/F Bumblebees Building, Jose Romero Road, Balabag East",lat:9.2890,lng:123.2626,precision:"approximate",source:"https://tmfitnesshub.com/contact/",note:"real gym with sauna and bistro facilities"},
+        {type:"food",label:"Bisnok Pungko-Pungko",address:"E Balabag Barangay Road · Plus Code 6QX577V3+W2",lat:9.2937,lng:123.2525,precision:"approximate",source:"https://www.foodpanda.ph/restaurant/hsuy/bisnok-pungko-pungko-valencia",note:"current menu and Plus Code location"},
+        {type:"social",label:"Café Mystika",address:"Stall 5, Valencia Food Plaza",lat:9.2810,lng:123.2440,precision:"approximate",source:"https://www.cafemystika.com/",note:"specialty coffee and local work/social hangout"},
+        {type:"activity",label:"Casaroro Falls",address:"Barangay Apolong · day trip",lat:9.2794,lng:123.2147,precision:"approximate",source:"https://www.tripadvisor.co.nz/Attraction_Review-g3600145-d1550121-Reviews-Casaroro_Falls-Valencia_Negros_Oriental_Negros_Island_Visayas.html",note:"real mountain waterfall; day-trip pin, not a walkable local venue"}
+      ],
+      "dumaguete-philippines": [
+        {type:"stay",label:"Marina Spatial Studio Condo",address:"EJ Blanco Drive / Piapi",lat:9.3210,lng:123.3100,precision:"approximate",source:"https://onepropertee.com/studio-condo-rent-marina-spatial-dumaguete-property-5721",note:"named condo building with PHP 20,000/month lead; exact unit needs confirmation"},
+        {type:"gym",label:"Fit24 Fitness Gym & Café",address:"Silliman Portal East G/F, Silliman Avenue",lat:9.3155,lng:123.3065,precision:"approximate",source:"https://www.fit24.life/",note:"monthly/walk-in rates plus sauna and ice-bath premium access"},
+        {type:"food",label:"1988 Bistro",address:"Rizal Boulevard corner San Juan Street",lat:9.3076,lng:123.3058,precision:"approximate",source:"https://www.foodpanda.ph/restaurant/ofds/1988-bistro-dumaguete",note:"current menu with seafood, pork, chicken, and noodles"},
+        {type:"social",label:"LFT Dumaguete",address:"Hibbard Avenue, Bantayan",lat:9.3220,lng:123.3005,precision:"approximate",source:"https://lftdumaguete.com/",note:"productivity/community space with published events"},
+        {type:"activity",label:"Apo Island snorkeling / Turtle Point",address:"Apo Island · day trip",lat:9.0770,lng:123.2700,precision:"approximate",source:"https://orientwind.com.ph/tour/apo-snorkeling-tour/",note:"operator-backed turtle activity; day-trip pin, not local walkability"}
+      ],
+      "canggu-bali": [
+        {type:"stay",label:"Monthly & Yearly Only! 2Bed, Walk to Beach & Finns",address:"Berawa / FINNS zone · Airbnb-masked point",lat:-8.6500,lng:115.1380,precision:"approximate",source:"https://www.airbnb.com/rooms/659095373295532446",note:"private pool, garden view, luxury bathrooms, and 280 m to Berawa Beach"},
+        {type:"gym",label:"Wanderlust Fitness Village",address:"Jalan Raya Padonan No. 6, Canggu",lat:-8.6262,lng:115.1560,precision:"approximate",source:"https://wanderlustfitnessvillage.com/hotel/",note:"modern fitness and recovery venue"},
+        {type:"food",label:"Mularasa Eatery",address:"Jl. Pantai Batu Mejan No. 15",lat:-8.6485,lng:115.1305,precision:"approximate",source:"https://mularasaeatery.com/",note:"official address and current menu"},
+        {type:"social",label:"FINNS Beach Club",address:"Jalan Pantai Berawa",lat:-8.6500,lng:115.1390,precision:"approximate",source:"https://finnsbeachclub.com/location/",note:"real beachfront social club"},
+        {type:"activity",label:"Berawa Beach / Off Peak Bali surf area",address:"Berawa Beach",lat:-8.6530,lng:115.1370,precision:"approximate",source:"https://www.offpeakbali.com/",note:"real surf and beach activity area"}
+      ],
+      "phu-quoc-vietnam": [
+        {type:"stay",label:"Pacific Apartment Phu Quoc",address:"Marina Square 30–31, Khu Marina Bai Truong, Duong To",lat:10.1530,lng:103.9790,precision:"approximate",source:"https://www.booking.com/hotel/vn/pacific-phu-quoc-apartment.en-gb.html",note:"pool property near Long Beach; current Booking example, future quote not exposed"},
+        {type:"gym",label:"Trung Anh Gym / ModunFit",address:"219 Nguyen Trung Truc, Duong Dong",lat:10.2172,lng:103.9610,precision:"approximate",source:"https://modunfit.com/dia-diem/trung-anh-gym",note:"large air-conditioned gym with equipment"},
+        {type:"food",label:"Grandma's Kitchen",address:"Duong Dong / Tran Hung Dao area",lat:10.2150,lng:103.9600,precision:"approximate",source:"https://www.grandmaskitchenphuquoc.com/menu",note:"real menu source; street address not exposed"},
+        {type:"social",label:"Phu Quoc Night Market",address:"Bach Dang Street, Duong Dong",lat:10.2159,lng:103.9603,precision:"approximate",source:"https://dulichphuquoc.gov.vn/iv/chodempq",note:"real night market and social food circuit"},
+        {type:"activity",label:"Sun World Hon Thom / An Thoi Station",address:"An Thoi Town",lat:10.0265,lng:104.0140,precision:"approximate",source:"https://sunworld.vn/en/hon-thom/transportation/an-thoi-terminal-departure-terminal",note:"real cable-car terminal and island-view activity"}
+      ],
+      "baguio-philippines": [
+        {type:"stay",label:"Brenthill Baguio studio",address:"Upper Yangco Road, Baguio",lat:16.4166,lng:120.6008,precision:"approximate",source:"https://rentpad.com.ph/for-rent/tagaytay/fully-furnished-studio-for-rent-at-brenthill-baguio/653e76ab84",note:"furnished studio with pool; PHP 27,000/month, six-month minimum"},
+        {type:"gym",label:"Anytime Fitness at Hotel Supreme",address:"Hotel Supreme Mall & Event Center",lat:16.4238,lng:120.5988,precision:"approximate",source:"https://www.anytimefitness.ph/gyms/ph-0209/baguio-city-benguet-2600/",note:"24/7 member access and real Baguio location"},
+        {type:"food",label:"GoodTaste Restaurant",address:"Corner Cariño and Otek Streets",lat:16.4106,lng:120.5948,precision:"approximate",source:"https://philjobnet.gov.ph/job-vacancies/company/goodtaste-restaurant-180500",note:"real local restaurant address and high-volume comfort food"},
+        {type:"social",label:"Baguio Craft Brewery",address:"120 RKC Building, Marcos Highway, Km 4",lat:16.3980,lng:120.5965,precision:"approximate",source:"https://www.baguiocraftbrewery.net/",note:"live music, beer, food, and late social hours"},
+        {type:"activity",label:"Camp John Hay",address:"Loakan Road, Baguio",lat:16.3955,lng:120.6082,precision:"approximate",source:"https://www.jhmc.com.ph/",note:"real pine forest recreation district"}
+      ],
+      "boracay-philippines": [
+        {type:"stay",label:"High-Ceiling 60 sqm Family Apartment",address:"Station 3 / Sitio Ambulong beachfront area",lat:11.9520,lng:121.9285,precision:"approximate",source:"https://www.airbnb.com/rooms/1197463291301130456",note:"beachfront complex with partial sea view; exact unit masked"},
+        {type:"gym",label:"Legacy Gym Boracay",address:"0915 Diniwid Road, Balabag",lat:11.9740,lng:121.9160,precision:"approximate",source:"https://www.legacygymphilippines.com/contact",note:"full gym plus boxing, MMA, Muay Thai, and BJJ"},
+        {type:"food",label:"Nonie's Boracay",address:"Ondus Hotel, Station 3",lat:11.9515,lng:121.9280,precision:"approximate",source:"https://www.nonies.com.ph/",note:"beachfront dining and current menu"},
+        {type:"social",label:"Station X",address:"Hue Hotel, Station 2 Main Road",lat:11.9607,lng:121.9265,precision:"approximate",source:"https://www.stationx.ph/our-community",note:"community/lifestyle gathering space"},
+        {type:"activity",label:"GreenYard Kite Center",address:"Bulabog Beach",lat:11.9650,lng:121.9320,precision:"approximate",source:"https://www.gy-kite.com/",note:"real kite center and water-sports beach"}
+      ],
+      "siquijor-philippines": [
+        {type:"stay",label:"SIQUIJOR – THE SEANDYOU Resort",address:"Campo Uno, Timbaon, San Juan",lat:9.1700,lng:123.4880,precision:"approximate",source:"https://www.booking.com/hotel/ph/seandyou-resort.en-gb.html",note:"pool, beach, and villa imagery; current Booking example"},
+        {type:"gym",label:"Golden Gorilla Gym",address:"Dragon Hill Farm, Can-Asagan, San Juan",lat:9.1700,lng:123.5030,precision:"approximate",source:"https://siquijorgym.com/",note:"real gym with visitor and monthly rates"},
+        {type:"food",label:"Tahanan Resort dining",address:"San Juan beachfront / cliffside area",lat:9.1630,lng:123.4860,precision:"approximate",source:"https://tahananresort.com/dining/",note:"cliffside beachfront resort dining"},
+        {type:"social",label:"Eden Coworking",address:"Tompong Compound, San Juan",lat:9.1680,lng:123.4950,precision:"approximate",source:"https://www.siquijorcoworkingspace.com/",note:"real coworking and community venue"},
+        {type:"activity",label:"Cambugahay Falls",address:"Tigbawan, Lazi",lat:9.1430,lng:123.5390,precision:"approximate",source:"https://www.discoverthephilippines.com/cambugahay-falls/",note:"real waterfall and rope-swing activity"}
+      ],
+      "florianopolis-brazil": [
+        {type:"stay",label:"Santinho monthly suite / apartment rental",address:"Servidão do Jornalista No. 76, Praia do Santinho",lat:-27.4665,lng:-48.3900,precision:"approximate",source:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/aluguel-mensal-em-pousada-florianopolis-santinho-1478695177",note:"monthly availability through November; 500 m from Praia do Santinho"},
+        {type:"gym",label:"Aguas do Santinho Resort fitness facilities",address:"Estrada Vereador Onildo Lemos, 2345",lat:-27.4675,lng:-48.3890,precision:"approximate",source:"https://www.aguasdosantinho.com.br/",note:"premium resort gym, pools, security, and sea-view amenities"},
+        {type:"food",label:"Garapuvu Café",address:"Rodovia Admar Gonzaga, 600, Itacorubi",lat:-27.5750,lng:-48.5060,precision:"approximate",source:"https://www.garapuvucafe.com.br/contato97453751",note:"real address paired with current meal evidence"},
+        {type:"social",label:"048 Coworking",address:"Shopping Oka Floripa, Rodovia Francisco Magno Vieira, 4397",lat:-27.6740,lng:-48.4940,precision:"approximate",source:"https://www.048coworking.com.br/",note:"community space and terrace with Campeche views"},
+        {type:"activity",label:"Projeto Tamar Visitor Center",address:"Rua Professor Ademir Francisco s/n, Barra da Lagoa",lat:-27.5745,lng:-48.4270,precision:"approximate",source:"https://www.tamar.com.br/centros_visitantes.php?cod=8",note:"real visitor center with address, hours, and ticket"}
+      ],
+      "bariloche-argentina": [
+        {type:"stay",label:"Apart del Lago",address:"Bustillo 7800, Playa Bonita",lat:-41.1115,lng:-71.3915,precision:"approximate",source:"https://barilocheturismo.gob.ar/es/ver-hotel/apart-del-lago",note:"lakefront property with pool, sauna, and Playa Bonita views"},
+        {type:"gym",label:"Summit Training Center",address:"Alemania 274, New Lawn",lat:-41.1340,lng:-71.3160,precision:"approximate",source:"https://summitbariloche.com.ar/",note:"real training center with published address"},
+        {type:"food",label:"Serena Restaurant",address:"Av. Exequiel Bustillo km 12.3",lat:-41.0995,lng:-71.4250,precision:"approximate",source:"https://www.serenabariloche.com.ar/contact-reservations",note:"lakeside corridor restaurant"},
+        {type:"social",label:"The Station Patagonia",address:"Av. Exequiel Bustillo 11500",lat:-41.0990,lng:-71.4240,precision:"approximate",source:"https://www.thestationpatagonia.com/",note:"coworking, café, events, and lake-area social life"},
+        {type:"activity",label:"Cerro Catedral Alta Patagonia",address:"Base Cerro Catedral",lat:-41.1680,lng:-71.4390,precision:"approximate",source:"https://catedralaltapatagonia.com/atencion-al-cliente/",note:"real mountain base and seasonal activity system"}
+      ],
+      "santiago-chile": [
+        {type:"stay",label:"Comfortable Apartment in Barrio Lastarria",address:"Barrio Lastarria · Airbnb-masked point",lat:-33.437966,lng:-70.641016,precision:"approximate",source:"https://www.airbnb.com/rooms/33310621?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"Airbnb masks the exact address; walkable arts district"},
+        {type:"gym",label:"Energy Club, Cenco Costanera",address:"Av. Andrés Bello 2425",lat:-33.417987,lng:-70.606425,precision:"exact",source:"https://www.cencomalls.cl/costanera/tiendas/energy-club",note:"full gym and group-training facility"},
+        {type:"food",label:"Latin Restaurant, Santiago Marriott",address:"Av. Presidente Kennedy 5741",lat:-33.400281,lng:-70.574290,precision:"exact",source:"https://www.marriott.com/en-us/hotels/scldt-santiago-marriott-hotel/dining/",note:"upscale Chilean dining"},
+        {type:"social",label:"Patio Bellavista",address:"Constitución 30–70",lat:-33.433889,lng:-70.634557,precision:"exact",source:"https://patiobellavista.cl/contacto/",note:"real gastronomic/nightlife complex"},
+        {type:"activity",label:"Sky Costanera",address:"Costanera Center, Providencia",lat:-33.416722,lng:-70.606835,precision:"exact",source:"https://www.skycostanera.cl/en/rates-and-schedules",note:"panoramic city and Andes views"}
+      ],
+      "mexico-city-mexico": [
+        {type:"stay",label:"Incredible suite in Nápoles",address:"Nápoles · Airbnb-masked point",lat:19.389663,lng:-99.173808,precision:"approximate",source:"https://www.airbnb.com/rooms/1738001618730582486?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"exact Airbnb building masked; central serviced-suite neighborhood"},
+        {type:"gym",label:"Sports World Condesa",address:"Sonora 180, Hipódromo Condesa",lat:19.413212,lng:-99.167465,precision:"approximate",source:"https://www.sportsworld.com.mx/uploads/documentos_generales/releases/Even_InauguraCondesa.pdf",note:"full fitness club; operation should be rechecked before booking"},
+        {type:"food",label:"Taco Tasting Room",address:"Calle 5 de Mayo 47, Centro",lat:19.434069,lng:-99.135717,precision:"exact",source:"https://tacotastingroom.com/en/",note:"real 14-seat taquería with current tasting menu"},
+        {type:"social",label:"The Club Coworking Condesa",address:"Campeche 410",lat:19.410409,lng:-99.176288,precision:"exact",source:"https://www.theclubcoworking.com.mx/ubicacion.php?ubicacion_id=1",note:"terrace, networking, and green-space views"},
+        {type:"activity",label:"Castillo de Chapultepec",address:"Bosque de Chapultepec",lat:19.420463,lng:-99.182087,precision:"exact",source:"https://lugares.inah.gob.mx/es/node/4682",note:"historic attraction with elevated city views"}
+      ],
+      "bangkok-thailand": [
+        {type:"stay",label:"XT Ekkamai",address:"259 Sukhumvit 63 · building-level Airbnb point",lat:13.734015,lng:100.586611,precision:"approximate",source:"https://www.airbnb.com/rooms/50835852?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"Airbnb masks the unit; high-rise Ekkamai base"},
+        {type:"gym",label:"Jetts Donki Mall Ekkamai",address:"107 Donki Mall, 4th floor",lat:13.730770,lng:100.585680,precision:"exact",source:"https://www.jetts.co.th/donki-ekkamai/",note:"real 24-hour fitness venue"},
+        {type:"food",label:"FRICKIN’ Fried Chicken",address:"Shop A4, 85 Soi Akapat, Thonglor 13",lat:13.7340,lng:100.5800,precision:"approximate",source:"https://www.tripadvisor.com/Restaurant_Review-g293916-d34273998-Reviews-FRICKIN_Fried_Chicken-Bangkok.html",note:"current restaurant address; street-level coordinate approximate"},
+        {type:"social",label:"Tulum Sky Bar",address:"29F, Estella Ekkamai, 559 Sukhumvit 63",lat:13.739406,lng:100.589034,precision:"exact",source:"https://tulum.asia/",note:"rooftop skyline views, DJs, and nightlife"},
+        {type:"activity",label:"Grand Palace",address:"Na Phra Lan Road",lat:13.749351,lng:100.491864,precision:"exact",source:"https://www.royalgrandpalace.th/en/visit/practical-information",note:"real attraction with official visitor information"}
+      ],
+      "buenos-aires-argentina": [
+        {type:"stay",label:"Recoleta with a Private Terrace",address:"Recoleta · Airbnb-masked point",lat:-34.587358,lng:-58.391570,precision:"approximate",source:"https://www.airbnb.com/rooms/37563991?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"private terrace; exact building masked"},
+        {type:"gym",label:"Megatlon Recoleta",address:"Arenales 1930",lat:-34.594697,lng:-58.395013,precision:"exact",source:"https://megatlon.com/sedes/recoleta/",note:"full gym with classes and running team"},
+        {type:"food",label:"Fuego y Vino Cabernet",address:"Jorge Luis Borges 1757, Palermo",lat:-34.587698,lng:-58.428460,precision:"exact",source:"https://www.fuegoyvino.com/contacto/",note:"upscale Palermo restaurant"},
+        {type:"social",label:"Bestial Fly Bar",address:"Humboldt 2495, 11th floor",lat:-34.578075,lng:-58.427489,precision:"exact",source:"https://bestialflybar.com.ar/",note:"rooftop DJs and sunset city views"},
+        {type:"activity",label:"Teatro Colón",address:"Cerrito 628",lat:-34.601086,lng:-58.383187,precision:"exact",source:"https://teatrocolon.org.ar/guided-tours/",note:"real theater and guided-tour entrance"}
+      ],
+      "mendoza-argentina": [
+        {type:"stay",label:"Centrally Located Apartment / Torre Leloir candidate",address:"Quinta Sección / Parque General San Martín",lat:-32.8890,lng:-68.8450,precision:"approximate",source:"https://www.airbnb.com/rooms/1131138598718915447",note:"view-focused replacement candidate advertises panoramic city/Andes views, pool, gym, and sauna"},
+        {type:"gym",label:"Gimnasio Municipal Nº1",address:"Paso de los Andes 385",lat:-32.896344,lng:-68.858590,precision:"exact",source:"https://ciudaddemendoza.gob.ar/area-municipal/direccion-de-deportes-y-recreacion/",note:"real municipal gym"},
+        {type:"food",label:"Diplomatic Restaurant",address:"Belgrano 1041",lat:-32.889419,lng:-68.849660,precision:"exact",source:"https://www.diplomaticrestaurant.com/es/",note:"hotel dining with a luxury profile"},
+        {type:"social",label:"Gómez Rooftop",address:"Garibaldi 7, 10th floor",lat:-32.890534,lng:-68.838795,precision:"exact",source:"https://www.isitfunky.com/mendoza/g-mez-rooftop-piso-10",note:"panoramic city views and nightlife"},
+        {type:"activity",label:"Catena Zapata winery",address:"Cobos s/n, Luján de Cuyo",lat:-33.135470,lng:-68.917898,precision:"approximate",source:"https://catenazapata.com/es/contact-es/",note:"real winery; gate coordinate needs final local check"}
+      ],
+      "tbilisi-georgia": [
+        {type:"stay",label:"Panoramic View Designer 1BR / Vake candidate",address:"Vake / Airbnb-masked point",lat:41.692233,lng:44.803252,precision:"approximate",source:"https://www.airbnb.nl/rooms/576471721326933079",note:"view-focused replacement advertises mountain and city views; exact building masked"},
+        {type:"gym",label:"Vake Pool",address:"49B Ilia Chavchavadze Avenue",lat:41.713160,lng:44.744728,precision:"exact",source:"https://vsp.ge/about-us/",note:"Olympic pool, gym, sauna, and fitness classes"},
+        {type:"food",label:"Salobie Bia",address:"17 Shota Rustaveli Avenue",lat:41.699833,lng:44.797949,precision:"exact",source:"https://ge.gaultmillau.com/en/restaurants/salobie-bia",note:"real restaurant with current menu source"},
+        {type:"social",label:"Fabrika Co-Work / cultural courtyard",address:"8 Ninoshvili Street",lat:41.709540,lng:44.802723,precision:"exact",source:"https://fabrikatbilisi.com/resident/co-working/",note:"cafés, bars, events, and social courtyard"},
+        {type:"activity",label:"Tbilisi Botanical Garden",address:"Botanikuri Street 1",lat:41.685766,lng:44.809316,precision:"approximate",source:"https://georgia.travel/the-botanical-garden",note:"waterfall, cliffs, and zipline access"}
+      ],
+      "krabi-thailand": [
+        {type:"stay",label:"Haus233/4 / Aonang Phu Pi Maan view-first alternative",address:"Ao Nang · Airbnb-masked zone",lat:8.037090,lng:98.831410,precision:"approximate",source:"https://www.airbnb.com/rooms/930091042648093053?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"map shows the Ao Nang rental zone; Phu Pi Maan alternative has pool, spa, and mountain views"},
+        {type:"gym",label:"Aonang Phu Pi Maan Fitness Room",address:"86/8 Moo 2",lat:8.037090,lng:98.831410,precision:"exact",source:"https://www.aonangphupimaan.com/facilities/fitness-room",note:"named resort fitness room at the view-focused property"},
+        {type:"food",label:"Saffron, Banyan Tree Krabi",address:"279 Moo 3, Nongtalay / Tubkaek",lat:8.117461,lng:98.748057,precision:"approximate",source:"https://www.banyantree.com/thailand/krabi/dining/saffron",note:"luxury restaurant in the beach/resort corridor"},
+        {type:"social",label:"iRest Ao Nang",address:"155/8–12 Moo 3",lat:8.040250,lng:98.819500,precision:"exact",source:"https://irestaonang.com/",note:"pool table, garden, live events, and coworking"},
+        {type:"activity",label:"Railay Rock You / Railay Beach",address:"Railay Beach climbing area",lat:8.012616,lng:98.837196,precision:"approximate",source:"https://www.railayrockyou.com/about/",note:"real climbing operator and limestone-beach destination"}
+      ]
+    };
     const offsets = {
       social:[0.008,0.006],
       food:[-0.005,0.010],
@@ -567,13 +728,15 @@
     const pinLetter = { stay:"S", social:"R", food:"F", gym:"G", activity:"A" };
     const pinLabel = { stay:"STAY", social:"SOCIAL", food:"FOOD", gym:"GYM", activity:"ACTIVITY" };
     const locationPins = (location) => {
+      const researched = realMapPins[location.slug];
+      if (Array.isArray(researched) && researched.length === 5) return researched;
       const names = { stay:location.stay, social:location.social, food:location.restaurant, gym:location.gym, activity:location.activity };
       return Object.keys(names).map((type) => {
         const delta = offsets[type] || [0,0];
-        return { type:type, label:names[type], lat:location.coords[0] + delta[0], lng:location.coords[1] + delta[1] };
+        return { type:type, label:names[type], lat:location.coords[0] + delta[0], lng:location.coords[1] + delta[1], precision:"planning", source:"", address:"Approximate planning lead" };
       });
     };
-    const mapLinkForPin = (pin) => osmMap(pin.lat.toFixed(5), pin.lng.toFixed(5), 14);
+    const mapLinkForPin = (pin) => pin.mapUrl || osmMap(pin.lat.toFixed(5), pin.lng.toFixed(5), 16);
 
     const state = { location:null, slide:0, mode:"auto", timer:null, maps:{} };
     let holdTimer = null;
@@ -658,7 +821,9 @@
       const livePrice = evidenceHasAnyPrice(evidence) ? evidence.price : "USD PRICE NOT VERIFIED — open source";
       const qualifier = evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ";
       const chipLabel = qualifier + (kind === "stay" ? "HOUSING" : kind === "social" ? "SOCIAL" : kind === "food" ? "MEAL" : kind === "gym" ? "GYM" : "ACTIVITY");
-      return '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / MEETUP" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + labels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, label, index) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(title) + '</h2>' + priceChip(chipLabel, livePrice) + '<p class="slide-copy">' + escapeHtml(copy) + '</p>' + evidenceCard(location, kind, label) + '</div></div></div></article>';
+      const stayPin = kind === "stay" ? locationPins(location).find((pin) => pin.type === "stay") : null;
+      const viewFocus = stayPin && stayPin.note ? '<div class="view-focus">VIEW / LUXURY SIGNAL · ' + escapeHtml(stayPin.note) + '</div>' : '';
+      return '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / MEETUP" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + labels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, label, index) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(title) + '</h2>' + priceChip(chipLabel, livePrice) + viewFocus + '<p class="slide-copy">' + escapeHtml(copy) + '</p>' + evidenceCard(location, kind, label) + '</div></div></div></article>';
     }).join("");
     const heroEvidence = (location) => {
       const activity = evidenceFor(location, "activity");
@@ -675,18 +840,28 @@
 
     const makeMap = (location) => {
       const pins = locationPins(location);
-      const west = location.coords[1] - 0.035;
-      const east = location.coords[1] + 0.035;
-      const north = location.coords[0] + 0.025;
-      const south = location.coords[0] - 0.025;
+      const latitudes = pins.map((pin) => Number(pin.lat));
+      const longitudes = pins.map((pin) => Number(pin.lng));
+      const centerLat = latitudes.reduce((sum, value) => sum + value, 0) / latitudes.length;
+      const centerLng = longitudes.reduce((sum, value) => sum + value, 0) / longitudes.length;
+      const latPad = Math.max(0.010, (Math.max(...latitudes) - Math.min(...latitudes)) * 0.28);
+      const lngPad = Math.max(0.014, (Math.max(...longitudes) - Math.min(...longitudes)) * 0.28);
+      const west = Math.min(...longitudes) - lngPad;
+      const east = Math.max(...longitudes) + lngPad;
+      const north = Math.max(...latitudes) + latPad;
+      const south = Math.min(...latitudes) - latPad;
+      const allSourced = pins.every((pin) => pin.source && pin.precision !== "planning");
       const fallbackPins = pins.map((pin) => {
         const x = Math.max(8, Math.min(92, ((pin.lng - west) / (east - west)) * 100)).toFixed(2);
         const y = Math.max(12, Math.min(86, ((north - pin.lat) / (north - south)) * 100)).toFixed(2);
-        return '<a class="static-pin" style="left:' + x + '%;top:' + y + '%;--pin-color:' + pinColors[pin.type] + '" data-label="' + escapeHtml(pin.label) + '" href="' + mapLinkForPin(pin) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(pinLabel[pin.type] + ": " + pin.label) + '">' + pinLetter[pin.type] + '</a>';
+        const precision = pin.precision === "approximate" ? " · approximate map point" : pin.precision === "exact" ? " · exact venue point" : " · planning point";
+        return '<a class="static-pin" style="left:' + x + '%;top:' + y + '%;--pin-color:' + pinColors[pin.type] + '" data-label="' + escapeHtml(pinLabel[pin.type]) + '" href="' + escapeHtml(mapLinkForPin(pin)) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(pinLabel[pin.type] + ": " + pin.label + precision) + '">' + pinLetter[pin.type] + '</a>';
       }).join("");
-      const bbox = [(location.coords[1] - 0.035).toFixed(5),(location.coords[0] - 0.025).toFixed(5),(location.coords[1] + 0.035).toFixed(5),(location.coords[0] + 0.025).toFixed(5)].join(",");
-      const embed = "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + location.coords[0] + "," + location.coords[1];
-      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><iframe class="osm-embed" title="OpenStreetMap geography for ' + escapeHtml(location.name) + '" src="' + embed + '" loading="lazy"></iframe><div class="map-hold-layer" aria-hidden="true"></div><div class="map-overlay"><div class="static-map-title">' + escapeHtml(location.name) + ' / five-point planning map</div>' + fallbackPins + '</div></div></div><div class="map-side">' + pins.map((pin) => '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type]) + '</strong><span>' + escapeHtml(pin.label) + '</span></div></div>').join("") + '<a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">The background is real OpenStreetMap geography. The transparent map layer preserves tap-and-hold pause; use Open full map for zoom/pan. Five named <strong>approximate planning pins</strong> sit above it for readability; each is a lead with its own map link, not a verified venue coordinate or walking-time promise.</p></div></div>';
+      const bbox = [west.toFixed(5), south.toFixed(5), east.toFixed(5), north.toFixed(5)].join(",");
+      const embed = "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + centerLat.toFixed(5) + "," + centerLng.toFixed(5);
+      const mapTitle = allSourced ? "real venue + property map" : "real named leads / masked stay map";
+      const mapNote = allSourced ? "Each pin is a real named property or venue with a source link and coordinate-based OpenStreetMap link. A stay pin may still be approximate when a rental platform masks the exact apartment address." : "Named pins and source links are real, but at least one location is still a planning lead or platform-masked stay. Do not treat an approximate point as a verified door address.";
+      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><iframe class="osm-embed" title="OpenStreetMap geography for ' + escapeHtml(location.name) + '" src="' + embed + '" loading="lazy"></iframe><div class="map-hold-layer" aria-hidden="true"></div><div class="map-overlay"><div class="static-map-title">' + escapeHtml(location.name) + ' / ' + escapeHtml(mapTitle) + '</div>' + fallbackPins + '</div></div></div><div class="map-side">' + pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type]) + ' · ' + escapeHtml(precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("") + '<a class="source-link" href="' + osmMap(centerLat, centerLng, 14) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">' + mapNote + ' The transparent map layer preserves tap-and-hold pause; use Open full map for zoom/pan.</p></div></div>';
     };
 
     const money = (value) => "$" + Math.round(value).toLocaleString();
@@ -711,7 +886,7 @@
       + photoSlide(location,"social","The people are part of the address","Lead: " + location.social + ". The social source is shown as verified only when a dated event/venue image and current cost are available.",["run / climbing / surf visual","community / hangout visual"],socialPrice(location))
       + photoSlide(location,"food","Good food without turning every meal into a project","Named lead: " + location.restaurant + ". The meal card carries the source menu price in USD when available.",["restaurant interior visual","dish / menu visual"],location.dishPrice)
       + photoSlide(location,"gym","Train hard, recover intelligently","Named lead: " + location.gym + ". Gym imagery and membership price stay visibly unresolved until a current source pair is found.",["training floor visual","recovery / outdoor fitness visual"],location.gymPrice)
-      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked. The base map is real geography; the pins are named planning leads with an OpenStreetMap link each.</p>' + priceChip("LOCAL MOVEMENT", "PLANNING ESTIMATE — " + movementPrice(location)) + makeMap(location) + '</div></article>'
+      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked with real named property or venue pins. Each pin has a source link, a coordinate-based map link, and an exact/approximate label so a platform-masked rental is never mistaken for a door address.</p>' + priceChip("LOCAL MOVEMENT", "PLANNING ESTIMATE — " + movementPrice(location)) + makeMap(location) + '</div></article>'
       + budgetSlide(location)
       + daySlide(location);
 
