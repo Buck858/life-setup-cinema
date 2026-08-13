@@ -77,22 +77,27 @@
     .cinema-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
     .cinema-title strong { font-size: 18px; letter-spacing: -.03em; }
     .cinema-title span { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .slide-viewport { flex: 1; min-height: 0; overflow: auto; position: relative; touch-action: pan-y; }
-    .slide { display: none; min-height: 100%; padding: 36px 7vw 120px; }
+    .slide-viewport { flex: 1; min-height: 0; overflow: hidden; position: relative; touch-action: pan-y; }
+    .slide { display: none; height: 100%; min-height: 0; padding: 22px 7vw 118px; overflow: hidden; }
     .slide.is-active { display: block; animation: rise .28s ease both; }
-    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .slide-inner { max-width: 1160px; margin: 0 auto; }
+    @keyframes rise { from { opacity: 0; } to { opacity: 1; } }
+    .slide-inner { max-width: 1160px; height: 100%; min-height: 0; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
     .kicker { color: var(--mint); margin-bottom: 13px; }
     .slide h2 { max-width: 970px; font-size: clamp(37px, 6vw, 82px); line-height: .91; letter-spacing: -.075em; margin-bottom: 14px; }
     .slide-copy { max-width: 850px; color: #c7e0d4; font-size: clamp(15px, 1.7vw, 20px); line-height: 1.42; margin-bottom: 24px; }
-    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 34px; align-items: center; min-height: 70vh; }
-    .hero-image { min-height: 390px; height: min(64vh, 650px); border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); position: relative; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 34px; align-items: center; min-height: 0; height: 100%; }
+    .hero-image { min-height: 0; height: min(56vh, 600px); border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); position: relative; }
     .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero-badge { position: absolute; left: 13px; bottom: 13px; padding: 6px 8px; color: var(--ink); background: var(--lime); border-radius: 999px; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .08em; }
     .hero-panel { max-width: 500px; }
     .hero-panel h2 { margin-bottom: 18px; }
     .hero-panel .big-number { color: var(--lime); font-size: clamp(30px, 4vw, 53px); letter-spacing: -.07em; line-height: .95; margin: 18px 0 3px; }
     .hero-panel small { color: var(--muted); font-family: var(--mono); font-size: 10px; line-height: 1.5; }
+    .slide-price { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 8px; width: fit-content; margin: 10px 0 3px; padding: 8px 10px; border: 1px solid rgba(201,241,126,.36); border-radius: 10px; background: rgba(201,241,126,.08); }
+    .slide-price span { color: var(--lime); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .slide-price strong { color: var(--paper); font-size: 16px; letter-spacing: -.02em; }
+    .slide[data-slide-kind="verdict"] .hero-grid { height: auto; flex: 1; min-height: 0; }
+    .slide[data-slide-kind="verdict"] .rating-grid { flex: 0 0 auto; }
     .verdict { border-left: 3px solid var(--orange); padding: 12px 0 12px 14px; margin: 22px 0; color: #f5dec8; font-size: 15px; line-height: 1.45; }
     .source-link { display: inline-flex; color: var(--ink); background: var(--mint); border-radius: 999px; padding: 9px 12px; text-decoration: none; font-family: var(--mono); font-size: 10px; font-weight: 700; border: 1px solid transparent; }
     .source-link:hover, .source-link:focus-visible { background: var(--lime); outline: none; }
@@ -105,6 +110,10 @@
     .photo-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin: 22px 0 14px; }
     .photo-grid.three { grid-template-columns: repeat(3, minmax(0,1fr)); }
     .photo-grid.two { grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 820px; }
+    .photo-single { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(270px, .92fr); gap: 26px; align-items: center; min-height: 0; flex: 1; }
+    .photo-single .photo-card { max-width: 760px; }
+    .photo-single .photo-card img { aspect-ratio: 16 / 10; max-height: min(52vh, 520px); }
+    .photo-single-copy { min-width: 0; }
     .photo-card { margin: 0; min-width: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(16,38,31,.8); }
     .photo-card img { display: block; width: 100%; aspect-ratio: 1.2 / 1; object-fit: cover; background: #17352b; }
     .photo-card figcaption { padding: 10px 11px 12px; color: var(--muted); font-family: var(--mono); font-size: 9px; line-height: 1.35; }
@@ -126,14 +135,14 @@
     .score-table td strong { color: var(--lime); }
     .bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; min-width: 120px; }
     .bar span { height: 100%; display: block; border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--lime)); }
-    .map-layout { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(250px,.65fr); gap: 14px; margin-top: 22px; align-items: stretch; }
-    .map-frame { min-height: 460px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #16362b; position: relative; }
-    .map-stage { min-height: 460px; height: 100%; position: relative; overflow: hidden; background: #dce9d8; }
-    .osm-embed { display: block; width: 100%; height: 100%; min-height: 460px; border: 0; }
+    .map-layout { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(250px,.65fr); gap: 14px; margin-top: 12px; align-items: stretch; flex: 1; min-height: 0; }
+    .map-frame { min-height: 0; height: 100%; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #16362b; position: relative; }
+    .map-stage { min-height: 0; height: 100%; position: relative; overflow: hidden; background: #dce9d8; }
+    .osm-embed { display: block; width: 100%; height: 100%; min-height: 0; border: 0; }
     .map-overlay { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
     .map-overlay .static-pin { pointer-events: auto; }
-    .map-side { display: flex; flex-direction: column; gap: 8px; }
-    .map-legend { min-height: 58px; display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 13px; background: rgba(16,38,31,.78); }
+    .map-side { display: flex; flex-direction: column; gap: 7px; min-height: 0; overflow: hidden; }
+    .map-legend { min-height: 0; flex: 1; display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--line); border-radius: 13px; background: rgba(16,38,31,.78); }
     .marker { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--marker); font-style: normal; font-family: var(--mono); font-size: 12px; font-weight: 700; }
     .map-legend strong { display: block; font-size: 12px; }
     .map-legend span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; line-height: 1.25; }
@@ -142,7 +151,7 @@
     .static-map-title { position: absolute; top: 16px; left: 18px; z-index: 2; color: #234136; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
     .static-pin { position: absolute; z-index: 3; transform: translate(-50%, -50%); display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; color: var(--ink); background: var(--pin-color); border: 2px solid rgba(255,255,255,.75); border-radius: 999px; font-family: var(--mono); font-size: 10px; font-weight: 700; box-shadow: 0 3px 9px rgba(0,0,0,.25); }
     .static-pin::after { content: attr(data-label); position: absolute; top: 32px; left: 50%; transform: translateX(-50%); color: #19382e; background: rgba(255,255,255,.82); padding: 3px 5px; border-radius: 4px; white-space: nowrap; font-family: var(--sans); font-size: 9px; font-weight: 600; }
-    .budget-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin: 24px 0; max-width: 960px; }
+    .budget-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin: 14px 0; max-width: 960px; }
     .budget-card { border: 1px solid var(--line); border-radius: 18px; background: rgba(16,38,31,.8); padding: 18px; }
     .budget-card h3 { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 21px; }
     .budget-card h3 span { color: var(--lime); }
@@ -151,7 +160,7 @@
     .budget-line strong { color: var(--paper); font-weight: 500; }
     .budget-line.remaining { color: var(--mint); border-bottom: 0; padding-top: 5px; }
     .budget-line.remaining strong { color: var(--lime); font-size: 17px; }
-    .day-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 24px 0; }
+    .day-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 14px 0; }
     .day-card { border-top: 2px solid var(--mint); padding: 14px 13px; background: rgba(16,38,31,.78); border-radius: 0 0 14px 14px; }
     .day-card h3 { font-size: 13px; margin-bottom: 8px; color: var(--lime); }
     .day-card p { color: #c8e1d5; font-size: 12px; line-height: 1.45; margin-bottom: 0; }
@@ -172,7 +181,7 @@
       .score-guide { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .location-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .hero-grid, .map-layout { grid-template-columns: 1fr; }
-      .hero-image { height: 42vh; min-height: 260px; }
+      .hero-image { height: min(44vh, 430px); min-height: 0; }
       .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
       .map-side .source-link, .map-note { grid-column: 1 / -1; }
     }
@@ -181,14 +190,59 @@
       .masthead { padding-top: 32px; }
       h1 { font-size: 53px; }
       .score-guide { grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .location-grid, .photo-grid, .photo-grid.three, .photo-grid.two, .rating-grid, .budget-grid, .day-grid { grid-template-columns: 1fr; }
+      .location-grid, .photo-grid, .photo-grid.three, .photo-grid.two { grid-template-columns: 1fr; }
       .location-card { min-height: 230px; }
-      .slide { padding: 26px 17px 154px; }
-      .slide h2 { font-size: 47px; }
+      .slide { padding: 14px 14px 112px; }
+      .slide-inner { justify-content: flex-start; }
+      .slide h2 { font-size: clamp(31px, 10vw, 43px); margin-bottom: 8px; }
+      .slide-copy { font-size: 13px; line-height: 1.3; margin-bottom: 10px; }
+      .hero-grid { display: flex; flex-direction: column; justify-content: flex-start; gap: 10px; }
+      .hero-image { flex: 0 0 auto; width: 100%; height: 28vh; min-height: 175px; max-height: 245px; }
+      .hero-panel { max-width: none; }
+      .hero-panel h2 { margin-bottom: 7px; }
+      .hero-panel .big-number { font-size: 34px; margin: 8px 0 0; }
+      .verdict { margin: 8px 0; padding: 7px 0 7px 10px; font-size: 12px; line-height: 1.3; }
+      .rating-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 5px; margin: 8px 0; }
+      .rating-card { padding: 7px 6px; border-radius: 9px; }
+      .rating-card strong { font-size: 17px; margin-bottom: 2px; }
+      .rating-card span { font-size: 7px; letter-spacing: .05em; }
+      .photo-single { display: flex; flex-direction: column; justify-content: flex-start; gap: 8px; flex: 1; }
+      .photo-single .photo-card { width: 100%; }
+      .photo-single .photo-card img { aspect-ratio: 16 / 9; max-height: 31vh; min-height: 0; }
+      .photo-single .photo-card figcaption { padding: 7px 9px 8px; }
+      .photo-single .photo-card figcaption strong { font-size: 12px; margin-bottom: 2px; }
+      .slide-price { margin: 4px 0 5px; padding: 6px 8px; }
+      .slide-price strong { font-size: 14px; }
+      .evidence-card { padding: 9px; gap: 7px; }
+      .evidence-card h3 { font-size: 12px; margin-bottom: 3px; }
+      .evidence-card p { font-size: 10px; line-height: 1.25; }
+      .evidence-card .source-row { margin-top: 4px; }
+      .source-link { padding: 7px 9px; font-size: 8px; }
+      .slide[data-slide-kind="map"] .slide-copy { font-size: 12px; margin-bottom: 5px; }
+      .map-layout { display: flex; flex-direction: column; gap: 7px; margin-top: 5px; }
+      .map-frame, .map-stage, .osm-embed, .static-map { min-height: 0; height: 31vh; max-height: 245px; }
+      .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 5px; overflow: hidden; }
+      .map-legend { min-height: 0; padding: 5px; gap: 5px; }
+      .map-legend .marker { width: 22px; height: 22px; font-size: 9px; }
+      .map-legend strong { font-size: 9px; }
+      .map-legend span { font-size: 7px; line-height: 1.1; margin-top: 1px; }
+      .map-side .source-link, .map-note { grid-column: 1 / -1; }
+      .map-note { font-size: 9px; line-height: 1.2; margin: 0; }
+      .budget-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; margin: 8px 0; }
+      .budget-card { padding: 8px; border-radius: 11px; }
+      .budget-card h3 { font-size: 15px; margin-bottom: 7px; }
+      .budget-lines { gap: 4px; }
+      .budget-line { display: block; font-size: 8px; padding-bottom: 4px; }
+      .budget-line strong { display: block; font-size: 10px; margin-top: 1px; }
+      .budget-line.remaining strong { font-size: 12px; }
+      .day-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 5px; margin: 8px 0; }
+      .day-card { padding: 8px 7px; }
+      .day-card h3 { font-size: 10px; margin-bottom: 4px; }
+      .day-card p { font-size: 9px; line-height: 1.2; }
       .cinema-header { padding-inline: 12px; }
       .cinema-controls { padding-inline: 12px; }
       .control-button { min-width: 0; flex: 1; font-size: 12px; }
-      .map-frame, .map-stage, .osm-embed, .static-map { min-height: 390px; }
+      .map-frame, .map-stage, .osm-embed, .static-map { min-height: 0; }
       .map-side { grid-template-columns: 1fr; }
       .evidence-card { grid-template-columns: 1fr; }
     }
@@ -204,7 +258,7 @@
       </div>
       <aside class="masthead-note">
         <strong id="place-count">21</strong>
-        <p>places • 8 slides each • $2K and $3K scenarios • every map has stay, food, social, gym, and activity pins</p>
+        <p>places • 14 slides each • USD prices on every slide • every map has stay, food, social, gym, and activity pins</p>
       </aside>
     </header>
 
@@ -220,7 +274,7 @@
 
     <section class="rule-card" aria-labelledby="rules-heading">
       <h2 id="rules-heading">The rules this remake follows</h2>
-      <p><strong>Every place gets eight slides:</strong> verdict + rating, four stay visuals, social and activity visuals with a schedule lead, restaurant interior + dish visuals with a price lead, gym + recovery visuals with a membership lead, a readable geographic map with five named pins, itemized $2K/$3K budgets, and a sample day. Photos are marked <strong>visual reference</strong> unless a named venue source is attached; that keeps a pretty image from pretending to be a confirmed listing. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
+      <p><strong>Every place gets fourteen no-scroll slides:</strong> verdict + rating, one slide per stay visual, one slide per social/activity visual, one slide per restaurant/food visual, one slide per gym/recovery visual, a readable geographic map with five named pins, itemized $2K/$3K budgets, and a sample day. Each slide carries a contextual USD planning price. Photos are marked <strong>visual reference</strong> unless a named venue source is attached; that keeps a pretty image from pretending to be a confirmed listing. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
     </section>
 
     <section class="directory-head">
@@ -356,6 +410,15 @@
 
     const scoreCard = (label, value) => '<div class="rating-card"><strong>' + Number(value).toFixed(1) + '</strong><span>' + escapeHtml(label) + '</span></div>';
     const lifeScore = (location) => (location.scores.value * .18 + location.scores.social * .18 + location.scores.nature * .18 + location.scores.training * .16 + location.scores.food * .12 + location.scores.access * .18).toFixed(1);
+    const rentPrice = (location) => "$" + location.rent[0].toLocaleString() + "–$" + location.rent[1].toLocaleString() + " / month";
+    const movementPrice = (location) => /island|Philippines|Indonesia/i.test(location.area + " " + location.country) ? "$5–$20 / day local rides" : /Thailand|Vietnam|Cambodia|Georgia/i.test(location.country) ? "$3–$15 / day local rides" : "$4–$18 / day local rides";
+    const socialPrice = (location) => /Hash|run|climb|surf|cycling|yoga|dive/i.test(location.social) ? "$0–$20 / meetup" : "$0–$15 / meetup";
+    const sampleDayPrice = (location) => {
+      const food = Number((location.dishPrice.match(/\$([0-9]+)/) || [0, 10])[1]);
+      const rides = Number((movementPrice(location).match(/\$([0-9]+)/) || [0, 5])[1]);
+      return "$" + Math.max(12, food + rides + Math.round(location.gymMonthly / 30) + 8) + " / day before rent";
+    };
+    const priceChip = (label, value) => '<div class="slide-price"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></div>';
     const sourceButtons = (location, kind) => {
       const query = {
         stay:location.name + " furnished apartment monthly rent " + location.area,
@@ -385,11 +448,8 @@
       const alt = location.name + " — " + label;
       return '<figure class="photo-card"><img data-photo-kind="' + kind + '" data-evidence="visual-reference" src="' + src + '" alt="' + escapeHtml(alt) + '" loading="eager" onerror="this.onerror=null;this.src=imageFallback(this.alt, \'' + location.accent + '\')"><figcaption><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(location.name) + '</span><br><span class="evidence-pill">visual reference</span></figcaption></figure>';
     };
-    const photoSlide = (location, kind, title, copy, labels) => {
-      const gridClass = labels.length === 2 ? "photo-grid two" : labels.length === 3 ? "photo-grid three" : "photo-grid";
-      return '<article class="slide" data-slide-kind="' + kind + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / ACTIVITY" : kind.toUpperCase()) + '</div><h2>' + escapeHtml(title) + '</h2><p class="slide-copy">' + escapeHtml(copy) + '</p><div class="' + gridClass + '">' + labels.map((label, index) => imageMarkup(location, kind, label, index)).join("") + '</div><div class="evidence-card"><div><h3>What this picture means</h3><p>These are visual references to make the life tangible, not confirmed venue or listing evidence. The named lead, map pin, and source buttons are the evidence trail; confirm the exact venue, listing, schedule, and price before spending money.</p></div><div class="source-row">' + sourceButtons(location, kind) + '</div></div></div></article>';
-    };
-    const ratingSlide = (location) => '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid"><div class="hero-image"><img data-photo-kind="hero" data-evidence="visual-reference" src="' + photo("hero", seedOf(location.slug) % 9999) + '" alt="' + escapeHtml(location.name + " — " + location.activity) + '" loading="eager" onerror="this.onerror=null;this.src=imageFallback(this.alt, \'' + location.accent + '\')"><span class="hero-badge">VISUAL REFERENCE</span></div><div class="hero-panel"><div class="kicker">' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p><div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + googleSearch(location.name + " long stay living") + '" target="_blank" rel="noopener noreferrer">Research lead ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
+    const photoSlide = (location, kind, title, copy, labels, price) => labels.map((label, index) => '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / ACTIVITY" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + labels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, label, index) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(title) + '</h2>' + priceChip(kind === "stay" ? "HOUSING TARGET" : kind === "social" ? "SOCIAL SPEND" : kind === "food" ? "DISH / MEAL" : "MEMBERSHIP", price) + '<p class="slide-copy">' + escapeHtml(copy) + '</p><div class="evidence-card"><div><h3>' + escapeHtml(label) + '</h3><p>Visual reference only. Confirm the named lead, current schedule, listing, menu, or membership price through the source buttons before spending money.</p></div><div class="source-row">' + sourceButtons(location, kind) + '</div></div></div></div></div></article>').join("");
+    const ratingSlide = (location) => '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid"><div class="hero-image"><img data-photo-kind="hero" data-evidence="visual-reference" src="' + photo("hero", seedOf(location.slug) % 9999) + '" alt="' + escapeHtml(location.name + " — " + location.activity) + '" loading="eager" onerror="this.onerror=null;this.src=imageFallback(this.alt, \'' + location.accent + '\')"><span class="hero-badge">VISUAL REFERENCE</span></div><div class="hero-panel"><div class="kicker">' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip("MONTHLY HOUSING TARGET", rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + googleSearch(location.name + " long stay living") + '" target="_blank" rel="noopener noreferrer">Research lead ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
 
     const makeMap = (location) => {
       const pins = locationPins(location);
@@ -418,20 +478,20 @@
       const buffer = Math.max(0, total - rent - food - transport - gym - phone - medical);
       return '<div class="budget-card"><h3><span>$' + total.toLocaleString() + '</span><span>' + (total === 2000 ? location.scores.budget2k.toFixed(1) : location.scores.budget3k.toFixed(1)) + '/10</span></h3><div class="budget-lines"><div class="budget-line"><span>mid rent target</span><strong>' + money(rent) + '</strong></div><div class="budget-line"><span>food / cafes</span><strong>' + money(food) + '</strong></div><div class="budget-line"><span>transport</span><strong>' + money(transport) + '</strong></div><div class="budget-line"><span>gym / training</span><strong>' + money(gym) + '</strong></div><div class="budget-line"><span>phone + misc</span><strong>' + money(phone) + '</strong></div><div class="budget-line"><span>medical reserve</span><strong>' + money(medical) + '</strong></div><div class="budget-line remaining"><span>trips / buffer / upgrades</span><strong>' + money(buffer) + '</strong></div></div></div>';
     };
-    const budgetSlide = (location) => '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">This is a transparent planning model: median rent target plus food, transport, training, phone/misc, and a $500 medical reserve. It is deliberately editable in your head; rent and medical reality are the two biggest swing factors.</p><div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Budget scores answer “how much margin remains?” They do not mean the lifestyle is guaranteed at that spend. The $500 medical line is a planning reserve inherited from the old brief, not a medical estimate.</p></div></article>';
-    const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p><div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' The life works when you treat the schedule as a lead to verify, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a></div></div></div></article>';
+    const budgetSlide = (location) => '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">This is a transparent planning model: median rent target plus food, transport, training, phone/misc, and a $500 medical reserve. It is deliberately editable in your head; rent and medical reality are the two biggest swing factors.</p>' + priceChip("MONTHLY PLAN", "$2,000 or $3,000 modeled") + '<div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Budget scores answer “how much margin remains?” They do not mean the lifestyle is guaranteed at that spend. The $500 medical line is a planning reserve inherited from the old brief, not a medical estimate.</p></div></article>';
+    const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p>' + priceChip("SAMPLE DAY", sampleDayPrice(location)) + '<div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' The life works when you treat the schedule as a lead to verify, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a></div></div></div></article>';
 
     const buildSlides = (location) => ratingSlide(location)
-      + photoSlide(location,"stay","A house that gives the life a chance","Target: " + location.stay + ". Four visuals keep the housing decision concrete, but each is marked as a visual reference until you select a real listing.",["living room / furnished base","bedroom / long-stay feel","kitchen / work surface","terrace / outside space"])
-      + photoSlide(location,"social","The people are part of the address","Lead: " + location.social + ". " + location.schedule,["run / climbing / surf visual","community / hangout visual"])
-      + photoSlide(location,"food","Good food without turning every meal into a project","Lead: " + location.restaurant + ". A dish lead: " + location.dish + " at " + location.dishPrice + ".",["restaurant interior visual","dish / market visual"])
-      + photoSlide(location,"gym","Train hard, recover intelligently","Lead: " + location.gym + ". Membership lead: " + location.gymPrice + ".",["training floor visual","recovery / outdoor fitness visual"])
-      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked. The base map is real geography; the pins are named planning leads with an OpenStreetMap link each.</p>' + makeMap(location) + '</div></article>'
+      + photoSlide(location,"stay","A house that gives the life a chance","Target: " + location.stay + ". Each visual is marked as a visual reference until you select a real listing.",["living room / furnished base","bedroom / long-stay feel","kitchen / work surface","terrace / outside space"],rentPrice(location))
+      + photoSlide(location,"social","The people are part of the address","Lead: " + location.social + ". " + location.schedule,["run / climbing / surf visual","community / hangout visual"],socialPrice(location))
+      + photoSlide(location,"food","Good food without turning every meal into a project","Lead: " + location.restaurant + ". A dish lead: " + location.dish + " at " + location.dishPrice + ".",["restaurant interior visual","dish / market visual"],location.dishPrice)
+      + photoSlide(location,"gym","Train hard, recover intelligently","Lead: " + location.gym + ". Membership lead: " + location.gymPrice + ".",["training floor visual","recovery / outdoor fitness visual"],location.gymPrice)
+      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked. The base map is real geography; the pins are named planning leads with an OpenStreetMap link each.</p>' + priceChip("LOCAL MOVEMENT", movementPrice(location)) + makeMap(location) + '</div></article>'
       + budgetSlide(location)
       + daySlide(location);
 
     const renderDirectory = () => {
-      grid.innerHTML = locations.map((location) => '<a class="location-card" href="#' + location.slug + '" data-number="' + String(location.index).padStart(2,"0") + '" style="--accent:' + location.accent + '" aria-label="Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span>' + String(location.index).padStart(2,"0") + ' / ' + locations.length + '</span><span>8 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10</span><span class="pill">' + escapeHtml(location.area) + '</span></div><div class="card-score">' + location.scores.budget2k.toFixed(1) + '<small> $2K</small></div></div></div></a>').join("");
+      grid.innerHTML = locations.map((location) => '<a class="location-card" href="#' + location.slug + '" data-number="' + String(location.index).padStart(2,"0") + '" style="--accent:' + location.accent + '" aria-label="Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span>' + String(location.index).padStart(2,"0") + ' / ' + locations.length + '</span><span>14 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10</span><span class="pill">' + escapeHtml(location.area) + '</span></div><div class="card-score">' + location.scores.budget2k.toFixed(1) + '<small> $2K</small></div></div></div></a>').join("");
     };
 
     const stopTimer = () => { if (state.timer) window.clearInterval(state.timer); state.timer = null; };
