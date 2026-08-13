@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Life Setup Cinema — 21 places</title>
+  <meta name="description" content="A ratings-first life setup cinema for 21 possible bases, with housing, social life, food, training, activities, budgets, and readable maps.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #07120f;
+      --ink-2: #0b1c17;
+      --panel: #10261f;
+      --panel-2: #153329;
+      --line: rgba(201, 255, 229, .16);
+      --muted: #a9c2b8;
+      --paper: #effcf5;
+      --mint: #83e9ce;
+      --lime: #c9f17e;
+      --orange: #ffb477;
+      --coral: #ff927f;
+      --violet: #c4a5ff;
+      --blue: #95caff;
+      --mono: "DM Mono", monospace;
+      --sans: "Space Grotesk", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--ink); scroll-behavior: smooth; }
+    body { margin: 0; color: var(--paper); background: radial-gradient(circle at 85% 0%, #183f31 0, transparent 30rem), var(--ink); font-family: var(--sans); }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(1240px, calc(100% - 36px)); margin: 0 auto; }
+    .eyebrow, .kicker, .card-label, .mono { font-family: var(--mono); text-transform: uppercase; letter-spacing: .16em; font-size: 10px; }
+    .eyebrow { color: var(--mint); }
+    .masthead { padding: 54px 0 22px; display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 36px; align-items: end; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 760px; margin-bottom: 20px; font-size: clamp(44px, 8vw, 104px); line-height: .88; letter-spacing: -.075em; font-weight: 600; }
+    .lede { max-width: 700px; color: #d8eee3; font-size: clamp(17px, 2vw, 23px); line-height: 1.35; }
+    .masthead-note { border: 1px solid var(--line); padding: 20px; background: rgba(16,38,31,.72); border-radius: 18px; }
+    .masthead-note strong { display: block; color: var(--lime); font-size: 30px; line-height: 1; margin-bottom: 8px; }
+    .masthead-note p { color: var(--muted); font-size: 13px; line-height: 1.5; margin-bottom: 0; }
+    .score-guide { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 8px; margin: 22px 0 28px; }
+    .guide-cell { border-top: 1px solid var(--line); padding-top: 10px; color: var(--muted); font-size: 11px; line-height: 1.35; }
+    .guide-cell strong { display: block; color: var(--paper); font-family: var(--mono); font-size: 10px; margin-bottom: 4px; }
+    .rule-card { margin: 26px 0 28px; border: 1px solid rgba(131,233,206,.25); background: linear-gradient(120deg, rgba(20,61,48,.82), rgba(11,28,23,.88)); border-radius: 22px; padding: 24px; }
+    .rule-card h2 { margin-bottom: 8px; font-size: 25px; letter-spacing: -.04em; }
+    .rule-card p { max-width: 1000px; color: #c8e4d7; line-height: 1.55; font-size: 14px; margin-bottom: 0; }
+    .rule-card strong { color: var(--lime); }
+    .directory-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin: 38px 0 16px; }
+    .directory-head h2 { font-size: 30px; letter-spacing: -.05em; margin-bottom: 0; }
+    .directory-head p { color: var(--muted); margin-bottom: 0; font-size: 13px; }
+    .location-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+    .location-card { min-height: 272px; display: flex; flex-direction: column; justify-content: space-between; gap: 25px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(145deg, rgba(20,51,41,.9), rgba(9,24,19,.9)); text-decoration: none; position: relative; overflow: hidden; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+    .location-card::after { content: ""; position: absolute; width: 180px; height: 180px; border-radius: 50%; right: -70px; top: -80px; background: var(--accent); opacity: .13; filter: blur(3px); }
+    .location-card:hover, .location-card:focus-visible { transform: translateY(-4px); border-color: var(--mint); background: linear-gradient(145deg, rgba(24,67,52,.95), rgba(9,24,19,.95)); outline: none; }
+    .card-top, .card-bottom, .card-meta, .score-row, .source-row, .control-row, .cinema-header { display: flex; align-items: center; }
+    .card-top { justify-content: space-between; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .1em; }
+    .location-card h2 { margin: 16px 0 0; font-size: 29px; letter-spacing: -.06em; line-height: .95; max-width: 230px; }
+    .location-card p { color: #c4dcd1; line-height: 1.4; font-size: 13px; min-height: 56px; margin-bottom: 15px; }
+    .card-bottom { justify-content: space-between; gap: 10px; position: relative; z-index: 1; }
+    .card-meta { gap: 6px; flex-wrap: wrap; }
+    .pill, .status-pill, .evidence-pill { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 6px 8px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .04em; }
+    .pill.rating { color: var(--ink); background: var(--lime); border-color: transparent; font-weight: 700; }
+    .card-score { position: relative; z-index: 1; color: var(--lime); font-size: 23px; font-weight: 600; white-space: nowrap; }
+    .card-score small { color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; }
+    .directory-footer { padding: 28px 0 48px; color: var(--muted); line-height: 1.55; font-size: 13px; }
+    .directory-footer strong { color: var(--paper); }
+
+    .cinema { position: fixed; inset: 0; z-index: 10; background: var(--ink); display: flex; flex-direction: column; }
+    .cinema[hidden] { display: none; }
+    .cinema-header { flex: 0 0 auto; min-height: 66px; justify-content: space-between; gap: 14px; padding: 12px 22px 10px; border-bottom: 1px solid var(--line); background: rgba(5,17,13,.86); backdrop-filter: blur(18px); }
+    .header-button { width: 42px; height: 42px; border-radius: 50%; color: var(--paper); background: rgba(255,255,255,.08); border: 1px solid var(--line); font-size: 28px; line-height: 1; }
+    .header-button:hover, .header-button:focus-visible { background: var(--mint); color: var(--ink); outline: none; }
+    .cinema-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .cinema-title strong { font-size: 18px; letter-spacing: -.03em; }
+    .cinema-title span { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .slide-viewport { flex: 1; min-height: 0; overflow: auto; position: relative; touch-action: pan-y; }
+    .slide { display: none; min-height: 100%; padding: 36px 7vw 120px; }
+    .slide.is-active { display: block; animation: rise .28s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-inner { max-width: 1160px; margin: 0 auto; }
+    .kicker { color: var(--mint); margin-bottom: 13px; }
+    .slide h2 { max-width: 970px; font-size: clamp(37px, 6vw, 82px); line-height: .91; letter-spacing: -.075em; margin-bottom: 14px; }
+    .slide-copy { max-width: 850px; color: #c7e0d4; font-size: clamp(15px, 1.7vw, 20px); line-height: 1.42; margin-bottom: 24px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 34px; align-items: center; min-height: 70vh; }
+    .hero-image { min-height: 390px; height: min(64vh, 650px); border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); position: relative; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-badge { position: absolute; left: 13px; bottom: 13px; padding: 6px 8px; color: var(--ink); background: var(--lime); border-radius: 999px; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+    .hero-panel { max-width: 500px; }
+    .hero-panel h2 { margin-bottom: 18px; }
+    .hero-panel .big-number { color: var(--lime); font-size: clamp(30px, 4vw, 53px); letter-spacing: -.07em; line-height: .95; margin: 18px 0 3px; }
+    .hero-panel small { color: var(--muted); font-family: var(--mono); font-size: 10px; line-height: 1.5; }
+    .verdict { border-left: 3px solid var(--orange); padding: 12px 0 12px 14px; margin: 22px 0; color: #f5dec8; font-size: 15px; line-height: 1.45; }
+    .source-link { display: inline-flex; color: var(--ink); background: var(--mint); border-radius: 999px; padding: 9px 12px; text-decoration: none; font-family: var(--mono); font-size: 10px; font-weight: 700; border: 1px solid transparent; }
+    .source-link:hover, .source-link:focus-visible { background: var(--lime); outline: none; }
+    .source-link.secondary { color: var(--paper); background: transparent; border-color: var(--line); }
+    .source-row { flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .rating-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 930px; margin: 24px 0; }
+    .rating-card { border: 1px solid var(--line); background: rgba(16,38,31,.78); border-radius: 15px; padding: 13px; }
+    .rating-card strong { display: block; color: var(--lime); font-size: 22px; margin-bottom: 6px; }
+    .rating-card span { color: var(--muted); font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+    .photo-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin: 22px 0 14px; }
+    .photo-grid.three { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .photo-grid.two { grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 820px; }
+    .photo-card { margin: 0; min-width: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(16,38,31,.8); }
+    .photo-card img { display: block; width: 100%; aspect-ratio: 1.2 / 1; object-fit: cover; background: #17352b; }
+    .photo-card figcaption { padding: 10px 11px 12px; color: var(--muted); font-family: var(--mono); font-size: 9px; line-height: 1.35; }
+    .photo-card figcaption strong { display: block; color: var(--paper); font-family: var(--sans); font-size: 13px; margin-bottom: 4px; }
+    .evidence-pill { margin-top: 8px; padding: 4px 6px; color: var(--orange); border-color: rgba(255,180,119,.35); }
+    .photo-note, .map-note { color: var(--muted); font-size: 12px; line-height: 1.5; max-width: 920px; }
+    .loop-note { max-width: 620px; color: #f1d7bd; font-size: 12px; line-height: 1.45; margin: 12px 0 0; }
+    .slide[data-slide-kind="map"] h2 { font-size: clamp(36px, 5.3vw, 68px); }
+    .slide[data-slide-kind="map"] .slide-copy { max-width: 760px; font-size: 16px; margin-bottom: 14px; }
+    .slide[data-slide-kind="map"] .map-legend { min-height: 48px; padding: 7px 9px; }
+    .slide[data-slide-kind="map"] .map-legend span { font-size: 9px; }
+    .evidence-card { display: grid; grid-template-columns: minmax(0,1fr) minmax(230px,.5fr); gap: 14px; border: 1px solid rgba(255,180,119,.25); border-radius: 16px; padding: 15px; background: rgba(73,48,30,.22); }
+    .evidence-card h3 { margin-bottom: 5px; font-size: 15px; }
+    .evidence-card p { color: #e8d6c1; margin-bottom: 0; font-size: 12px; line-height: 1.45; }
+    .evidence-card .source-row { justify-content: end; align-content: center; margin-top: 0; }
+    .score-table { width: 100%; max-width: 950px; border-collapse: collapse; margin: 20px 0 28px; font-size: 13px; }
+    .score-table th, .score-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--line); }
+    .score-table th { color: var(--muted); font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; font-weight: 400; }
+    .score-table td strong { color: var(--lime); }
+    .bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; min-width: 120px; }
+    .bar span { height: 100%; display: block; border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--lime)); }
+    .map-layout { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(250px,.65fr); gap: 14px; margin-top: 22px; align-items: stretch; }
+    .map-frame { min-height: 460px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #16362b; position: relative; }
+    .map-stage { min-height: 460px; height: 100%; position: relative; overflow: hidden; background: #dce9d8; }
+    .osm-embed { display: block; width: 100%; height: 100%; min-height: 460px; border: 0; }
+    .map-overlay { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+    .map-overlay .static-pin { pointer-events: auto; }
+    .map-side { display: flex; flex-direction: column; gap: 8px; }
+    .map-legend { min-height: 58px; display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 13px; background: rgba(16,38,31,.78); }
+    .marker { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--marker); font-style: normal; font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .map-legend strong { display: block; font-size: 12px; }
+    .map-legend span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; line-height: 1.25; }
+    .static-map { height: 100%; min-height: 460px; position: relative; overflow: hidden; background: radial-gradient(circle at 25% 30%, rgba(146,207,189,.45), transparent 20%), linear-gradient(135deg, #dce9d8, #9dc3ad); }
+    .static-map::before { content: ""; position: absolute; inset: 0; opacity: .32; background-image: linear-gradient(30deg, transparent 47%, #fff 48%, transparent 50%), linear-gradient(120deg, transparent 47%, #fff 48%, transparent 50%); background-size: 90px 90px; }
+    .static-map-title { position: absolute; top: 16px; left: 18px; z-index: 2; color: #234136; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .static-pin { position: absolute; z-index: 3; transform: translate(-50%, -50%); display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; color: var(--ink); background: var(--pin-color); border: 2px solid rgba(255,255,255,.75); border-radius: 999px; font-family: var(--mono); font-size: 10px; font-weight: 700; box-shadow: 0 3px 9px rgba(0,0,0,.25); }
+    .static-pin::after { content: attr(data-label); position: absolute; top: 32px; left: 50%; transform: translateX(-50%); color: #19382e; background: rgba(255,255,255,.82); padding: 3px 5px; border-radius: 4px; white-space: nowrap; font-family: var(--sans); font-size: 9px; font-weight: 600; }
+    .budget-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin: 24px 0; max-width: 960px; }
+    .budget-card { border: 1px solid var(--line); border-radius: 18px; background: rgba(16,38,31,.8); padding: 18px; }
+    .budget-card h3 { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 21px; }
+    .budget-card h3 span { color: var(--lime); }
+    .budget-lines { display: grid; gap: 8px; }
+    .budget-line { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-family: var(--mono); font-size: 10px; border-bottom: 1px solid rgba(201,255,229,.09); padding-bottom: 7px; }
+    .budget-line strong { color: var(--paper); font-weight: 500; }
+    .budget-line.remaining { color: var(--mint); border-bottom: 0; padding-top: 5px; }
+    .budget-line.remaining strong { color: var(--lime); font-size: 17px; }
+    .day-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 24px 0; }
+    .day-card { border-top: 2px solid var(--mint); padding: 14px 13px; background: rgba(16,38,31,.78); border-radius: 0 0 14px 14px; }
+    .day-card h3 { font-size: 13px; margin-bottom: 8px; color: var(--lime); }
+    .day-card p { color: #c8e1d5; font-size: 12px; line-height: 1.45; margin-bottom: 0; }
+    .cinema-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 9px 22px 13px; background: linear-gradient(transparent, rgba(5,17,13,.98) 26%); pointer-events: none; }
+    .cinema-controls > * { pointer-events: auto; }
+    .progress-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 8px; }
+    .dot { width: 9px; height: 9px; border: 0; padding: 0; border-radius: 50%; background: rgba(239,252,245,.38); }
+    .dot.is-active { width: 23px; border-radius: 999px; background: var(--mint); }
+    .control-row { justify-content: center; gap: 9px; }
+    .control-button { min-width: 190px; height: 46px; border: 1px solid var(--line); border-radius: 999px; color: var(--paper); background: rgba(255,255,255,.08); font-weight: 700; }
+    .control-button:hover, .control-button:focus-visible { border-color: var(--mint); outline: none; }
+    .control-button.primary { color: var(--ink); background: var(--mint); border-color: transparent; }
+    .status-row { min-height: 16px; color: var(--muted); text-align: center; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; margin-top: 7px; }
+    .status-row[data-mode="paused"] { color: var(--orange); }
+    .hold-tip { color: rgba(201,255,229,.68); text-align: center; font-size: 10px; margin-top: 3px; }
+    @media (max-width: 900px) {
+      .masthead { grid-template-columns: 1fr; }
+      .score-guide { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .location-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .hero-grid, .map-layout { grid-template-columns: 1fr; }
+      .hero-image { height: 42vh; min-height: 260px; }
+      .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .map-side .source-link, .map-note { grid-column: 1 / -1; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 24px, 520px); }
+      .masthead { padding-top: 32px; }
+      h1 { font-size: 53px; }
+      .score-guide { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .location-grid, .photo-grid, .photo-grid.three, .photo-grid.two, .rating-grid, .budget-grid, .day-grid { grid-template-columns: 1fr; }
+      .location-card { min-height: 230px; }
+      .slide { padding: 26px 17px 154px; }
+      .slide h2 { font-size: 47px; }
+      .cinema-header { padding-inline: 12px; }
+      .cinema-controls { padding-inline: 12px; }
+      .control-button { min-width: 0; flex: 1; font-size: 12px; }
+      .map-frame, .map-stage, .osm-embed, .static-map { min-height: 390px; }
+      .map-side { grid-template-columns: 1fr; }
+      .evidence-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main id="directory" class="shell">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">LIFE SETUP CINEMA / REMADE</div>
+        <h1>Choose the life, not just the pin.</h1>
+        <p class="lede">Twenty-one bases scored for the version of life you keep describing: beautiful nature, a house that feels good, people you can actually meet, real food, serious training, and enough margin to breathe.</p>
+      </div>
+      <aside class="masthead-note">
+        <strong id="place-count">21</strong>
+        <p>places • 8 slides each • $2K and $3K scenarios • every map has stay, food, social, gym, and activity pins</p>
+      </aside>
+    </header>
+
+    <section class="score-guide" aria-label="Rating rubric">
+      <div class="guide-cell"><strong>OVERALL</strong>weighted life-fit score</div>
+      <div class="guide-cell"><strong>VALUE</strong>space + daily cost</div>
+      <div class="guide-cell"><strong>SOCIAL</strong>ease of meeting people</div>
+      <div class="guide-cell"><strong>NATURE</strong>nearby beauty and movement</div>
+      <div class="guide-cell"><strong>TRAINING</strong>gym, recovery, activities</div>
+      <div class="guide-cell"><strong>FOOD</strong>everyday eating range</div>
+      <div class="guide-cell"><strong>ACCESS</strong>healthcare, transit, friction</div>
+    </section>
+
+    <section class="rule-card" aria-labelledby="rules-heading">
+      <h2 id="rules-heading">The rules this remake follows</h2>
+      <p><strong>Every place gets eight slides:</strong> verdict + rating, four stay visuals, social and activity visuals with a schedule lead, restaurant interior + dish visuals with a price lead, gym + recovery visuals with a membership lead, a readable geographic map with five named pins, itemized $2K/$3K budgets, and a sample day. Photos are marked <strong>visual reference</strong> unless a named venue source is attached; that keeps a pretty image from pretending to be a confirmed listing. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
+    </section>
+
+    <section class="directory-head">
+      <div>
+        <div class="eyebrow">THE SHORTLIST</div>
+        <h2>Twenty-one lives to compare</h2>
+      </div>
+      <p>Open a card. The show starts automatically.<br>Touch and hold any slide to pause.</p>
+    </section>
+    <section id="location-grid" class="location-grid" aria-label="Choose a destination"></section>
+    <p class="directory-footer">The wildcard from the old conversation is <strong>Tbilisi, Georgia</strong>. Krabi remains in the set as the climbing-forward addition. This remake uses the old research as a starting point, then turns it into a consistent decision system with explicit uncertainty.</p>
+  </main>
+
+  <section id="cinema" class="cinema" hidden aria-label="Destination slideshow">
+    <header class="cinema-header">
+      <button id="close-cinema" class="header-button" type="button" aria-label="Back to all destinations">×</button>
+      <div class="cinema-title"><strong id="cinema-name"></strong><span id="cinema-meta"></span></div>
+      <div id="slide-counter" aria-live="polite" class="mono"></div>
+    </header>
+    <div id="slide-viewport" class="slide-viewport" tabindex="0" aria-label="Slideshow. Touch and hold to pause."></div>
+    <div class="cinema-controls">
+      <div id="progress-row" class="progress-row" aria-label="Choose slide"></div>
+      <div class="control-row">
+        <button id="back-button" class="control-button" type="button" aria-label="Previous slide">‹ Back</button>
+        <button id="auto-button" class="control-button primary" type="button" aria-label="Pause automatic slideshow">PAUSE ‖</button>
+        <button id="next-button" class="control-button" type="button" aria-label="Next slide">Next ›</button>
+      </div>
+      <div id="status-row" class="status-row" data-mode="auto">AUTO PLAYING</div>
+      <div class="hold-tip">Touch and hold the slide to pause. Press AUTO to resume.</div>
+    </div>
+  </section>
+
+  <script>
+    "use strict";
+
+    const imageFallback = (label, accent) => {
+      const safe = String(label).replace(/[<>&'"]/g, "").slice(0, 48);
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#07120f"/><stop offset="1" stop-color="' + accent + '"/></linearGradient></defs><rect width="1200" height="760" fill="url(#g)"/><circle cx="960" cy="120" r="190" fill="#ffd58a" opacity=".18"/><path d="M0 620 320 370 520 530 790 220 1200 590V760H0Z" fill="#06100d" opacity=".72"/><text x="64" y="660" fill="#f5fbf7" font-family="Arial,sans-serif" font-size="42" font-weight="700">' + safe + '</text></svg>';
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    };
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+    const slugify = (value) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const cityMap = (query) => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
+    const googleSearch = (query) => "https://www.google.com/search?q=" + encodeURIComponent(query);
+    const osmMap = (lat, lng, zoom) => "https://www.openstreetmap.org/?mlat=" + lat + "&mlon=" + lng + "#map=" + (zoom || 13) + "/" + lat + "/" + lng;
+    const imageBank = {
+      hero:["photo-1507525428034-b723cf961d3e","photo-1469474968028-56623f02e42e","photo-1510414842594-a61c69b5ae57","photo-1500534623283-312aade485b7","photo-1441974231531-c6227db76b6e","photo-1470770841072-f978cf4d019e","photo-1500530855697-b586d89ba3ee","photo-1454496522488-7a8e488e8606"],
+      stay:["photo-1600607687920-4e2a09cf159d","photo-1600585154340-be6161a56a0c","photo-1600566753086-00f18fb6b3ea","photo-1600047509807-ba8f99d2cdde","photo-1613490493576-7fde63acd811","photo-1600210492486-724fe5c67fb0","photo-1600566753190-17f0baa2a6c3","photo-1600607688969-a5bfcd646154"],
+      social:["photo-1552674605-db6ffd4facb5","photo-1518611012118-696072aa579a","photo-1529156069898-49953e39b3ac","photo-1538805060514-97d9cc17730c","photo-1517836357463-d25dfeac3438","photo-1534438327276-14e5300c3a48"],
+      food:["photo-1517248135467-4c7edcad34c4","photo-1547592180-85f173990554","photo-1504674900247-0877df9cc836","photo-1515003197210-e0cd71810b5f","photo-1414235077428-338989a2e8c0","photo-1552566626-52f8b828add9"],
+      gym:["photo-1534438327276-14e5300c3a48","photo-1571019613454-1cb2f99b2d8b","photo-1540497077202-7c8a3999166f","photo-1579758629938-03607ccdbaba","photo-1581009146145-b5ef050c2e1e","photo-1583454110551-21f2fa2afe61"]
+    };
+    const photo = (kind, lock) => "https://images.unsplash.com/" + imageBank[kind][lock % imageBank[kind].length] + "?auto=format&fit=crop&w=1200&q=84";
+    const seedOf = (value) => [...value].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    const rawLocations = [
+      { name:"Uluwatu, Bali", area:"Bingin / Pecatu", country:"Indonesia", key:"uluwatu bali", rent:[1100,1400], coords:[-8.810,115.103], accent:"#e4936c", verdict:"The $3K tropical fantasy: surf cliffs, beautiful homes, and a strong active scene. The trade is steep paths, scooter dependence, and a tighter $2K.", social:"Bali Hash House / surf and run crews", schedule:"Recurring Hash and surf-community leads; verify this week’s start point.", gym:"The Space Bali / local recovery studios", gymPrice:"$40–$110 / month planning", gymMonthly:75, restaurant:"The Cashew Tree + seafood warungs", dish:"seafood plate / nasi campur", dishPrice:"$4–$14 planning", activity:"Bingin Beach + Uluwatu cliff walks", stay:"furnished villa or studio in Bingin / Pecatu", logistics:"Most daily movement is scooter or short ride; cliff beaches involve stairs, and Canggu/Denpasar are not casual daily trips.", scores:{overall:8.2,value:7.0,social:8.3,nature:9.5,training:8.6,food:8.0,access:6.3,budget2k:5.8,budget3k:8.8}, sources:[["Bali destination guide","https://visitbali.com/destinations/uluwatu"]] },
+      { name:"Da Lat, Vietnam", area:"Ward 3 / Xuan Huong Lake", country:"Vietnam", key:"da lat vietnam", rent:[300,650], coords:[11.940,108.458], accent:"#6c9f8c", verdict:"The quietly excellent $2K life: cool weather, coffee, trails, and a lot of room. Social life is gentler, so you have to join the same places repeatedly.", social:"Da Lat runners / cycling and cafe circles", schedule:"Run and cycling leads are community-led; check current cafe and club pages.", gym:"local strength clubs + hotel recovery", gymPrice:"$20–$55 / month planning", gymMonthly:35, restaurant:"An Cafe + Da Lat market / modern bistros", dish:"banh can / Vietnamese coffee stop", dishPrice:"$2–$10 planning", activity:"Xuan Huong Lake + pine trails", stay:"furnished apartment near Ward 3 / lake edge", logistics:"The lake, cafes, and central services can form a compact loop; pine trails and waterfalls are short rides rather than doorstep walks.", scores:{overall:8.1,value:9.3,social:6.8,nature:8.8,training:7.2,food:8.3,access:7.0,budget2k:9.2,budget3k:9.3}, sources:[["Vietnam Tourism: Da Lat","https://www.vietnam.travel/places-to-go/central-vietnam/dalat"],["Xuan Huong Lake","https://vietnamtourism.vn/en/index.php/tourism/items/1461"]] },
+      { name:"Siargao, Philippines", area:"General Luna", country:"Philippines", key:"siargao general luna", rent:[700,1200], coords:[9.784,126.158], accent:"#4d9ca5", verdict:"The island-social version: surf, warm people, and lush weekends. It is wonderful when you want island life; logistics and price volatility are the real tax.", social:"Siargao surf, run, and beach community", schedule:"Surf and beach meetups are the practical recurring social lane; verify seasonality.", gym:"Siargao Fitness / boutique studios", gymPrice:"$35–$80 / month planning", gymMonthly:55, restaurant:"Shaka + Filipino seafood and cafe dinners", dish:"smoothie bowl / grilled seafood", dishPrice:"$4–$15 planning", activity:"Cloud 9 surf + mangrove island trips", stay:"monthly studio or small villa in General Luna", scores:{overall:8.3,value:7.4,social:9.0,nature:9.6,training:7.0,food:7.8,access:5.7,budget2k:6.2,budget3k:8.5}, sources:[["General Luna municipal tourism","https://surigaodelnorte.gov.ph/general-luna/"],["Siargao Islands","https://www.siargaoislands.com/general-luna/"]] },
+      { name:"Kuta Lombok", area:"Kuta / Mandalika", country:"Indonesia", key:"kuta lombok", rent:[550,1000], coords:[-8.894,116.280], accent:"#d39169", verdict:"A handsome sleeper pick: dramatic beaches, a calmer daily rhythm, and enough surf culture to avoid isolation. The social funnel is smaller than Bali.", social:"surf, run, and coworking meetups", schedule:"Surf and coworking calendars are the most reliable recurring social leads.", gym:"Kuta Lombok gyms / hotel wellness", gymPrice:"$25–$75 / month planning", gymMonthly:50, restaurant:"The Bus Bar + Indonesian grills", dish:"local grilled fish / nasi goreng", dishPrice:"$3–$14 planning", activity:"Tanjung Aan + headland hikes", stay:"furnished villa or studio near Kuta", scores:{overall:8.2,value:8.1,social:7.6,nature:9.4,training:7.1,food:7.5,access:5.8,budget2k:7.6,budget3k:9.0} },
+      { name:"Siem Reap, Cambodia", area:"Wat Bo / Old Market edge", country:"Cambodia", key:"siem reap cambodia", rent:[350,650], coords:[13.356,103.858], accent:"#c5965d", verdict:"The absurd-value social life: spacious housing, easy daily spending, Angkor weekends, and a friendly international layer. Training is adequate rather than elite.", social:"Hash House Harriers / expat pub circuit", schedule:"Hash and expat event leads; confirm current meetup details locally.", gym:"local fitness clubs + hotel spas", gymPrice:"$25–$70 / month planning", gymMonthly:45, restaurant:"Chanrey Tree + Khmer garden restaurants", dish:"amok / lok lak", dishPrice:"$4–$16 planning", activity:"Angkor forest + Tonle Sap", stay:"large furnished apartment near Wat Bo", scores:{overall:8.0,value:9.2,social:8.0,nature:8.7,training:6.8,food:8.6,access:7.2,budget2k:9.4,budget3k:9.2} },
+      { name:"Valencia, Philippines", area:"Valencia / Dumaguete hinterland", country:"Philippines", key:"valencia negros philippines", rent:[350,650], coords:[9.282,123.245], accent:"#5f9c77", verdict:"The space-and-nature play: cooler foothills, waterfalls, and a house that can feel generous. You borrow Dumaguete for services and social density.", social:"Dumaguete running and expat groups", schedule:"Use Dumaguete as the recurring social anchor; check current groups before committing.", gym:"Valencia gyms / Dumaguete training", gymPrice:"$20–$60 / month planning", gymMonthly:38, restaurant:"market cooking + Dumaguete cafes", dish:"Filipino grill plate / silvanas", dishPrice:"$3–$12 planning", activity:"Casaroro Falls + mountain roads", stay:"furnished house in Valencia with Dumaguete access", scores:{overall:7.7,value:9.1,social:6.0,nature:9.0,training:6.0,food:7.2,access:6.0,budget2k:9.0,budget3k:8.8} },
+      { name:"Dumaguete, Philippines", area:"Rizal Boulevard / downtown", country:"Philippines", key:"dumaguete philippines", rent:[450,800], coords:[9.307,123.306], accent:"#4f8e96", verdict:"The practical version of the Valencia area: better services, a walkable boulevard, university energy, and nature within reach.", social:"Dumaguete run clubs / university circles", schedule:"University, boulevard, and expat group leads; verify current weekly meetups.", gym:"Fitness Edge and local strength gyms", gymPrice:"$25–$65 / month planning", gymMonthly:45, restaurant:"Lab-as + boulevard seafood", dish:"fresh seafood / Filipino comfort plate", dishPrice:"$5–$18 planning", activity:"Apo Island + Casaroro Falls", stay:"walkable downtown apartment near the boulevard", scores:{overall:7.9,value:8.6,social:7.4,nature:8.3,training:7.0,food:7.8,access:7.5,budget2k:8.5,budget3k:8.6} },
+      { name:"Canggu, Bali", area:"Batu Bolong / Berawa", country:"Indonesia", key:"canggu bali", rent:[900,1700], coords:[-8.648,115.138], accent:"#b978a0", verdict:"The social machine: elite cafe density, gyms, and constant people. It is the most fun when you can afford to buy back time from traffic and noise.", social:"Bali Hash House / Canggu run clubs", schedule:"Many recurring run and wellness leads; calendars change quickly.", gym:"Wanderlust CrossFit / boutique recovery", gymPrice:"$70–$180 / month planning", gymMonthly:120, restaurant:"Milk & Madu + Canggu cafe density", dish:"brunch plate / Indonesian dinner", dishPrice:"$5–$24 planning", activity:"rice-field walks + west-coast beaches", stay:"quiet furnished villa in Berawa, away from the core", scores:{overall:8.0,value:6.5,social:9.5,nature:7.7,training:9.2,food:9.1,access:7.2,budget2k:5.2,budget3k:8.1} },
+      { name:"Phu Quoc, Vietnam", area:"Duong Dong / Ong Lang", country:"Vietnam", key:"phu quoc vietnam", rent:[350,900], coords:[10.216,103.960], accent:"#4e9eaa", verdict:"Beach-value living with more infrastructure than a tiny island. Choose the neighborhood carefully; the social scene is easier when you are near the active west coast.", social:"expat beach groups / casual runners", schedule:"Beach and expat meetups are seasonal leads; check current groups.", gym:"hotel gyms + Duong Dong fitness clubs", gymPrice:"$20–$60 / month planning", gymMonthly:38, restaurant:"Ra Khoi + seafood markets", dish:"seafood hotpot / banh mi", dishPrice:"$4–$17 planning", activity:"Ong Lang Beach + island forest", stay:"monthly studio in Duong Dong or Ong Lang", scores:{overall:7.8,value:8.2,social:6.5,nature:8.8,training:6.6,food:7.6,access:6.3,budget2k:8.0,budget3k:8.8} },
+      { name:"Baguio, Philippines", area:"Camp John Hay / central hills", country:"Philippines", key:"baguio philippines", rent:[350,900], coords:[16.402,120.596], accent:"#607e9e", verdict:"Cool air and mountain trails instead of beaches: a comfortable reading base with a real city behind it and a more local rhythm.", social:"Baguio runners / Camp John Hay fitness", schedule:"Running and university/community leads; verify current group pages.", gym:"Camp John Hay clubs + local training", gymPrice:"$25–$70 / month planning", gymMonthly:45, restaurant:"Hill Station + Cordilleran markets", dish:"strawberry taho / local comfort food", dishPrice:"$3–$18 planning", activity:"Camp John Hay + pine ridges", stay:"furnished condo or house near Camp John Hay", scores:{overall:7.7,value:8.4,social:6.8,nature:8.5,training:7.0,food:7.5,access:7.0,budget2k:8.7,budget3k:8.9} },
+      { name:"Boracay, Philippines", area:"Station 3 / Bulabog", country:"Philippines", key:"boracay philippines", rent:[600,1200], coords:[11.967,121.924], accent:"#55a9ad", verdict:"Easy beauty and easy social access, but tourist pricing means the $3K version is the one that really breathes.", social:"beach runs, kite groups, and expat meetups", schedule:"Beach and kite communities are recurring leads; seasonality matters.", gym:"Boracay fitness clubs / hotel gyms", gymPrice:"$30–$85 / month planning", gymMonthly:55, restaurant:"Los Indios Bravos + Station 3 seafood", dish:"seafood plate / Filipino grill", dishPrice:"$5–$22 planning", activity:"White Beach + Bulabog water sports", stay:"monthly studio in Station 3 or Bulabog", scores:{overall:7.9,value:6.9,social:8.7,nature:9.3,training:7.8,food:8.0,access:6.5,budget2k:6.1,budget3k:8.4} },
+      { name:"Siquijor, Philippines", area:"San Juan", country:"Philippines", key:"siquijor philippines", rent:[500,1000], coords:[9.168,123.521], accent:"#6da977", verdict:"The magical quiet island: excellent nature and low daily costs, with a smaller social funnel you need to enter intentionally.", social:"dive, yoga, surf, and expat gatherings", schedule:"Dive and wellness communities are the best recurring leads.", gym:"small local gyms / hotel wellness", gymPrice:"$20–$55 / month planning", gymMonthly:35, restaurant:"Baha Bar + roadside grills", dish:"fresh fish / Filipino breakfast", dishPrice:"$3–$15 planning", activity:"Cambugahay Falls + reef roads", stay:"monthly bungalow or studio in San Juan", scores:{overall:7.8,value:8.5,social:6.5,nature:9.2,training:6.4,food:7.5,access:5.5,budget2k:8.0,budget3k:8.7} },
+      { name:"Florianópolis, Brazil", area:"Campeche / Lagoa", country:"Brazil", key:"florianopolis brazil", rent:[900,1300], coords:[-27.675,-48.478], accent:"#3e9ca3", verdict:"The strongest tropical all-rounder: real beach life, a substantial city, active locals, and recovery options that can support a serious routine.", social:"Floripa Runners / RUN & BASS Campeche", schedule:"Floripa Runners and local event leads; confirm current days and meeting points.", gym:"JOY Wellness Club / premium local gyms", gymPrice:"$25–$70 local; premium recovery quote", gymMonthly:55, restaurant:"Ostradamus / Freguesia Oyster Bar", dish:"oysters / shrimp pastel", dishPrice:"$8–$35 planning", activity:"Campeche Beach + Lagoa trails", stay:"furnished apartment in Campeche or Lagoa", scores:{overall:8.8,value:7.7,social:8.9,nature:9.3,training:9.0,food:8.6,access:8.0,budget2k:6.6,budget3k:8.8}, sources:[["Nomad Almanac: Florianópolis","https://www.nomadalmanac.com/countries/brazil/cities/florianopolis"],["Floripa social lead","https://www.instagram.com/p/DUbuPwukkzH/"],["Freguesia Oyster Bar","https://www.tripadvisor.com/Restaurant_Review-g303576-d5009975-Reviews-Freguesia_Oyster_Bar-Florianopolis_State_of_Santa_Catarina.html"]] },
+      { name:"Bariloche, Argentina", area:"Centro / Playa Bonita", country:"Argentina", key:"bariloche argentina", rent:[700,1200], coords:[-41.133,-71.310], accent:"#5d7fa6", verdict:"The lake-and-Andes fantasy: cool-weather apartments, trail running, coffee, steak, and the most cinematic weekend nature in the set.", social:"trail runners / Open Work Bariloche community", schedule:"Trail and coworking leads; ask for current group runs and seasonal events.", gym:"Summit Training Center", gymPrice:"$30–$90 / month planning", gymMonthly:55, restaurant:"Alto El Fuego + lake-view dining", dish:"Patagonian steak / chocolate", dishPrice:"$12–$40 planning", activity:"Cerro Lindo + Nahuel Huapi shore", stay:"lake-view apartment near Centro or Playa Bonita", scores:{overall:8.5,value:8.1,social:7.7,nature:9.8,training:8.3,food:8.5,access:7.1,budget2k:7.4,budget3k:8.8}, sources:[["Summit Training Center","https://summittrainingcenter.com.ar/"],["Open Work Bariloche","https://www.instagram.com/openworkbariloche/"],["Living in Bariloche research lead","https://travelingjackie.com/living-bariloche-argentina/"]] },
+      { name:"Santiago, Chile", area:"Providencia / Ñuñoa", country:"Chile", key:"santiago chile", rent:[800,1300], coords:[-33.426,-70.611], accent:"#6b7db0", verdict:"Big-city infrastructure with the Andes in the background: a strong choice if healthcare, restaurants, and serious weekend mountains matter.", social:"Parque Metropolitano runners and cyclists", schedule:"Park running is the recurring anchor; verify group schedules before arrival.", gym:"Energy Fitness / Smart Fit / premium clubs", gymPrice:"$35–$110 / month planning", gymMonthly:70, restaurant:"Boragó lane + neighborhood restaurants", dish:"Chilean tasting menu / empanada", dishPrice:"$5–$55 planning", activity:"Cerro San Cristóbal + Andes weekends", stay:"furnished apartment in Providencia or Ñuñoa", scores:{overall:8.1,value:7.5,social:8.4,nature:8.9,training:8.7,food:8.5,access:9.0,budget2k:6.5,budget3k:8.5}, sources:[["Expat.cl neighborhood guide","https://www.expat.cl/es/santiago/comunas-donde-instalarse/"],["Parque Metropolitano","https://www.parquemet.cl/"]] },
+      { name:"Mexico City, Mexico", area:"Condesa / Roma", country:"Mexico", key:"mexico city condesa", rent:[1000,1700], coords:[19.416,-99.169], accent:"#b66f7d", verdict:"The restaurant-and-social heavyweight: Parque México becomes your daily circuit, but beautiful furnished housing makes $2K deliberate.", social:"Parque México run groups / expat circles", schedule:"Park running and community event leads; verify current weekly schedules.", gym:"Sports World / neighborhood boutique gyms", gymPrice:"$45–$130 / month planning", gymMonthly:85, restaurant:"Contramar / Mercado Medellín / taco circuit", dish:"tostada de atún / tacos", dishPrice:"$5–$35 planning", activity:"Parque México + Chapultepec", stay:"furnished apartment in Condesa or Roma", scores:{overall:8.6,value:6.8,social:9.2,nature:7.8,training:8.8,food:9.6,access:8.8,budget2k:5.6,budget3k:8.2}, sources:[["Mexico City rental context","https://rentremote.com/travel-guide/mexico-city/activities/short-term-rentals-mexico-city-where-to-stay-and-what-to-expect"],["Condesa housing context","https://staykukun.com/blog/hospedaje-condesa"]] },
+      { name:"Bangkok, Thailand", area:"Ari / Phrom Phong", country:"Thailand", key:"bangkok thailand", rent:[700,1400], coords:[13.780,100.545], accent:"#b38a59", verdict:"The convenience champion: elite food, hospitals, gyms, transit, and enough parks to make a disciplined routine possible.", social:"S69 Saturday run / Bangkok expat groups", schedule:"Saturday run lead around S69; check current group posts for exact details.", gym:"Jetts, Fitness First, and wellness clubs", gymPrice:"$35–$120 / month planning", gymMonthly:75, restaurant:"Jai Fai lane + neighborhood street food", dish:"crab omelet / boat noodles", dishPrice:"$2–$40 planning", activity:"Benjakitti Park + weekend escapes", stay:"furnished condo near BTS in Ari or Phrom Phong", scores:{overall:8.7,value:8.1,social:8.5,nature:6.6,training:9.2,food:9.5,access:9.2,budget2k:7.8,budget3k:9.0}, sources:[["Bangkok neighborhood guide","https://www.bkkoracle.com/guides/where-to-live-in-bangkok-as-expat"],["Bangkok run-group lead","https://www.reddit.com/r/Bangkok/comments/1r2k1ew/any_running_groups/"]] },
+      { name:"Buenos Aires, Argentina", area:"Palermo / Recoleta", country:"Argentina", key:"buenos aires palermo", rent:[800,1400], coords:[-34.574,-58.424], accent:"#9b6fa0", verdict:"The urban romance option: parks, cafes, late dinners, excellent apartment stock, and a social life that does not depend on expats alone.", social:"Palermo run clubs / Buenos Aires Hash", schedule:"Park runs and Hash leads; confirm current meeting points.", gym:"Megatlon / boutique training clubs", gymPrice:"$25–$90 / month planning", gymMonthly:55, restaurant:"Don Julio lane + Palermo cafes", dish:"steak / medialunas / gelato", dishPrice:"$6–$45 planning", activity:"Bosques de Palermo + river parks", stay:"furnished apartment in Palermo or Recoleta", scores:{overall:8.6,value:8.0,social:9.0,nature:7.2,training:8.3,food:9.5,access:8.8,budget2k:7.1,budget3k:8.8} },
+      { name:"Mendoza, Argentina", area:"Ciudad / Quinta Sección", country:"Argentina", key:"mendoza argentina", rent:[600,1000], coords:[-32.889,-68.845], accent:"#8aa262", verdict:"A slower wine-country base with strong mountain weekends, good apartment value, and enough city life for a sustainable routine.", social:"Mendoza runners / cycling and wine circles", schedule:"Run, cycling, and wine-community leads; verify current seasonal events.", gym:"Megatlon and local training clubs", gymPrice:"$25–$80 / month planning", gymMonthly:50, restaurant:"Azafrán + wine-bar circuit", dish:"asado / Mendoza Malbec pairing", dishPrice:"$8–$45 planning", activity:"Andes foothills + vineyards", stay:"furnished apartment in Quinta Sección", scores:{overall:8.4,value:8.4,social:7.5,nature:9.3,training:8.0,food:9.0,access:7.4,budget2k:7.9,budget3k:9.0} },
+      { name:"Tbilisi, Georgia", area:"Vake / Vera", country:"Georgia", key:"tbilisi georgia", rent:[600,1000], coords:[41.710,44.783], accent:"#a67d5c", verdict:"Wildcard: mountain access, a young international city, serious food and wine, and unusually generous space for the money.", social:"Tbilisi Hash House / climbing and run groups", schedule:"Hash and climbing leads; verify current group calendars and language mix.", gym:"World Class / local strength clubs", gymPrice:"$35–$100 / month planning", gymMonthly:60, restaurant:"Keto and Kote + wine bars", dish:"khinkali / Georgian dinner", dishPrice:"$4–$25 planning", activity:"Turtle Lake + Caucasus weekends", stay:"large furnished apartment in Vake or Vera", scores:{overall:8.6,value:9.0,social:8.3,nature:8.8,training:7.8,food:9.0,access:7.2,budget2k:9.0,budget3k:9.1} },
+      { name:"Krabi, Thailand", area:"Ao Nang / Railay access", country:"Thailand", key:"krabi thailand", rent:[500,900], coords:[8.034,98.839], accent:"#4a9d99", verdict:"The climbing-forward addition: dramatic limestone, beach access, Thai food, and a social scene that can form around climbing rather than running.", social:"Railay / Tonsai climbing community", schedule:"Climbing gyms, guides, and beach crags are the recurring social lane; check weather and group timing.", gym:"Ao Nang training clubs + climbing gyms", gymPrice:"$25–$80 / month planning", gymMonthly:50, restaurant:"Jungle Kitchen + Ao Nang seafood", dish:"southern Thai curry / seafood", dishPrice:"$3–$20 planning", activity:"Railay / Tonsai climbing + islands", stay:"monthly studio in Ao Nang with Railay access", scores:{overall:8.5,value:8.2,social:8.4,nature:9.7,training:8.2,food:8.3,access:6.4,budget2k:7.8,budget3k:9.0}, sources:[["Thailand tourism / Krabi climbing lead","https://www.thailandtravel.or.jp/common/pdf/Krabi_trang2019.pdf"],["Railay Adventure","https://www.railayadventure.com/"]] }
+    ];
+    const logisticsBySlug = {
+      "uluwatu-bali":"Most daily movement is scooter or short ride; cliff beaches involve stairs, and Canggu / Denpasar are not casual daily trips.",
+      "da-lat-vietnam":"The lake, cafes, and central services can form a compact loop; pine trails and waterfalls are short rides rather than doorstep walks.",
+      "siargao-philippines":"General Luna is scooter-friendly and socially compact; surf breaks, island trips, and reliable healthcare require transport or a boat day.",
+      "kuta-lombok":"Kuta is easy by scooter, but the best beaches and quieter homes are spread out; the social life is more intentional than Canggu.",
+      "siem-reap-cambodia":"Wat Bo, Old Market, restaurants, and coworking are reachable by bicycle or tuk-tuk; Angkor and Tonle Sap are excursion days.",
+      "valencia-philippines":"This is not a walkable all-in-one base: Dumaguete is the service and social anchor, so plan regular rides and do not pretend Valencia pins replace it.",
+      "dumaguete-philippines":"Downtown and the boulevard can be a walkable daily loop; Apo Island and the mountain waterfalls are planned day trips, not after-work errands.",
+      "canggu-bali":"The life is highly neighborhood-dependent: choose Berawa or Batu Bolong and accept traffic; crossing Bali for a weekday activity erodes the setup.",
+      "phu-quoc-vietnam":"Duong Dong and Ong Lang are spread out and scooter-oriented; the best beaches, forest, and more serious services are not all in one loop.",
+      "baguio-philippines":"Camp John Hay is a strong nature/training pocket, but steep hills and traffic make neighborhood choice more important than the city label.",
+      "boracay-philippines":"Station 3, White Beach, and Bulabog can be linked on foot or by short tricycle; island transfers and peak-season congestion change the rhythm.",
+      "siquijor-philippines":"San Juan is the social base, but waterfalls, reefs, and most activities need a scooter; this is a deliberate slow-island life.",
+      "florianopolis-brazil":"Campeche, Lagoa, and Jurerê are separate lifestyle pockets; pick one and live locally rather than assuming the whole island is a short commute.",
+      "bariloche-argentina":"Centro is the service anchor; trailheads and Playa Bonita need bus, taxi, or a car, so the lake-and-trail life includes planned outings.",
+      "santiago-chile":"Providencia and Ñuñoa work with Metro and park access; Andes hikes and ski days are weekend logistics, not part of the daily walking loop.",
+      "mexico-city-mexico":"Condesa / Roma supports a strong walk-and-Metro loop, while Chapultepec and social venues vary by neighborhood; traffic is the hidden budget.",
+      "bangkok-thailand":"Ari and Phrom Phong are BTS-centered choices; select one rail corridor and one park, because cross-city traffic can destroy an otherwise excellent routine.",
+      "buenos-aires-argentina":"Palermo / Recoleta supports walking, parks, cafes, and Subte access; the best day trips and some social events sit outside the neighborhood loop.",
+      "mendoza-argentina":"The city is bikeable around the central grid; vineyards and Andes access are separate planned excursions, which is part of the appeal.",
+      "tbilisi-georgia":"Vake and Vera are hilly but social and cafe-rich; climbing, baths, and mountain escapes are reachable with short rides rather than one flat loop.",
+      "krabi-thailand":"Ao Nang is the practical home base; Railay / Tonsai is a longtail-boat outing, so climbing is a recurring social lane but not a doorstep gym."
+    };
+    const locations = rawLocations.map((location, index) => ({ ...location, index:index + 1, slug:slugify(location.name), logistics:logisticsBySlug[slugify(location.name)] || "Verify local travel time and operating hours before choosing the address." }));
+
+    const offsets = {
+      social:[0.008,0.006],
+      food:[-0.005,0.010],
+      gym:[0.010,-0.008],
+      activity:[-0.012,-0.006]
+    };
+    const pinColors = { stay:"#83e9ce", social:"#ff927f", food:"#ffcf86", gym:"#c4a5ff", activity:"#9fe38d" };
+    const pinLetter = { stay:"S", social:"R", food:"F", gym:"G", activity:"A" };
+    const pinLabel = { stay:"STAY", social:"SOCIAL", food:"FOOD", gym:"GYM", activity:"ACTIVITY" };
+    const locationPins = (location) => {
+      const names = { stay:location.stay, social:location.social, food:location.restaurant, gym:location.gym, activity:location.activity };
+      return Object.keys(names).map((type) => {
+        const delta = offsets[type] || [0,0];
+        return { type:type, label:names[type], lat:location.coords[0] + delta[0], lng:location.coords[1] + delta[1] };
+      });
+    };
+    const mapLinkForPin = (pin) => osmMap(pin.lat.toFixed(5), pin.lng.toFixed(5), 14);
+
+    const state = { location:null, slide:0, mode:"auto", timer:null, maps:{} };
+    let holdTimer = null;
+    let holdFired = false;
+    const directory = document.getElementById("directory");
+    const cinema = document.getElementById("cinema");
+    const grid = document.getElementById("location-grid");
+    const viewport = document.getElementById("slide-viewport");
+    const progress = document.getElementById("progress-row");
+    const status = document.getElementById("status-row");
+    const autoButton = document.getElementById("auto-button");
+    const counter = document.getElementById("slide-counter");
+
+    const scoreCard = (label, value) => '<div class="rating-card"><strong>' + Number(value).toFixed(1) + '</strong><span>' + escapeHtml(label) + '</span></div>';
+    const lifeScore = (location) => (location.scores.value * .18 + location.scores.social * .18 + location.scores.nature * .18 + location.scores.training * .16 + location.scores.food * .12 + location.scores.access * .18).toFixed(1);
+    const sourceButtons = (location, kind) => {
+      const query = {
+        stay:location.name + " furnished apartment monthly rent " + location.area,
+        social:location.name + " run club social climbing surf group schedule",
+        food:location.name + " " + location.restaurant + " menu prices",
+        gym:location.name + " " + location.gym + " membership",
+        activity:location.name + " " + location.activity
+      }[kind];
+      const links = [["Map / named lead", cityMap(query)], ["Search current proof", googleSearch(query)]];
+      if (location.sources) links.push(...location.sources);
+      return links.slice(0, 4).map((link, index) => '<a class="source-link' + (index > 0 ? ' secondary' : '') + '" href="' + link[1] + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(link[0]) + ' ↗</a>').join("");
+    };
+    const photoTags = (location, kind) => {
+      const tags = {
+        hero:[location.key, "landscape"],
+        stay:[location.key, "accommodation", "interior"],
+        social:[location.key, "running", "community"],
+        food:[location.key, "restaurant", "food"],
+        gym:[location.key, "gym", "fitness"],
+        activity:[location.key, "nature", "outdoor"]
+      }[kind];
+      return tags;
+    };
+    const imageMarkup = (location, kind, label, index) => {
+      const lock = seedOf(location.slug + kind + index) % 9999;
+      const src = photo(kind, lock);
+      const alt = location.name + " — " + label;
+      return '<figure class="photo-card"><img data-photo-kind="' + kind + '" data-evidence="visual-reference" src="' + src + '" alt="' + escapeHtml(alt) + '" loading="eager" onerror="this.onerror=null;this.src=imageFallback(this.alt, \'' + location.accent + '\')"><figcaption><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(location.name) + '</span><br><span class="evidence-pill">visual reference</span></figcaption></figure>';
+    };
+    const photoSlide = (location, kind, title, copy, labels) => {
+      const gridClass = labels.length === 2 ? "photo-grid two" : labels.length === 3 ? "photo-grid three" : "photo-grid";
+      return '<article class="slide" data-slide-kind="' + kind + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / ACTIVITY" : kind.toUpperCase()) + '</div><h2>' + escapeHtml(title) + '</h2><p class="slide-copy">' + escapeHtml(copy) + '</p><div class="' + gridClass + '">' + labels.map((label, index) => imageMarkup(location, kind, label, index)).join("") + '</div><div class="evidence-card"><div><h3>What this picture means</h3><p>These are visual references to make the life tangible, not confirmed venue or listing evidence. The named lead, map pin, and source buttons are the evidence trail; confirm the exact venue, listing, schedule, and price before spending money.</p></div><div class="source-row">' + sourceButtons(location, kind) + '</div></div></div></article>';
+    };
+    const ratingSlide = (location) => '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid"><div class="hero-image"><img data-photo-kind="hero" data-evidence="visual-reference" src="' + photo("hero", seedOf(location.slug) % 9999) + '" alt="' + escapeHtml(location.name + " — " + location.activity) + '" loading="eager" onerror="this.onerror=null;this.src=imageFallback(this.alt, \'' + location.accent + '\')"><span class="hero-badge">VISUAL REFERENCE</span></div><div class="hero-panel"><div class="kicker">' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p><div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + googleSearch(location.name + " long stay living") + '" target="_blank" rel="noopener noreferrer">Research lead ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
+
+    const makeMap = (location) => {
+      const pins = locationPins(location);
+      const west = location.coords[1] - 0.035;
+      const east = location.coords[1] + 0.035;
+      const north = location.coords[0] + 0.025;
+      const south = location.coords[0] - 0.025;
+      const fallbackPins = pins.map((pin) => {
+        const x = Math.max(8, Math.min(92, ((pin.lng - west) / (east - west)) * 100)).toFixed(2);
+        const y = Math.max(12, Math.min(86, ((north - pin.lat) / (north - south)) * 100)).toFixed(2);
+        return '<a class="static-pin" style="left:' + x + '%;top:' + y + '%;--pin-color:' + pinColors[pin.type] + '" data-label="' + escapeHtml(pin.label) + '" href="' + mapLinkForPin(pin) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(pinLabel[pin.type] + ": " + pin.label) + '">' + pinLetter[pin.type] + '</a>';
+      }).join("");
+      const bbox = [(location.coords[1] - 0.035).toFixed(5),(location.coords[0] - 0.025).toFixed(5),(location.coords[1] + 0.035).toFixed(5),(location.coords[0] + 0.025).toFixed(5)].join(",");
+      const embed = "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + location.coords[0] + "," + location.coords[1];
+      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><iframe class="osm-embed" title="OpenStreetMap geography for ' + escapeHtml(location.name) + '" src="' + embed + '" loading="lazy"></iframe><div class="map-overlay"><div class="static-map-title">' + escapeHtml(location.name) + ' / five-point planning map</div>' + fallbackPins + '</div></div></div><div class="map-side">' + pins.map((pin) => '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type]) + '</strong><span>' + escapeHtml(pin.label) + '</span></div></div>').join("") + '<a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">The background is real OpenStreetMap geography. Five named <strong>approximate planning pins</strong> sit above it for readability; each is a lead with its own map link, not a verified venue coordinate or walking-time promise.</p></div></div>';
+    };
+
+    const money = (value) => "$" + Math.round(value).toLocaleString();
+    const budgetCard = (location, total) => {
+      const rent = (location.rent[0] + location.rent[1]) / 2;
+      const food = total === 2000 ? 360 : 520;
+      const transport = total === 2000 ? 130 : 220;
+      const gym = location.gymMonthly;
+      const phone = 50;
+      const medical = 500;
+      const buffer = Math.max(0, total - rent - food - transport - gym - phone - medical);
+      return '<div class="budget-card"><h3><span>$' + total.toLocaleString() + '</span><span>' + (total === 2000 ? location.scores.budget2k.toFixed(1) : location.scores.budget3k.toFixed(1)) + '/10</span></h3><div class="budget-lines"><div class="budget-line"><span>mid rent target</span><strong>' + money(rent) + '</strong></div><div class="budget-line"><span>food / cafes</span><strong>' + money(food) + '</strong></div><div class="budget-line"><span>transport</span><strong>' + money(transport) + '</strong></div><div class="budget-line"><span>gym / training</span><strong>' + money(gym) + '</strong></div><div class="budget-line"><span>phone + misc</span><strong>' + money(phone) + '</strong></div><div class="budget-line"><span>medical reserve</span><strong>' + money(medical) + '</strong></div><div class="budget-line remaining"><span>trips / buffer / upgrades</span><strong>' + money(buffer) + '</strong></div></div></div>';
+    };
+    const budgetSlide = (location) => '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">This is a transparent planning model: median rent target plus food, transport, training, phone/misc, and a $500 medical reserve. It is deliberately editable in your head; rent and medical reality are the two biggest swing factors.</p><div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Budget scores answer “how much margin remains?” They do not mean the lifestyle is guaranteed at that spend. The $500 medical line is a planning reserve inherited from the old brief, not a medical estimate.</p></div></article>';
+    const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p><div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' The life works when you treat the schedule as a lead to verify, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a></div></div></div></article>';
+
+    const buildSlides = (location) => ratingSlide(location)
+      + photoSlide(location,"stay","A house that gives the life a chance","Target: " + location.stay + ". Four visuals keep the housing decision concrete, but each is marked as a visual reference until you select a real listing.",["living room / furnished base","bedroom / long-stay feel","kitchen / work surface","terrace / outside space"])
+      + photoSlide(location,"social","The people are part of the address","Lead: " + location.social + ". " + location.schedule,["run / climbing / surf visual","community / hangout visual"])
+      + photoSlide(location,"food","Good food without turning every meal into a project","Lead: " + location.restaurant + ". A dish lead: " + location.dish + " at " + location.dishPrice + ".",["restaurant interior visual","dish / market visual"])
+      + photoSlide(location,"gym","Train hard, recover intelligently","Lead: " + location.gym + ". Membership lead: " + location.gymPrice + ".",["training floor visual","recovery / outdoor fitness visual"])
+      + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked. The base map is real geography; the pins are named planning leads with an OpenStreetMap link each.</p>' + makeMap(location) + '</div></article>'
+      + budgetSlide(location)
+      + daySlide(location);
+
+    const renderDirectory = () => {
+      grid.innerHTML = locations.map((location) => '<a class="location-card" href="#' + location.slug + '" data-number="' + String(location.index).padStart(2,"0") + '" style="--accent:' + location.accent + '" aria-label="Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span>' + String(location.index).padStart(2,"0") + ' / ' + locations.length + '</span><span>8 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10</span><span class="pill">' + escapeHtml(location.area) + '</span></div><div class="card-score">' + location.scores.budget2k.toFixed(1) + '<small> $2K</small></div></div></div></a>').join("");
+    };
+
+    const stopTimer = () => { if (state.timer) window.clearInterval(state.timer); state.timer = null; };
+    const startTimer = () => { stopTimer(); state.timer = window.setInterval(() => { if (state.mode === "auto") goTo(state.slide + 1, false); }, 6200); };
+    const updateControls = () => {
+      const slides = [...viewport.querySelectorAll(".slide")];
+      slides.forEach((slide, index) => slide.classList.toggle("is-active", index === state.slide));
+      [...progress.querySelectorAll(".dot")].forEach((dot, index) => dot.classList.toggle("is-active", index === state.slide));
+      counter.textContent = (state.slide + 1) + " / " + slides.length;
+      autoButton.textContent = state.mode === "auto" ? "PAUSE ‖" : "AUTO ▶";
+      autoButton.setAttribute("aria-label", state.mode === "auto" ? "Pause automatic slideshow" : "Resume automatic slideshow");
+      status.textContent = state.mode === "auto" ? "AUTO PLAYING" : "PAUSED — PRESS AUTO TO RESUME";
+      status.dataset.mode = state.mode;
+    };
+    const renderProgress = () => {
+      const count = viewport.querySelectorAll(".slide").length;
+      progress.innerHTML = Array.from({length:count}, (_, index) => '<button class="dot' + (index === state.slide ? ' is-active' : '') + '" type="button" aria-label="Go to slide ' + (index + 1) + '" data-slide="' + index + '"></button>').join("");
+    };
+    const goTo = (index, pause) => {
+      const count = viewport.querySelectorAll(".slide").length;
+      state.slide = (index + count) % count;
+      if (pause) state.mode = "paused";
+      updateControls();
+      if (state.mode === "auto") startTimer(); else stopTimer();
+    };
+    const pauseForHold = () => { state.mode = "paused"; stopTimer(); updateControls(); };
+
+
+    const openLocation = (slug) => {
+      const location = locations.find((item) => item.slug === slug);
+      if (!location) return;
+      state.location = location;
+      state.slide = 0;
+      state.mode = "auto";
+      document.getElementById("cinema-name").textContent = location.name;
+      document.getElementById("cinema-meta").textContent = location.area + " • " + location.country + " • tap and hold to pause";
+      viewport.innerHTML = buildSlides(location);
+      renderProgress();
+      cinema.hidden = false;
+      directory.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "hidden";
+      updateControls();
+      startTimer();
+    };
+    const closeCinema = () => {
+      stopTimer();
+      cinema.hidden = true;
+      directory.removeAttribute("aria-hidden");
+      document.body.style.overflow = "";
+      if (window.location.hash) history.replaceState(null, "", window.location.pathname + window.location.search);
+      state.location = null;
+    };
+
+    renderDirectory();
+    grid.addEventListener("click", (event) => {
+      const link = event.target.closest("a.location-card");
+      if (!link) return;
+      event.preventDefault();
+      history.pushState(null, "", link.getAttribute("href"));
+      openLocation(link.getAttribute("href").slice(1));
+    });
+    document.getElementById("close-cinema").addEventListener("click", closeCinema);
+    document.getElementById("back-button").addEventListener("click", () => goTo(state.slide - 1, true));
+    document.getElementById("next-button").addEventListener("click", () => goTo(state.slide + 1, true));
+    autoButton.addEventListener("click", () => { state.mode = state.mode === "auto" ? "paused" : "auto"; updateControls(); if (state.mode === "auto") startTimer(); else stopTimer(); });
+    progress.addEventListener("click", (event) => { const dot = event.target.closest(".dot"); if (dot) goTo(Number(dot.dataset.slide), true); });
+    const clearHold = () => { if (holdTimer) window.clearTimeout(holdTimer); holdTimer = null; };
+    viewport.addEventListener("pointerdown", (event) => {
+      if (event.target.closest("button,a")) return;
+      holdFired = false;
+      clearHold();
+      holdTimer = window.setTimeout(() => { holdFired = true; pauseForHold(); }, 450);
+    });
+    viewport.addEventListener("pointerup", clearHold);
+    viewport.addEventListener("pointercancel", clearHold);
+    viewport.addEventListener("pointerleave", clearHold);
+    viewport.addEventListener("keydown", (event) => { if (event.key === "ArrowRight") goTo(state.slide + 1, true); if (event.key === "ArrowLeft") goTo(state.slide - 1, true); if (event.key === " ") { event.preventDefault(); autoButton.click(); } });
+    document.addEventListener("keydown", (event) => { if (cinema.hidden) return; if (event.key === "Escape") closeCinema(); });
+    window.addEventListener("hashchange", () => { const slug = window.location.hash.slice(1); if (slug) openLocation(slug); else closeCinema(); });
+    window.addEventListener("popstate", () => { const slug = window.location.hash.slice(1); if (slug) openLocation(slug); else closeCinema(); });
+    const initialSlug = window.location.hash.slice(1);
+    if (initialSlug) openLocation(initialSlug);
+  </script>
+</body>
+</html>
