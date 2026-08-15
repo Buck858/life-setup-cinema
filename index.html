@@ -466,7 +466,7 @@
       </div>
       <aside class="masthead-note">
         <strong id="place-count">21</strong>
-        <p>places • image-first slide sets • USD prices on every slide • source snapshot 2026-08-14 • unverified gaps are visible</p>
+        <p>places • image-first slide sets • USD prices on every slide • source snapshot 2026-08-14 • reference photos are labeled</p>
       </aside>
     </header>
 
@@ -482,7 +482,7 @@
 
     <section class="rule-card" aria-labelledby="rules-heading">
       <h2 id="rules-heading">The rules this remake follows</h2>
-      <p><strong>Every place gets an image-first slide set:</strong> verdict + rating, at least four stay slides (with more when a source publishes distinct housing photos), two social slides, two meal slides, two gym/recovery slides, two activity slides, a readable map with five named real property/venue pins, itemized $2K/$3K budgets, and a sample day. Live price chips are shown in U.S. dollars. A category is called <strong>LIVE SOURCE VERIFIED</strong> only when the source, dated price, and source-specific image were found together; partial or missing evidence is labeled on-slide and never replaced with stock photography. Map pins carry a direct venue/property source and mark exact versus approximate coordinates; rental platforms often mask the exact apartment address. The short-stay check window is <strong>Oct 13–Nov 12, 2026 for one guest</strong>; prices and availability are snapshots, not guarantees. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
+      <p><strong>Every place gets an image-first slide set:</strong> verdict + rating, at least four stay slides (with more when a source publishes distinct housing photos), two social slides, two meal slides, two gym/recovery slides, two activity slides, a readable map with five named real property/venue pins, itemized $2K/$3K budgets, and a sample day. Live price chips are shown in U.S. dollars. A category is called <strong>LIVE SOURCE VERIFIED</strong> only when the source, dated price, and source-specific image were found together. When that exact source does not publish a clean photo, the deck shows a real, location-matched <strong>REAL LOCATION REFERENCE</strong> and names the photo source; it never presents that reference as proof of the exact rental, plate, event, or membership. Map pins carry a direct venue/property source and mark exact versus approximate coordinates; rental platforms often mask the exact apartment address. The short-stay check window is <strong>Oct 13–Nov 12, 2026 for one guest</strong>; prices and availability are snapshots, not guarantees. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
     </section>
 
     <section class="directory-head">
@@ -593,7 +593,8 @@
 
     // Live evidence is deliberately separate from the editorial shortlist. A location can
     // still be a good idea without having a bookable listing, menu, ticket, or venue photo
-    // verified on the check date. Those gaps render as gaps; they never fall back to stock.
+    // verified on the check date. Exact-source gaps use a real, explicitly labeled location
+    // reference when one is available; they never fall back to stock or generated imagery.
     const evidenceCheckedAt = "2026-08-14";
     const stayWindow = "Oct 13–Nov 12, 2026 · 1 guest · 30 nights";
     const liveEvidence = {
@@ -1279,11 +1280,96 @@
     });
     Object.assign(mediaRoleOverrides, {"dumaguete-philippines": {stay:{status:"partial",images:["https://www.apartmentsdumaguete.com/wp-content/uploads/2014/10/1-bedroom1-1024x682.jpg","https://www.apartmentsdumaguete.com/wp-content/uploads/2014/10/IMG_0847-1024x682.jpg","https://www.apartmentsdumaguete.com/wp-content/uploads/2014/10/IMG_0593-1024x682.jpg","https://www.apartmentsdumaguete.com/wp-content/uploads/2014/10/IMG_0809-1024x682.jpg"],roles:["Dumaguete City Apartments / furnished living area","Dumaguete City Apartments / bedroom","Dumaguete City Apartments / apartment interior","Dumaguete City Apartments / terrace or amenity view"],note:"These four full-size images come from the official Dumaguete City Apartments gallery. They show the property type, while the exact available unit still needs confirmation."}}});
     Object.assign(mediaRoleOverrides, {"valencia-philippines": {stay:{status:"partial",images:["https://images.squarespace-cdn.com/content/v1/56b9fb5ee707eb34c51c2190/1455349475944-4DNFHYVWV1V811M41LS6/DSC_0254.JPG","https://images.squarespace-cdn.com/content/v1/56b9fb5ee707eb34c51c2190/1455349534306-LATUK1VJKT0BJIS543II/DSC_0147.jpg","https://images.squarespace-cdn.com/content/v1/56b9fb5ee707eb34c51c2190/1455349744299-RJWC1DODBPZ2WKYOIENK/DSC_0143.jpg","https://images.squarespace-cdn.com/content/v1/56b9fb5ee707eb34c51c2190/1455349746046-HMQZWQY4NZUWEGKLABS1/DSC_0146.jpg"],roles:["Hassaram Residences / exterior and grounds","Hassaram Residences / furnished living area","Hassaram Residences / bedroom or interior","Hassaram Residences / property amenity or view"],note:"These four full-size images come from the official Hassaram Residences gallery. The rates page is separate; exact available unit and dates still need confirmation."}}});
+
+    // Real reference media closes the visual gap without changing the evidence claim.
+    // These are used only when the named source has no usable direct image (or only
+    // a rejected thumbnail). The label and source link stay visible on the slide.
+    const referenceMediaBySlug = {
+      "siargao-philippines": {
+        social:{images:["https://i0.wp.com/cebuinsider.com/wp-content/uploads/2023/03/RumBar-in-Siargao.jpg?ssl=1&w=1200"],roles:["RumBar Siargao / General Luna nightlife interior"],source:"Cebu Insider — Siargao nightlife",url:"https://cebuinsider.com/philippine-nightlife/",note:"Real General Luna nightlife venue reference. The named festival calendar does not publish a clean venue photograph, so this is not presented as festival-event proof."}
+      },
+      "uluwatu-bali": {
+        food:{images:["https://images.happycow.net/venues/1024/48/83/hcmp488334_3709753.jpeg"],roles:["Tanah Uluwatu / açaí bowl close-up"],source:"HappyCow — Tanah Uluwatu",url:"https://www.happycow.net/reviews/tanah-uluwatu-bakery-grill-bali-488334",note:"Real Uluwatu food reference showing an açaí bowl. The priced menu lead is separate, so the image is not claimed as The Loft’s exact plate."},
+        social:{images:["https://www.singlefinbali.com/wp-content/uploads/2024/06/hero-homepage.webp"],roles:["Single Fin Bali / cliffside social venue"],source:"Single Fin Bali / Project Black",url:"https://www.projectblack.co/singlefin",note:"Real Uluwatu social-venue reference with the cliffside setting. The named Hatch calendar remains the source for the schedule, not this photograph."},
+        gym:{images:["https://assets.zyrosite.com/cdn-cgi/image/format%3Dauto%2Cw%3D768%2Ch%3D768%2Cfit%3Dcrop/Yg2jZV8zXQuOn2eE/yxgozf6sdvvtbp61iwlq-AoPW8jRjj7hJ5GGK.webp"],roles:["Raw Gym Uluwatu / weights floor reference"],source:"Raw Gym Uluwatu",url:"https://www.rawbali.com/raw-uluwatu",note:"Real Uluwatu gym reference from an operating fitness venue. The priced 360 MOVE lead remains separate, so this image is not claimed as that exact facility."}
+      },
+      "da-lat-vietnam": {
+        food:{images:["https://static.vinwonders.com/production/2025/07/Pho-Da-Lat-banner.jpg"],roles:["Da Lat / phở bowl close-up reference"],source:"VinWonders — Phở Đà Lạt",url:"https://vinwonders.com/en/wonderpedia/news/pho-da-lat/",note:"Real Da Lat phở photo from a local travel source. It is a dish reference for the priced Zen Valley lead, not a claim that the two restaurants are the same."},
+        activity:{images:["https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dalat_Crazy_House.jpg/1920px-Dalat_Crazy_House.jpg"],roles:["Crazy House / exterior attraction"],source:"Wikimedia Commons — Da Lat Crazy House",url:"https://commons.wikimedia.org/wiki/File:Dalat_Crazy_House.jpg",note:"Real, location-matched Crazy House photo. The image proves the attraction; the ticket price remains tied to the official ticket source."},
+        social:{images:["https://included.co/wp-content/uploads/formidable/9/20190809_154354-scaled.jpg"],roles:["One More Coworking / community interior"],source:"One More Coworking",url:"https://included.co/join/onemorecoworking/",note:"Real Da Lat coworking-community interior reference. The dated meetup lead does not publish its own event photograph."},
+        gym:{images:["https://lamdong360.net/images/post/2025/06/phong_gym_da_lat/life_gym.webp"],roles:["Life Gym Da Lat / equipment floor"],source:"LamDong360 — Da Lat gyms",url:"https://lamdong360.net/post/phong-gym-da-lat",note:"Real Da Lat training-floor reference from a local gym guide. It is not used to assert that the priced Hoàng Vũ membership is the same facility."}
+      },
+      "siem-reap-cambodia": {
+        food:{images:["https://cdn.bookingtour.vn/upload/2024/11/25/mceu_30366634211732550389384.jpg"],roles:["Cambodian fish amok / Siem Reap dish reference"],source:"BookingTour.vn — Cambodian fish amok",url:"https://bookingtour.vn/",note:"Real Cambodian fish-amok photo used as a clear local dish reference. The exact Sambo green-mango-salad plate is not published, so this is not presented as Sambo’s own photo."},
+        social:{images:["https://www.siem-reap.info/wp-content/uploads/2021/03/pub_street_siem_reap-1024x518.jpg"],roles:["Pub Street Siem Reap / nightlife environment"],source:"Siem-Reap.info — Pub Street",url:"https://www.siem-reap.info/en/pub-street-siem-reap-en/",note:"Real Siem Reap nightlife reference. It shows the local social environment, not a claim that it is the specific Angkor Comedy room."}
+      },
+      "valencia-philippines": {
+        social:{images:["https://travelistajournal.wordpress.com/wp-content/uploads/2016/10/img_0996.jpg?w=660"],roles:["Valencia, Negros Oriental / Sunday market community scene"],source:"Travelista Journal — Valencia, Negros Oriental",url:"https://travelistajournal.wordpress.com/2016/10/04/discover-valencia-negros-oriental/",note:"Real Valencia community-market reference at the destination itself. It is not presented as a photograph of the AA meeting; the meeting source remains the source for schedule details."}
+      },
+      "dumaguete-philippines": {
+        food:{images:["https://img.restaurantguru.com/radd-Jorelyns-Roast-and-Grill-food.jpg"],roles:["Negros Oriental / pancit dish reference"],source:"RestaurantGuru — Jorelyn’s Roast & Grill",url:"https://restaurantguru.com/Jorelyns-Roast-and-Grill-Guihulngan-City",note:"Real Negros Oriental pancit photograph used as a clear local-food reference. The USD price remains tied to 1988 Bistro’s current menu, not this separate restaurant."},
+        social:{images:["https://www.wrkpod.com/wp-content/uploads/2023/08/HERO-PHOTO-3-scaled.jpg"],roles:["WRKPod Dumaguete / coworking community interior"],source:"WRKPod Dumaguete",url:"https://www.wrkpod.com/locations/downtown/",note:"Real Dumaguete coworking-community interior reference. The named LFT calendar does not publish a clean event photograph."}
+      },
+      "canggu-bali": {
+        activity:{images:["https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/rsfit800600gsm/eventThirdParty/2025/09/10/2f4d5cd4-bcef-4a03-8a11-5f3dbb64457d-1757506218811-33751296bbe6ff35f1b745b725a1f080.jpg"],roles:["Canggu surf lesson / real class"],source:"Tiket — one-on-one Canggu surf lesson",url:"https://www.tiket.com/en-sg/to-do/tiket-private-one-on-one-surf-lesson-in-canggu-area-bali",note:"Real Canggu surf-lesson photograph. The image is a location/activity reference for the priced lesson lead, not a claim about a particular instructor slot."}
+      },
+      "baguio-philippines": {
+        food:{images:["https://img02.restaurantguru.com/c9c4-New-Good-Taste-Cafe-and-Restaurant-meals.jpg"],roles:["Good Taste Baguio / Filipino food spread"],source:"RestaurantGuru — Good Taste Baguio",url:"https://restaurantguru.com/Good-Taste-Baguio-3",note:"Real Good Taste restaurant food spread. The named Krispy Sisig Solo price remains on the menu source; this reference is not relabeled as that exact plate."},
+        activity:{images:["https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Trees_at_Camp_John_Hay%2C_Baguio%2C_Jul_2025.jpg/1920px-Trees_at_Camp_John_Hay%2C_Baguio%2C_Jul_2025.jpg"],roles:["Camp John Hay / pine-forest recreation"],source:"Wikimedia Commons — Camp John Hay",url:"https://commons.wikimedia.org/wiki/File:Trees_at_Camp_John_Hay,_Baguio,_Jul_2025.jpg",note:"Real Camp John Hay recreation photo. It shows the destination environment rather than claiming a specific paid activity ticket."},
+        social:{images:["https://i0.wp.com/ubaguio.edu/wp-content/uploads/2026/03/639145543_1435285838629381_7676031277144395210_n.jpg"],roles:["Baguio university/community event reference"],source:"University of Baguio — community event photo",url:"https://ubaguio.edu/",note:"Real Baguio community-event reference from a local university source. The dated Mission Strong listing remains the event/price lead; this is not presented as its exact race photograph."},
+        gym:{images:["https://johnhayhotels.com/wp-content/uploads/2025/09/Lifestyle-shoot-1-218.jpg"],roles:["The Gym at John Hay Hotels / fitness facility"],source:"John Hay Hotels — facilities",url:"https://johnhayhotels.com/facilities/",note:"Real Camp John Hay hotel-fitness reference from the named facility page, which also states sauna and jacuzzi access. Confirm guest access and the current day rate."}
+      },
+      "boracay-philippines": {
+        stay:{images:["https://media.realtyware.net/image/60f6d4987ce36b50169f3a189a260f863c0d77d60713331d42677214850ed1b39dfb98de073.jpg","https://media.realtyware.net/image/1f1a1b883d6b755954e53a189a25f3823c0880ae3363331d42677214850ed1b39dfb98de073.jpg","https://media.realtyware.net/image/21c4b12c1d9109abaf7c3a189a25faf43c0547793613331d42677214850ed1b39dfb98de073.jpg","https://media.realtyware.net/image/c0e308ebdc3d0a7baef73a189a2607973c0d84accea3331d42677214850ed1b39dfb98de073.jpg"],roles:["SPR Boracay / oceanfront exterior and sea view","SPR Boracay / furnished living area","SPR Boracay / bedroom","SPR Boracay / terrace and view amenity"],source:"SPR Boracay — Oceanfront 1BR Apartment",url:"https://www.sprboracay.com/en/0027-apartment-manoc-manoc-boracay-island-003A48",note:"Four real photos from an active SPR Boracay oceanfront monthly-rental source. The displayed Booking lead and this replacement are separate housing leads; confirm the exact unit and dates before booking."},
+        food:{images:["https://primer.com.ph/food/wp-content/uploads/sites/4/2019/04/Chicken-Pork-Adobo-2-1024x769.jpg"],roles:["Nonie’s Boracay / chicken pork adobo"],source:"Primer — Nonie’s Boracay",url:"https://primer.com.ph/food/location/philippines/boracay/nonies-2/",note:"Real Nonie’s Boracay adobo photo from a restaurant visit. The menu price is a current snapshot; verify the plate and price at order."},
+        activity:{images:["https://outoftownblog.com/wp-content/uploads/2009/01/Kiteboarding-in-Bulabog-Beach.jpg"],roles:["Bulabog Beach / kiteboarding activity"],source:"Out of Town Blog — Bulabog Beach",url:"https://outoftownblog.com/bulabog-beach-asias-windsurfing-kiteboarding-capital/",note:"Real Boracay kiteboarding photo at the same activity beach. The priced GreenYard lesson source remains the booking lead."}
+      },
+      "siquijor-philippines": {
+        stay:{images:["https://windowseat.ph/wp-content/uploads/2020/09/executive-sea-view-room.jpg"],roles:["White Villas Resort / beachfront room reference"],source:"Windowseat — White Villas Resort Siquijor",url:"https://www.windowseat.ph/enjoy-siquijors-enchanting-shores-at-this-beachfront-resort/",note:"Real San Juan, Siquijor beachfront-room reference with a balcony and sea view. The short-stay Seandyou example and the long-stay rental lead remain separate sources."},
+        food:{images:["https://i.autoreserve.com/thumb/1600x1600/restaurant_image/image/041/738/937/41738937/140fc039-3b43-49cf-8141-1fec800c9fd0.jpg?format=webp"],roles:["Filipino longsilog / dish reference"],source:"AutoReserve — Filipino breakfast reference",url:"https://autoreserve.com/en/ph/la-union/rosario/filipino",note:"Real Filipino longsilog photograph used as a clear dish reference. The Tahanan menu price is separate and the image is not claimed as its exact plate."},
+        activity:{images:["https://upload.wikimedia.org/wikipedia/commons/2/27/Siquijor_-_Cambugahay_Falls.jpg"],roles:["Cambugahay Falls / waterfall and rope-swing destination"],source:"Wikimedia Commons — Cambugahay Falls",url:"https://commons.wikimedia.org/wiki/File:Siquijor_-_Cambugahay_Falls.jpg",note:"Real Siquijor activity photo matched to the named waterfall lead. Gate fees and reopening status still require a current check."}
+      },
+      "bariloche-argentina": {
+        stay:{images:["https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_001.jpg","https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_002.jpg","https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_003.jpg","https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_004.jpg"],roles:["B612 Pinar del Lago / living room and lake-view base","B612 Pinar del Lago / bedroom","B612 Pinar del Lago / exterior and lake setting","B612 Pinar del Lago / common amenity"],source:"Tizado Bariloche — Pinar del Lago apartment",url:"https://www.tizado.com/ficha/departamento-alquiler-3-ambientes-pinar-del-lago-bariloche-patagonia-lp787782",note:"Four real images from the source-backed Pinar del Lago long-stay apartment. This replaces the misleading three-night Booking example with a monthly-eligible housing lead; confirm the contract and total monthly costs."},
+        food:{images:["https://img.nh-hotels.net/D02W1/zAdB1L/original/NH_Edelweiss_Restaurant_Grilled_Trout_Cup_of_wine_Candle_Natural_Light.jpg?background-color=white&output-quality=80&resize=1600%3A%2A"],roles:["Bariloche / Patagonian trout plate reference"],source:"NH Edelweiss Bariloche — restaurant photo",url:"https://www.nh-hotels.com/hotel/nh-bariloche-edelweiss",note:"Real Bariloche Patagonian-trout restaurant reference. The Serena menu price remains the priced lead; the photo is not claimed as Serena’s exact plate."},
+        activity:{images:["https://www.turismobariloche.com.ar/img/nieve-bariloche.jpg"],roles:["Cerro Catedral / snow and mountain activity"],source:"Turismo Bariloche — snow activities",url:"https://www.turismobariloche.com.ar/esqui-nieve.html",note:"Real Bariloche snow-activity photo matched to the Cerro Catedral lead. Seasonal operation and the selected rate still need confirmation."}
+      },
+      "santiago-chile": {
+        food:{images:["https://images.myguide-cdn.com/chile/companies/miraolas/large/miraolas-613116.jpg"],roles:["Santiago / seafood dish reference"],source:"My Guide Chile — Miraolas",url:"https://www.myguidechile.com/restaurants/miraolas",note:"Real Santiago seafood-restaurant photo used as a clear meal reference. The priced Marriott menu remains separate and is not visually relabeled."},
+        gym:{images:["https://www.olympicgym.cl/las-condes/wp-content/uploads/sites/2/2020/08/cda20afc2a-1.jpg"],roles:["Olympic Gym Las Condes / strength-training floor"],source:"Olympic Gym Las Condes — gallery",url:"https://www.olympicgym.cl/las-condes/galeria/",note:"Real Santiago gym interior reference with strength equipment. It is not presented as a Smart Fit Vivo Panorámico photograph."}
+      },
+      "mexico-city-mexico": {
+        food:{images:["https://res.cloudinary.com/the-infatuation/image/upload/c_fill%2Cw_3840%2Car_4%3A3%2Cg_center%2Cf_auto/images/Siembra_TostadadePulpo_AliciaVera_MexicoCity_013_dpn2el"],roles:["Mexico City / octopus taco dish reference"],source:"The Infatuation — Mexico City food guide",url:"https://www.theinfatuation.com/mexico-city/neighborhoods/polanco",note:"Real Mexico City octopus-tostada photo used as a clear meal reference. The Taco Tasting Room price remains tied to its current menu, not this separate dish."},
+        social:{images:["https://www.theclubcoworking.com.mx/galeria/whatsappimage2024-01_01.jpeg"],roles:["The Club Coworking Condesa / community terrace"],source:"The Club Coworking",url:"https://www.theclubcoworking.com.mx/ubicacion.php?ubicacion_id=1",note:"Real photo from the named Condesa coworking/social venue. The dated running calendar remains the uncertain part, not the venue itself."},
+        gym:{images:["https://images.totalpass.com/public/1280x720/czM6Ly90cC1pbWFnZS1hZG1pbi1wcm9kL2d5bXMvaWJ0YTM0MG1iajd0eXpobWh4aWJ5Y3NqZnluc2NhdG9kMnJ6NHUwNTV2ZWpiY2h3NDUycW9mamdmdDZn"],roles:["Sports World Condesa / fitness-floor reference"],source:"Sports World Condesa",url:"https://www.sportsworld.com.mx/uploads/documentos_generales/releases/Even_InauguraCondesa.pdf",note:"Real Mexico City fitness-club reference matched to the named Condesa gym lead. Membership and operating status still need a current check."}
+      },
+      "bangkok-thailand": {
+        food:{images:["https://static.wixstatic.com/media/6b6f86_e445074e2ca84ad5948bf1a7890b12a5~mv2.jpg"],roles:["FRICKIN’ / Chicken & Waffles close-up"],source:"FRICKIN’ official menus",url:"https://www.frickinbkk.com/menus",note:"Full-size real Chicken & Waffles photo from the named restaurant’s own menu site; the transformed thumbnail was removed."},
+        gym:{images:["https://www.fitnessfirst.com/th/en/-/media/project/evolution-wellness/fitness-first/thailand/clubs/terminal-21/fitness-first-terminal-21-cardio-area.jpg"],roles:["Fitness First Terminal 21 / cardio floor"],source:"Fitness First Thailand — Terminal 21",url:"https://www.fitnessfirst.com/th/en/clubs/terminal-21",note:"Real Bangkok gym interior from the named Fitness First club. Confirm current membership and visitor eligibility before paying."}
+      },
+      "buenos-aires-argentina": {
+        food:{images:["https://image-tc.galaxy.tf/wijpeg-desqw5jfaoiacwpytub2v0aba/eat-drink-detail-section-maximus-restaurant-hero.jpg"],roles:["Buenos Aires / premium steak plate reference"],source:"Hotel Emperador — Maximus Restaurant",url:"https://www.hotel-emperador.com.ar/restaurant-bar/maximus-restaurant",note:"Real Buenos Aires steak-restaurant photo used as a clear meal reference. The Fuego y Vino menu price remains separate and is not visually claimed as Maximus."}
+      },
+      "mendoza-argentina": {
+        social:{images:["https://media.timeout.com/images/106171835/750/422/image.jpg"],roles:["Gómez Rooftop / Mendoza social venue reference"],source:"Time Out — Gómez Rooftop Mendoza",url:"https://www.timeout.com/buenos-aires/mendoza/what-to-do-in-mendoza-on-a-girls-trip-must-see-places",note:"Real Mendoza rooftop-social venue photo with the city-view setting. The Club Banco membership price remains separate; this is a nearby social reference, not the club’s own photograph."},
+        gym:{images:["https://mercadofitness.com/wp-content/uploads/2019/09/El-gimnasio-Chronos-Fit-de-Mendoza-amplio-sus-instalaciones-1-640x480.jpg"],roles:["Mendoza / strength-training floor reference"],source:"Mercado Fitness — Mendoza gym facilities",url:"https://mercadofitness.com/tag/entrenamiento-funcional-mendoza/",note:"Real Mendoza gym-interior reference. The priced municipal-gym lead remains separate; membership and current access still need confirmation."}
+      },
+      "tbilisi-georgia": {
+        gym:{images:["https://s.inyourpocket.com/gallery/149669.jpg","https://s.inyourpocket.com/gallery/149670.jpg"],roles:["Vake Pool / fitness area beside pool","Vake Pool / indoor pool and recovery facility"],source:"Vake Swimming Pool and Fitness Centre",url:"https://www.inyourpocket.com/tbilisi/vake-swimming-pool-and-fitness-centre_113928v",note:"Two real Vake Pool facility photos show the fitness floor and pool/recovery environment. The venue’s sauna access is source-described; confirm the current plan before joining."}
+      },
+      "krabi-thailand": {
+        social:{images:["https://images.trvl-media.com/lodging/16000000/15610000/15607300/15607247/8498273f.jpg?impolicy=resizecrop&ra=fill&rh=575&rw=575"],roles:["iRest Ao Nang / hostel lobby and social lounge"],source:"Hotels.com — iRest Ao Nang",url:"https://www.hotels.com/ho606467/irest-ao-nang-krabi-krabi-thailand/",note:"Real photo from the named iRest Ao Nang property showing its communal lobby. The card’s live-event schedule still needs a current date check."}
+      }
+    };
     const mediaEvidenceFor = (location, kind, evidence) => {
       const base = evidence || evidenceFor(location, kind);
       const override = (mediaRoleOverrides[location.slug] || {})[kind] || {};
-      const images = Array.isArray(override.images) ? override.images : (Array.isArray(base.images) ? base.images : []);
-      const mediaQuality = images.some(mediaQualityIssue);
+      const rawImages = Array.isArray(override.images) ? override.images : (Array.isArray(base.images) ? base.images : []);
+      const directImages = [...new Set(rawImages.filter(Boolean).filter((src) => !mediaQualityIssue(src)))];
+      const reference = (referenceMediaBySlug[location.slug] || {})[kind];
+      const referenceImages = reference ? [...new Set((reference.images || []).filter(Boolean).filter((src) => !mediaQualityIssue(src)))] : [];
+      const useReference = !directImages.length && referenceImages.length > 0;
+      const images = useReference ? referenceImages : directImages;
       return {
         ...base,
         ...(override.status ? {status:override.status} : {}),
@@ -1291,10 +1377,12 @@
         ...(override.price ? {price:override.price} : {}),
         ...(override.source ? {source:override.source} : {}),
         ...(override.url ? {url:override.url} : {}),
-        ...(Array.isArray(override.images) ? {images:override.images} : {}),
-        ...(Array.isArray(override.roles) ? {imageRoles:override.roles} : {}),
-        ...(override.note ? {mediaNote:override.note} : {}),
-        mediaQualityIssue: mediaQuality ? "One or more source images are too small or transformed for a clear full-size card." : ""
+        ...(useReference ? {images, imageRoles:reference.roles || [], mediaReferenceOnly:true, mediaReferenceSource:reference.source || "Real location reference", mediaReferenceUrl:reference.url || "", mediaNote:reference.note || "Real location reference; the exact source-specific image was not published."} : {}),
+        ...(!useReference && Array.isArray(override.images) ? {images} : {}),
+        ...(!useReference && !Array.isArray(override.images) ? {images} : {}),
+        ...(!useReference && Array.isArray(override.roles) ? {imageRoles:override.roles} : {}),
+        ...(!useReference && override.note ? {mediaNote:override.note} : {}),
+        mediaQualityIssue: ""
       };
     };
 
@@ -1547,7 +1635,7 @@
     };
     const evidenceHasPrice = (evidence) => Boolean(evidence && evidence.status === "verified" && evidence.price && !/NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(evidence.price));
     const evidenceHasAnyPrice = (evidence) => Boolean(evidence && evidence.price && !/NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(evidence.price));
-    const evidenceStatus = (evidence) => evidence.mediaQualityIssue ? "IMAGE QUALITY CHECK REQUIRED" : evidence.status === "verified" ? "LIVE SOURCE VERIFIED" : evidence.status === "partial" ? "PARTIAL — RECHECK" : "SOURCE CHECK REQUIRED";
+    const evidenceStatus = (evidence) => evidence.mediaReferenceOnly ? "REAL LOCATION REFERENCE" : evidence.mediaQualityIssue ? "IMAGE QUALITY CHECK REQUIRED" : evidence.status === "verified" ? "LIVE SOURCE VERIFIED" : evidence.status === "partial" ? "PARTIAL — RECHECK" : "SOURCE CHECK REQUIRED";
     const evidenceClass = (evidence) => evidence.mediaQualityIssue || evidence.status !== "verified" ? "needs-check" : "verified";
     const evidencePriceLabel = (evidence, noun) => (evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ") + noun;
     const usdAmounts = (value) => [...String(value || "").matchAll(/\$([0-9][0-9,]*(?:\.[0-9]+)?)/g)].map((match) => Number(match[1].replace(/,/g, ""))).filter((amount) => Number.isFinite(amount) && amount > 0);
@@ -1624,6 +1712,7 @@
       const evidence = evidenceOverride || evidenceFor(location, kind);
       const links = [];
       if (evidence.url) links.push([evidence.source || "Direct source", evidence.url]);
+      if (evidence.mediaReferenceUrl) links.push(["Photo source (reference)", evidence.mediaReferenceUrl]);
       links.push(["Map / named lead", cityMap(query)], ["Search current proof", googleSearch(query)]);
       if (location.sources) links.push(...location.sources);
       const seen = new Set();
@@ -1655,7 +1744,7 @@
       const statusType = evidenceClass(evidence);
       const role = label || mediaRoleFor(location, kind, evidence, index);
       const alt = (evidence.title || location.name) + " — " + role;
-      const imageSource = evidence.source || "the linked source";
+      const imageSource = evidence.mediaReferenceOnly ? (evidence.mediaReferenceSource || "real location reference") : (evidence.source || "the linked source");
       const caption = (evidence.title || location.name) + " — " + role;
       const emptyMarkup = (reason, detail) => '<figure class="photo-card"><div class="evidence-empty" data-photo-kind="' + kind + '" data-photo-role="' + escapeHtml(role) + '" data-evidence="' + reason + '"><strong>' + (reason === "low-quality" ? "SOURCE IMAGE REJECTED" : "SOURCE IMAGE NOT PUBLISHED") + '</strong><span>' + escapeHtml(evidence.title || role) + '</span><span class="image-source-note">' + escapeHtml(detail) + '</span></div><figcaption><strong>' + escapeHtml(role) + '</strong><span>' + escapeHtml(imageSource) + '</span><br><span class="evidence-pill needs-check">' + escapeHtml(reason === "low-quality" ? "IMAGE TOO SMALL / TRANSFORMED" : "SOURCE IMAGE NOT PUBLISHED") + '</span></figcaption></figure>';
       if (!images[index]) return emptyMarkup("missing", "A direct source-specific image was not available for this card. The source link remains below.");
