@@ -55,7 +55,11 @@
     .rule-card strong { color: var(--lime); }
     .directory-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin: 38px 0 16px; }
     .directory-head h2 { font-size: 30px; letter-spacing: -.05em; margin-bottom: 0; }
-    .directory-head p { color: var(--muted); margin-bottom: 0; font-size: 13px; }
+    .directory-tools { display: flex; align-items: end; justify-content: end; gap: 12px; flex-wrap: wrap; }
+    .directory-tools p { color: var(--muted); max-width: 360px; margin: 0; font-size: 13px; line-height: 1.4; text-align: right; }
+    .sort-control { display: flex; align-items: center; gap: 8px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .sort-control select { min-height: 42px; min-width: 210px; padding: 0 34px 0 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--paper); background: rgba(255,255,255,.08); font: inherit; letter-spacing: .02em; text-transform: none; }
+    .sort-control select:hover, .sort-control select:focus-visible { border-color: var(--mint); outline: none; }
     .location-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
     .location-card { min-height: 272px; display: flex; flex-direction: column; justify-content: space-between; gap: 25px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(145deg, rgba(20,51,41,.9), rgba(9,24,19,.9)); text-decoration: none; position: relative; overflow: hidden; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
     .location-card::after { content: ""; position: absolute; width: 180px; height: 180px; border-radius: 50%; right: -70px; top: -80px; background: var(--accent); opacity: .13; filter: blur(3px); }
@@ -201,6 +205,9 @@
       .masthead { grid-template-columns: 1fr; }
       .score-guide { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .location-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .directory-head { align-items: stretch; }
+      .directory-tools { justify-content: start; align-items: start; }
+      .directory-tools p { text-align: left; }
       .hero-grid, .map-layout { grid-template-columns: 1fr; }
       .hero-image { height: min(44vh, 430px); min-height: 0; }
       .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -212,6 +219,10 @@
       h1 { font-size: 53px; }
       .score-guide { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .location-grid, .photo-grid, .photo-grid.three, .photo-grid.two { grid-template-columns: 1fr; }
+      .directory-tools { width: 100%; flex-direction: column; align-items: stretch; gap: 8px; }
+      .directory-tools p { max-width: none; }
+      .sort-control { justify-content: space-between; }
+      .sort-control select { flex: 1; min-width: 0; }
       .location-card { min-height: 230px; }
       .slide { padding: 14px 14px 112px; }
       .slide-inner { justify-content: flex-start; }
@@ -426,7 +437,16 @@
         <div class="eyebrow">THE SHORTLIST</div>
         <h2>Twenty-one lives to compare</h2>
       </div>
-      <p>Tiles are ordered by weighted life-fit rank.<br>Open a card; touch and hold any slide to pause.</p>
+      <div class="directory-tools">
+        <p id="directory-sort-note">Sorted by weighted life-fit rank. Open a card; touch and hold any slide to pause.</p>
+        <label class="sort-control" for="directory-sort"><span>Sort tiles</span><select id="directory-sort" aria-label="Sort destination tiles">
+          <option value="overall">Overall life-fit</option>
+          <option value="budget3k">Highest $3K rating</option>
+          <option value="budget2k">Highest $2K rating</option>
+          <option value="housing-high">Highest housing price</option>
+          <option value="housing-low">Lowest housing price</option>
+        </select></label>
+      </div>
     </section>
     <section id="location-grid" class="location-grid" aria-label="Choose a destination"></section>
     <p class="directory-footer">The wildcard from the old conversation is <strong>Tbilisi, Georgia</strong>. Krabi remains in the set as the climbing-forward addition. This remake uses the old research as a starting point, then turns it into a consistent decision system with explicit uncertainty.</p>
@@ -1107,11 +1127,13 @@
     const status = document.getElementById("status-row");
     const autoButton = document.getElementById("auto-button");
     const counter = document.getElementById("slide-counter");
+    const directorySort = document.getElementById("directory-sort");
+    const directorySortNote = document.getElementById("directory-sort-note");
 
     const scoreCard = (label, value) => '<div class="rating-card"><strong>' + Number(value).toFixed(1) + '</strong><span>' + escapeHtml(label) + '</span></div>';
     const lifeScoreValue = (location) => location.scores.value * .18 + location.scores.social * .18 + location.scores.nature * .18 + location.scores.training * .16 + location.scores.food * .12 + location.scores.access * .18;
     const lifeScore = (location) => lifeScoreValue(location).toFixed(1);
-    const rankedLocations = [...locations].sort((a, b) => lifeScoreValue(b) - lifeScoreValue(a) || a.index - b.index).map((location, rankIndex) => ({ ...location, rank:rankIndex + 1 }));
+    let rankedLocations = [];
     const evidenceFor = (location, kind) => {
       const base = (liveEvidence[location.slug] || {})[kind];
       const override = (venueEvidenceOverrides[location.slug] || {})[kind];
@@ -1129,6 +1151,40 @@
       const match = String(value || "").match(/\$([0-9][0-9,]*(?:\.[0-9]+)?)/);
       return match ? Number(match[1].replace(/,/g, "")) : 0;
     };
+    const formatUsd = (value) => "$" + Math.round(value).toLocaleString();
+    const housingPriceValues = (location) => {
+      const sourcedPrices = (housingOptionsBySlug[location.slug] || []).map((option) => usdAmount(option.price)).filter((value) => value > 0);
+      const evidencePrice = usdAmount(evidenceFor(location, "stay").price);
+      const planningPrices = Array.isArray(location.rent) ? location.rent.map(Number).filter((value) => Number.isFinite(value) && value > 0) : [];
+      const values = sourcedPrices.length ? sourcedPrices : evidencePrice ? [evidencePrice] : planningPrices;
+      if (!values.length) return {min:null, max:null, source:"unpriced"};
+      return {min:Math.min(...values), max:Math.max(...values), source:sourcedPrices.length || evidencePrice ? "source-backed" : "planning"};
+    };
+    const housingRangeLabel = (location) => {
+      const housing = housingPriceValues(location);
+      if (housing.min === null) return "housing unpriced";
+      const range = housing.min === housing.max ? formatUsd(housing.min) : formatUsd(housing.min) + "–" + formatUsd(housing.max);
+      return "housing " + range + "/mo" + (housing.source === "planning" ? " plan" : "");
+    };
+    const directorySortModes = {
+      overall: {badge:"OVERALL", note:"Sorted by weighted life-fit rank. Open a card; touch and hold any slide to pause.", direction:"desc", value:(location) => lifeScoreValue(location)},
+      budget3k: {badge:"$3K RATING", note:"Sorted by highest $3K monthly-budget rating. The selected metric is shown on every tile.", direction:"desc", value:(location) => Number(location.scores.budget3k)},
+      budget2k: {badge:"$2K RATING", note:"Sorted by highest $2K monthly-budget rating. The selected metric is shown on every tile.", direction:"desc", value:(location) => Number(location.scores.budget2k)},
+      "housing-high": {badge:"HOUSING HIGH", note:"Sorted by highest available monthly housing price; planning ranges are labeled when source pricing is not available.", direction:"desc", value:(location) => housingPriceValues(location).max},
+      "housing-low": {badge:"HOUSING LOW", note:"Sorted by lowest available monthly housing price; planning ranges are labeled when source pricing is not available.", direction:"asc", value:(location) => housingPriceValues(location).min}
+    };
+    const sortLocations = (mode) => {
+      const sortMode = directorySortModes[mode] || directorySortModes.overall;
+      return [...locations].sort((a, b) => {
+        const aValue = sortMode.value(a);
+        const bValue = sortMode.value(b);
+        if (aValue === null && bValue !== null) return 1;
+        if (bValue === null && aValue !== null) return -1;
+        const difference = sortMode.direction === "asc" ? aValue - bValue : bValue - aValue;
+        return difference || lifeScoreValue(b) - lifeScoreValue(a) || a.index - b.index;
+      }).map((location, rankIndex) => ({ ...location, rank:rankIndex + 1 }));
+    };
+    rankedLocations = sortLocations("overall");
     const rentPrice = (location) => {
       const evidence = evidenceFor(location, "stay");
       return evidenceHasAnyPrice(evidence) ? (evidence.status === "verified" ? evidence.price : "PARTIAL — " + evidence.price) : "USD PRICE NOT VERIFIED — open housing source";
@@ -1260,7 +1316,15 @@
 
     const liveCategoryCount = (location) => ["stay","food","activity","social","gym"].filter((kind) => evidenceFor(location, kind).status === "verified").length;
     const renderDirectory = () => {
-      grid.innerHTML = rankedLocations.map((location) => '<a class="location-card" href="#' + location.slug + '" data-rank="' + location.rank + '" style="--accent:' + location.accent + '" aria-label="#' + location.rank + ' overall — Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span class="rank-badge">#' + location.rank + ' OVERALL</span><span>14 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10</span><span class="pill">' + escapeHtml(location.area) + '</span><span class="pill">' + liveCategoryCount(location) + ' / 5 live</span></div><div class="card-score">' + location.scores.budget2k.toFixed(1) + '<small> $2K</small></div></div></div></a>').join("");
+      const mode = directorySort.value || "overall";
+      const sortMode = directorySortModes[mode] || directorySortModes.overall;
+      directorySortNote.textContent = sortMode.note;
+      grid.innerHTML = rankedLocations.map((location) => {
+        const selectedValue = sortMode.value(location);
+        const selectedMetric = mode === "housing-high" ? (selectedValue === null ? "—" : formatUsd(selectedValue)) : mode === "housing-low" ? (selectedValue === null ? "—" : formatUsd(selectedValue)) : selectedValue === null ? "—" : Number(selectedValue).toFixed(1);
+        const selectedLabel = mode === "overall" ? " overall" : mode === "budget3k" ? " $3K" : mode === "budget2k" ? " $2K" : " /mo";
+        return '<a class="location-card" href="#' + location.slug + '" data-rank="' + location.rank + '" data-sort-mode="' + mode + '" data-sort-value="' + (selectedValue === null ? "" : selectedValue) + '" style="--accent:' + location.accent + '" aria-label="#' + location.rank + ' ' + escapeHtml(sortMode.badge) + ' — Open ' + escapeHtml(location.name) + ' life setup"><div><div class="card-top"><span class="rank-badge">#' + location.rank + ' ' + escapeHtml(sortMode.badge) + '</span><span>14 slides</span></div><h2>' + escapeHtml(location.name) + '</h2></div><div><p>' + escapeHtml(location.verdict) + '</p><div class="card-bottom"><div class="card-meta"><span class="pill rating">' + lifeScore(location) + ' / 10 overall</span><span class="pill">' + escapeHtml(housingRangeLabel(location)) + '</span><span class="pill">' + escapeHtml(location.area) + '</span><span class="pill">' + liveCategoryCount(location) + ' / 5 live</span></div><div class="card-score">' + selectedMetric + '<small>' + selectedLabel + '</small></div></div></div></a>';
+      }).join("");
     };
 
     const stopTimer = () => { if (state.timer) window.clearInterval(state.timer); state.timer = null; };
@@ -1412,6 +1476,10 @@
     };
 
     renderDirectory();
+    directorySort.addEventListener("change", () => {
+      rankedLocations = sortLocations(directorySort.value);
+      renderDirectory();
+    });
     grid.addEventListener("click", (event) => {
       const link = event.target.closest("a.location-card");
       if (!link) return;
