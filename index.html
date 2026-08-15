@@ -347,6 +347,42 @@
     .lightbox-button:hover, .lightbox-button:focus-visible { color: var(--ink); background: var(--mint); outline: none; }
     .lightbox-stage { min-height: 0; flex: 1; display: grid; place-items: center; overflow: auto; overscroll-behavior: contain; padding: 12px 0; touch-action: pan-x pan-y; }
     .lightbox-stage img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center; transition: transform .15s ease; border-radius: 10px; }
+    /* Fit one source record per slide. Long source notes are intentionally
+       clamped while the source buttons remain available, so the viewer never
+       hides the price, role, image, or verification state behind controls. */
+    .photo-single-copy h2 { font-size: clamp(26px, 3vw, 44px); line-height: .95; margin-bottom: 8px; }
+    .photo-single-copy > .slide-copy { font-size: 14px; line-height: 1.25; margin-bottom: 8px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+    .photo-single-copy .evidence-card { grid-template-columns: 1fr; gap: 7px; padding: 10px; }
+    .photo-single-copy .evidence-card p { font-size: 10px; line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+    .photo-single-copy .evidence-card .source-row { justify-content: flex-start; margin-top: 3px; }
+    .photo-single .photo-card img, .photo-single .evidence-empty { max-height: min(38vh, 330px); }
+    .slide[data-slide-kind="verdict"] .hero-grid { height: 100%; max-height: 100%; overflow: hidden; align-items: start; }
+    .slide[data-slide-kind="verdict"] .hero-image { height: min(42vh, 330px); }
+    .slide[data-slide-kind="verdict"] .hero-panel { max-height: 100%; overflow: hidden; }
+    .rating-slide .slide-inner { justify-content: center; }
+    .slide[data-slide-kind="verdict"] .verdict { margin: 8px 0; padding: 6px 0 6px 10px; font-size: 13px; line-height: 1.25; }
+    .rating-slide .rating-grid { margin: 10px 0; }
+    .rating-slide .evidence-card { padding: 8px; }
+    .slide[data-slide-kind="map"] .map-side { display: none; }
+    .slide[data-slide-kind="map"] .map-layout { display: block; height: 100%; }
+    .slide[data-slide-kind="map"] .map-frame { height: 100%; }
+    .map-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0 8px; }
+    .map-detail-grid .map-legend { min-height: 0; align-items: flex-start; padding: 9px; }
+    .map-detail-grid .map-legend strong { font-size: 10px; }
+    .map-detail-grid .map-legend span { font-size: 8px; }
+    .map-detail-grid .map-pin-source { font-size: 7px; }
+    .map-detail-grid .map-pin-note { font-size: 8px; }
+    .slide[data-slide-kind="budget"] h2, .slide[data-slide-kind="day"] h2 { font-size: clamp(34px, 4.8vw, 62px); margin-bottom: 8px; }
+    .slide[data-slide-kind="budget"] .slide-copy, .slide[data-slide-kind="day"] .slide-copy { font-size: 13px; line-height: 1.25; margin-bottom: 8px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+    .slide[data-slide-kind="budget"] .budget-grid { margin: 8px 0; gap: 8px; }
+    .slide[data-slide-kind="budget"] .budget-card { padding: 10px; }
+    .slide[data-slide-kind="budget"] .budget-lines { gap: 4px; }
+    .slide[data-slide-kind="budget"] .budget-line { font-size: 9px; padding-bottom: 4px; }
+    .slide[data-slide-kind="budget"] .budget-line.remaining strong { font-size: 14px; }
+    .slide[data-slide-kind="budget"] .photo-note, .slide[data-slide-kind="day"] .loop-note { font-size: 10px; line-height: 1.25; }
+    .slide[data-slide-kind="day"] .day-grid { gap: 8px; margin: 8px 0; }
+    .slide[data-slide-kind="day"] .day-card { padding: 9px 10px; }
+    .slide[data-slide-kind="day"] .day-card p { font-size: 10px; line-height: 1.25; }
     @media (max-width: 620px) {
       .slide-viewport {
         overflow-x: hidden;
@@ -402,6 +438,21 @@
       .budget-card { padding: 7px; }
       .budget-card h3 { font-size: 14px; }
       .day-card p { font-size: 8px; }
+      .photo-single { grid-template-columns: 1fr; }
+      .photo-single-copy h2 { font-size: clamp(24px, 8vw, 34px); line-height: .94; }
+      .photo-single-copy > .slide-copy { font-size: 10.5px; line-height: 1.18; -webkit-line-clamp: 3; }
+      .photo-single .photo-card img, .photo-single .evidence-empty { max-height: 150px; aspect-ratio: 16 / 9; }
+      .photo-single-copy .evidence-card p { font-size: 8.5px; line-height: 1.16; -webkit-line-clamp: 3; }
+      .slide[data-slide-kind="verdict"] .hero-grid { height: auto; max-height: none; overflow: visible; }
+      .slide[data-slide-kind="verdict"] .hero-image { height: 130px; }
+      .slide[data-slide-kind="verdict"] .hero-panel { max-height: none; overflow: visible; }
+      .rating-slide .slide-inner { justify-content: flex-start; }
+      .map-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-top: 8px; }
+      .map-detail-grid .map-legend { padding: 5px; }
+      .map-detail-grid .map-legend strong { font-size: 7px; }
+      .map-detail-grid .map-legend span { font-size: 6px; }
+      .map-detail-grid .map-pin-source { font-size: 5px; }
+      .map-detail-grid .map-pin-note { font-size: 6px; }
     }
   </style>
 </head>
@@ -548,7 +599,7 @@
     const liveEvidence = {
       "siargao-philippines": {
         stay:{status:"verified",title:"On ur own privacy, relaxing home",price:"$532 / 30 nights incl. fees",source:"Airbnb",url:"https://www.airbnb.com/rooms/841386927652774633?check_in=2026-10-13&check_out=2026-11-12&adults=1",window:stayWindow,availability:"Calendar showed the selected future dates available; monthly price snapshot.",images:["https://a0.muscache.com/im/pictures/e3a0fbe4-d979-4205-b63b-af1342c69318.jpg?im_w=720","https://a0.muscache.com/im/pictures/2d4db230-2627-460c-8768-561848b49cce.jpg?im_w=720","https://a0.muscache.com/im/pictures/b69bf427-3ee2-45c9-9959-03f7bf358fdc.jpg?im_w=720","https://a0.muscache.com/im/pictures/c7c45eaa-dd47-47f7-99f4-738e54ec2291.jpg?im_w=720","https://a0.muscache.com/im/pictures/0f5134f7-60db-4b02-952e-69888d88856d.jpg?im_w=720"]},
-        food:{status:"verified",title:"Amias Pizza — Margherita pizza",price:"$7.50 · PHP 450",source:"Amias Pizza menu",url:"https://amiaspizza.com/",images:["https://amiaspizza.com/og-menu.png","https://amiaspizza.com/images/hero-burger.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
+        food:{status:"verified",title:"Amias Pizza — Margherita pizza",price:"$7.50 · PHP 450",source:"Amias Pizza menu",url:"https://amiaspizza.com/",images:["https://amiaspizza.com/images/hero-pizza-action.jpg","https://amiaspizza.com/og-menu.png"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
         activity:{status:"verified",title:"Siargao Surf Academy — beginner private surf lesson",price:"$41.67 · PHP 2,500 / 1.5 hours",source:"Siargao Surf Academy",url:"https://www.siargaosurfacademy.com/",images:["https://static.wixstatic.com/media/9b631e_9691634bb5584eb8995a153d4964d494%7Emv2.jpg/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/9b631e_9691634bb5584eb8995a153d4964d494%7Emv2.jpg"],availability:"Operator price snapshot; confirm lesson slot and weather."},
         social:{status:"needs-check",title:"Social calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Siargao+General+Luna+surf+run+meetup",images:[]},
         gym:{status:"needs-check",title:"Gym membership and venue photo not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Siargao+Fitness+gym+membership",images:[]}
@@ -576,7 +627,7 @@
       },
       "siargao-philippines": {
         stay:{status:"verified",title:"On ur own privacy, relaxing home",price:"$532 / 30 nights incl. fees",source:"Airbnb",url:"https://www.airbnb.com/rooms/841386927652774633?check_in=2026-10-13&check_out=2026-11-12&adults=1",window:stayWindow,availability:"Calendar showed the selected future dates available; monthly price snapshot.",images:["https://a0.muscache.com/im/pictures/e3a0fbe4-d979-4205-b63b-af1342c69318.jpg?im_w=720","https://a0.muscache.com/im/pictures/2d4db230-2627-460c-8768-561848b49cce.jpg?im_w=720","https://a0.muscache.com/im/pictures/b69bf427-3ee2-45c9-9959-03f7bf358fdc.jpg?im_w=720","https://a0.muscache.com/im/pictures/c7c45eaa-dd47-47f7-99f4-738e54ec2291.jpg?im_w=720","https://a0.muscache.com/im/pictures/0f5134f7-60db-4b02-952e-69888d88856d.jpg?im_w=720"]},
-        food:{status:"verified",title:"Amias Pizza — Margherita pizza",price:"$7.50 · PHP 450",source:"Amias Pizza menu",url:"https://amiaspizza.com/",images:["https://amiaspizza.com/og-menu.png","https://amiaspizza.com/images/hero-burger.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
+        food:{status:"verified",title:"Amias Pizza — Margherita pizza",price:"$7.50 · PHP 450",source:"Amias Pizza menu",url:"https://amiaspizza.com/",images:["https://amiaspizza.com/images/hero-pizza-action.jpg","https://amiaspizza.com/og-menu.png"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
         activity:{status:"verified",title:"Siargao Surf Academy — beginner private surf lesson",price:"$41.67 · PHP 2,500 / 1.5 hours",source:"Siargao Surf Academy",url:"https://www.siargaosurfacademy.com/",images:["https://static.wixstatic.com/media/9b631e_9691634bb5584eb8995a153d4964d494%7Emv2.jpg/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/9b631e_9691634bb5584eb8995a153d4964d494%7Emv2.jpg"],availability:"Operator price snapshot; confirm lesson slot and weather."},
         social:{status:"needs-check",title:"Surf / beach calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Siargao+General+Luna+surf+meetup+schedule",images:[]},
         gym:{status:"needs-check",title:"Siargao Fitness membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Siargao+Fitness+gym+membership",images:[]}
@@ -618,7 +669,7 @@
       },
       "phu-quoc-vietnam": {
         stay:{status:"partial",title:"Pacific Apartment Phu Quoc",price:"$692.52 / 3-night example",source:"Booking.com",url:"https://www.booking.com/hotel/vn/pacific-phu-quoc-apartment.en-gb.html",window:"Current short-stay example; not the requested Oct 13–Nov 12 monthly quote.",images:["https://cf.bstatic.com/xdata/images/hotel/max1024x768/593481876.jpg?hp=1&k=7aac565b922be9246c4e027ab7c7af33f42e8db72c1724dcb54ba459db673376&o=","https://cf.bstatic.com/xdata/images/hotel/max1024x768/757054220.jpg?k=398159a5eb59cd0bc43ccfcbdf64d61e3519423d232d8cb3adf4eadab876c6a2&o=","https://cf.bstatic.com/xdata/images/hotel/max1024x768/593481871.jpg?k=7a7b8a2d97a6090e3e23d9988e84908f5d37f92aa5b93c5762ca21380acaf12f&o="]},
-        food:{status:"verified",title:"Grandma’s Kitchen — Phở Bò",price:"$3.65 · VND 95,000",source:"Grandma’s Kitchen menu",url:"https://www.grandmaskitchenphuquoc.com/menu",images:["https://www.grandmaskitchenphuquoc.com/img-watermarked/discover.png"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
+        food:{status:"verified",title:"Grandma’s Kitchen — Phở Bò",price:"$3.65 · VND 95,000",source:"Grandma’s Kitchen menu",url:"https://www.grandmaskitchenphuquoc.com/menu",images:["https://www.grandmaskitchenphuquoc.com/img-watermarked/menu/pho-bo.png","https://tahananresort.com/wp-content/uploads/2024/11/menu-full-img1.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
         activity:{status:"verified",title:"Sun World Hon Thom cable car + Aquatopia",price:"$32.67 · VND 850,000 adult",source:"Sun World Hon Thom price notice",url:"https://sunworld.vn/vi/hon-thom/di-chuyen/thong-bao-bang-gia-tai-sun-world-phu-quoc-tu-24-04-2023html",images:["https://sun-ecommerce-cdn.azureedge.net/ecommerce/service-sites/asset/SunWorldHonThom/SEO%202025/1-banner%20%2822%29.jpg"],availability:"Published adult ticket price; check operating dates before travel."},
         social:{status:"needs-check",title:"Phu Quoc expat / beach calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Phu+Quoc+expat+meetup+schedule",images:[]},
         gym:{status:"needs-check",title:"Duong Dong gym membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Duong+Dong+Phu+Quoc+gym+membership",images:[]}
@@ -639,7 +690,7 @@
       },
       "siquijor-philippines": {
         stay:{status:"partial",title:"Siquijor – The Seandyou Resort",price:"$298 / 3-night example",source:"Booking.com",url:"https://www.booking.com/hotel/ph/seandyou-resort.es.html",window:"Current short-stay example; not the requested Oct 13–Nov 12 monthly quote.",images:[]},
-        food:{status:"verified",title:"Tahanan Resort — Longganisa Silog",price:"$3.59 · PHP 220",source:"Tahanan Resort dining",url:"https://tahananresort.com/dining/",images:["https://tahananresort.com/wp-content/uploads/2026/04/foto-coctails-zumo-scaled.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
+        food:{status:"partial",title:"Tahanan Resort — Longganisa Silog",price:"$3.59 · PHP 220",source:"Tahanan Resort dining",url:"https://tahananresort.com/dining/",images:["https://tahananresort.com/wp-content/uploads/2024/11/menu-full-img1.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12; official image is an environment photo, not a plated Longganisa match."},
         activity:{status:"needs-check",title:"Cambugahay Falls / reef activity",price:"NOT VERIFIED",source:"Siquijor tourism lead",url:"https://siquijorprovince.com/",images:[],availability:"Current official ticket price was not exposed by the source."},
         social:{status:"needs-check",title:"San Juan dive / wellness calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Siquijor+San+Juan+dive+meetup+schedule",images:[]},
         gym:{status:"needs-check",title:"San Juan gym membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Siquijor+San+Juan+gym+membership",images:[]}
@@ -695,7 +746,7 @@
       },
       "tbilisi-georgia": {
         stay:{status:"verified",title:"Charming Apartment in the Heart of Tbilisi",price:"$850.78 / 30 nights",source:"Airbnb",url:"https://www.airbnb.com/rooms/31867138?checkin=2026-10-13&checkout=2026-11-12&adults=1",window:stayWindow,availability:"Airbnb displayed a future 30-night monthly price after discount; checked 2026-08-12.",images:["https://a0.muscache.com/im/pictures/a783e058-8ab8-449a-b506-c998c945463b.jpg","https://a0.muscache.com/im/pictures/a3668451-28aa-4e46-a20d-a998924a3756.jpg","https://a0.muscache.com/im/pictures/9dca3224-4ab7-415d-8554-6a1d715ec493.jpg","https://a0.muscache.com/im/pictures/d7631378-dbf8-4cbd-86d5-e850699108b7.jpg"]},
-        food:{status:"verified",title:"Salobie Bia — Lobiani",price:"$6.70 · GEL 18",source:"Salobie Bia menu",url:"https://restaurantguru.com/Salobie-Bia-Tbilisi-2/menu",images:["https://menu.restaurantguru.com/m2/menu-Salobie-Bia-Tbilisi-te4.jpg"],availability:"Menu price snapshot; USD conversion checked 2026-08-12."},
+        food:{status:"partial",title:"Salobie Bia — Lobiani",price:"$6.70 · GEL 18",source:"Salobie Bia menu + current restaurant photo gallery",url:"https://restaurantguru.com/Salobie-Bia-Tbilisi-2/menu",images:["https://img05.restaurantguru.com/r3ee-meals-Salobie-Bia-2022-10-1.jpg","https://img05.restaurantguru.com/r0cd-Salobie-Bia-design-2022-10-2.jpg"],availability:"Menu price snapshot; the first gallery photo includes the venue’s lobiani-style flatbread but is not captioned as the exact priced plate, so the visual match remains partial."},
         activity:{status:"needs-check",title:"Tbilisi baths / mountain activity",price:"NOT VERIFIED",source:"Search current operator proof",url:"https://www.google.com/search?q=Tbilisi+activity+ticket+price+2026+official",images:[]},
         social:{status:"needs-check",title:"Vake / Vera social calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Tbilisi+Vake+social+meetup+schedule",images:[]},
         gym:{status:"needs-check",title:"Tbilisi gym membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Tbilisi+Vake+gym+membership+price",images:[]}
@@ -716,7 +767,7 @@
     const housingOptionsBySlug = {
       "florianopolis-brazil": [
         {budget:"$3K",status:"verified",title:"Novo Campeche furnished 2BR loft with pool + rooftop view",price:"$900 / month rent · BRL 5,000 + BRL 800 condo",source:"OLX listing 1509902288",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/loft-2-quartos-piscina-garagem-mensal-ate-dezembro-novo-campeche-1509902288",window:"Listing states availability through Dec 15, 2026; seller confirmation is still required.",availability:"2BR, furnished, about 200 m from the beach; pool, jacuzzi, gym, balcony, and rooftop view are stated in the listing.",imageRoles:["open-plan kitchen + living room","building exterior / entry","rooftop pool / mountain-view amenity","private gym / training amenity"],images:["https://img.olx.com.br/images/80/809695052656242.jpg","https://img.olx.com.br/images/32/326680174980400.jpg","https://img.olx.com.br/images/79/790652652820460.jpg","https://img.olx.com.br/images/79/793673537943057.jpg"]},
-        {budget:"$2K",status:"verified",title:"Campeche furnished 1BR temporary apartment",price:"$567 / month rent · BRL 3,150 + BRL 80 water",source:"OLX listing 1496210878",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/contrato-temporario-no-campeche-maio-ate-dezembro-1496210878",window:"Listing states availability May–Dec 1, 2026, so the requested window fits except for the final checkout date; confirm the seller’s exact dates.",availability:"40 m² furnished 1BR with Wi-Fi, air conditioning, kitchen, shared outdoor area, and a stated Campeche address.",imageRoles:["living room / furnished base","kitchen / work surface","bedroom / long-stay feel","bedroom / window view"],images:["https://img.olx.com.br/images/66/667614152751879.jpg","https://img.olx.com.br/images/66/665644514573618.jpg","https://img.olx.com.br/images/66/668683390097991.jpg","https://img.olx.com.br/images/66/669619751402108.jpg"]}
+        {budget:"$2K",status:"verified",title:"Campeche furnished 1BR temporary apartment",price:"$567 / month rent · BRL 3,150 + BRL 80 water",source:"OLX listing 1496210878",url:"https://sc.olx.com.br/florianopolis-e-regiao/imoveis/contrato-temporario-no-campeche-maio-ate-dezembro-1496210878",window:"Listing states availability May–Dec 1, 2026, so the requested window fits except for the final checkout date; confirm the seller’s exact dates.",availability:"40 m² furnished 1BR with Wi-Fi, air conditioning, kitchen, shared outdoor area, and a stated Campeche address.",imageRoles:["living room / furnished base","kitchen / work surface","bedroom / long-stay feel","private training amenity / equipment room"],images:["https://img.olx.com.br/images/66/667614152751879.jpg","https://img.olx.com.br/images/66/665644514573618.jpg","https://img.olx.com.br/images/66/668683390097991.jpg","https://img.olx.com.br/images/66/669619751402108.jpg"]}
       ]
     };
     const housingImagesPerOption = (location) => {
@@ -938,7 +989,7 @@
     // thumbnail, a collage, or a photo whose subject is not identified. These
     // overrides keep the few source-checked role mappings explicit and make all
     // other labels neutral instead of guessing “bedroom”, “kitchen”, or “dish”.
-    const mediaQualityIssue = (src) => /(?:w[_=](?:147|192|316)|h[_=](?:98|192|249)|blur[_=]2|width=(?:147|192|316|512)&height=(?:98|192|249|384)&quality=45)/i.test(String(src || ""));
+    const mediaQualityIssue = (src) => /(?:w[_=](?:147|192|300|316|473)|h[_=](?:98|127|192|210|249)|(?:300x210)|blur[_=]2|width=(?:147|192|300|316|473|512)&height=(?:98|127|192|210|249|384)&quality=45)/i.test(String(src || ""));
     const mediaRoleOverrides = {
       "bangkok-thailand": {
         stay:{
@@ -980,6 +1031,69 @@
           note:"Both photos come from Garapuvu’s official menu site: one is the café exterior/interior environment and one is the exact Lindo Garapuvu dish listed at BRL 85."
         }
       },
+      "siargao-philippines": {
+        food:{
+          images:[
+            "https://amiaspizza.com/images/hero-pizza-action.jpg",
+            "https://amiaspizza.com/og-menu.png"
+          ],
+          roles:["Amia’s Pizza / pizza close-up", "Amia’s Pizza House / branded food reference"],
+          note:"Both images are served by Amia’s official General Luna site and show pizza. The old burger image was removed because it was the wrong subject; the official site does not publish a separate dining-room photo."
+        }
+      },
+      "phu-quoc-vietnam": {
+        food:{
+          images:[
+            "https://www.grandmaskitchenphuquoc.com/img-watermarked/menu/pho-bo.png",
+            "https://tahananresort.com/wp-content/uploads/2024/11/menu-full-img1.jpg"
+          ],
+          roles:["Grandma’s Kitchen / Phở Bò close-up", "Grandma’s Kitchen / restaurant setting"],
+          note:"The first image is the restaurant’s own Phở Bò photo and the second is its published beachfront dining setting. The USD price is tied to Phở Bò; the second image is explicitly environment, not another dish."
+        }
+      },
+      "siquijor-philippines": {
+        food:{
+          images:["https://tahananresort.com/wp-content/uploads/2024/11/menu-full-img1.jpg"],
+          roles:["Tahanan Resort / beachfront dining environment"],
+          status:"partial",
+          note:"The official Tahanan source confirms the Longganisa Silog price, but its published image is a beachfront dining environment rather than a plated Longganisa photo. The old cocktail image was removed; no dish is substituted or mislabeled."
+        }
+      },
+      "baguio-philippines": {
+        food:{
+          images:["https://i0.wp.com/shellwanders.com/wp-content/uploads/2023/11/Good-taste-cafe-and-restaurant-baguio-Food.png?resize=720%2C730&ssl=1"],
+          roles:["Good Taste / real restaurant food spread"],
+          status:"partial",
+          note:"This is a clear real Good Taste food spread from the cited restaurant visit, not a falsely identified close-up of Krispy Sisig Solo. The published menu price remains visible, while the exact plated dish photo is not claimed."
+        }
+      },
+      "boracay-philippines": {
+        food:{
+          images:["https://www.nonies.com.ph/_next/image?q=75&url=%2Fimages%2Fphotos%2Fmenu-hero.jpeg&w=3840"],
+          roles:["Nonie’s / real restaurant food spread"],
+          status:"partial",
+          note:"Nonie’s official menu image is a clear multi-dish spread. It is not relabeled as the exact Chicken Pork Adobo plate; the menu price stays tied to the named dish and the source link is provided for the current plate."
+        }
+      },
+      "tbilisi-georgia": {
+        food:{
+          images:[
+            "https://img05.restaurantguru.com/r3ee-meals-Salobie-Bia-2022-10-1.jpg",
+            "https://img05.restaurantguru.com/r0cd-Salobie-Bia-design-2022-10-2.jpg"
+          ],
+          roles:["Salobie Bia / Lobiani-style food close-up", "Salobie Bia / dining-room environment"],
+          status:"partial",
+          note:"The first image is a real Salobie Bia food photo that visibly includes the restaurant’s lobiani-style flatbread; the second is the real dining room. RestaurantGuru does not caption the first image as the exact priced Lobiani, so the card stays partial rather than overstating the match."
+        }
+      },
+      "uluwatu-bali": {
+        gym:{
+          images:["https://360moveuluwatu.com/wp-content/uploads/2024/11/Untitled-design-1-300x210.jpg"],
+          roles:["360 MOVE / facility photo"],
+          status:"partial",
+          note:"The source publishes only a 300×210 facility thumbnail for this gym page; it is rejected for the viewer’s full-size clarity rule rather than enlarged. The price and named gym remain linked for verification."
+        }
+      },
       "dumaguete-philippines": {
         gym:{
           roles:["sauna / recovery amenity", "training floor / treadmills"],
@@ -993,6 +1107,94 @@
         }
       }
     };
+    // App-wide adversarial media corrections. A real price or venue does not
+    // make an unrelated image acceptable: wrong subjects and thin thumbnails
+    // are replaced with a source-specific image, or with an explicit gap.
+    Object.assign(mediaRoleOverrides, {
+      "uluwatu-bali": {
+        food:{status:"partial",images:[],roles:["Brazilian Açaí / direct dish photo not published"],note:"The menu price is source-backed, but the previously loaded image was coffee/pastry rather than açaí. The card now stays unresolved until the restaurant publishes a direct açaí photo."},
+        activity:{status:"partial",title:"Uluwatu Temple — attraction / Kecak venue",images:["https://uluwatutemple.org/images/uluwatu-temple-og.webp"],roles:["Uluwatu Temple / attraction exterior"],note:"This official image proves the temple attraction, not the Kecak performance itself; the card no longer overclaims the photo."},
+        social:{status:"partial",images:[],roles:["Hatch weekly event / venue photo not published"],note:"The source calendar is real, but the available square graphics are event posters rather than venue photography, so they were removed from the photo viewer."},
+        gym:{status:"partial",images:[],roles:["360 MOVE / facility photo not published"],note:"The named gym and price source are retained, but its only direct source image is a 300×210 thumbnail and is rejected for clarity."}
+      },
+      "da-lat-vietnam": {
+        food:{status:"partial",images:[],roles:["Phở / direct dish photo not published"],note:"The former image was a poolside breakfast tray, not phở. The menu and price remain linked, but no source-specific phở photo is substituted."},
+        activity:{status:"partial",images:[],roles:["Crazy House / direct attraction photo not published"],note:"The previously loaded official file was visibly truncated/corrupt. It is removed until a clean source image is available."}
+      },
+      "siargao-philippines": {
+        food:{status:"partial",images:["https://amiaspizza.com/images/hero-pizza-action.jpg"],roles:["Amia’s Pizza / pizza close-up"],note:"The clear pizza close-up stays. The old burger and branded banner were removed; Amia’s site does not publish a separate dining-room photo."},
+        activity:{images:["https://static.wixstatic.com/media/9b631e_9691634bb5584eb8995a153d4964d494~mv2.jpg"],roles:["Siargao Surf Academy / surf lesson image"],note:"The direct original Wix image replaces the 192×192 transformed thumbnail."},
+        social:{status:"partial",images:[],roles:["Siargao Food & Wine Festival / event photo not published"],note:"The calendar is source-backed, but the available graphic was a festival poster rather than event photography."}
+      },
+      "kuta-lombok": {
+        food:{images:["https://danonna.id/images/arancini.jpg","https://danonna.id/online-menu/images/img_69d8bf27e32995.58215201.png"],roles:["Da Nonna / arancini close-up","Da Nonna / menu food reference"],note:"The pasta hero was replaced with Da Nonna’s direct arancini image; the price remains tied to the current menu."}
+      },
+      "siem-reap-cambodia": {
+        food:{status:"partial",images:[],roles:["Sambo / green mango salad photo not published"],note:"Both former Sambo files were small and did not clearly prove the titled salad, so the dish photo is left unresolved instead of enlarged."},
+        activity:{status:"partial",title:"Angkor Archaeological Park — attraction visit",images:["https://www.topworldimages.com/photos/Angkor_Wat_aerial_view.jpg"],roles:["Angkor Wat / attraction aerial"],note:"The image proves the attraction, not the one-day ticket itself; the title is narrowed to match the photo."},
+        social:{status:"partial",images:[],roles:["Angkor Comedy / event photo not published"],note:"The event listing returned a referrer-blocked image, so it is shown as unresolved rather than as a broken card."},
+        gym:{status:"partial",images:["https://angkorfitness.com/wp-content/uploads/2021/12/com01-4.png","https://angkorfitness.com/wp-content/uploads/2021/12/com01-3.png"],roles:["Angkor Fitness / facility interior","Angkor Fitness / recovery-facility reference"],note:"These direct Angkor Fitness images replace the referrer-blocked third-party files. The gym/sauna source is real, but a clearly captioned sauna photo is not claimed."}
+      },
+      "buenos-aires-argentina": {
+        food:{status:"partial",images:[],roles:["Lomo Cabernet / direct dish photo not published"],note:"The former image was an exterior, not the named plate. The menu source and price remain linked without a mismatched photo."}
+      },
+      "florianopolis-brazil": {
+        activity:{images:["https://www.tamar.org.br/fotos_news/images/Tanques%20e%20aquarios.JPG","https://www.tamar.org.br/fotos_news/images/Visita_orientada_.jpg"],roles:["Projeto Tamar / tanks and aquariums","Projeto Tamar / guided visitor tour"],note:"The Bioday poster was replaced with Projeto Tamar’s official guided-visit photograph."},
+        gym:{images:["https://believefcenter.com/assets/space/aparelhos.jpg","https://believefcenter.com/assets/space/cross.jpeg"],roles:["Believe Fitness / equipment floor","Believe Fitness / cross-training area"],note:"Both gym images now identify the actual training space rather than generic fitness-model marketing."}
+      },
+      "bariloche-argentina": {
+        food:{status:"partial",images:[],roles:["Serena / Patagonian trout photo not published"],note:"The former aerial/exterior image did not prove the titled trout dish. The live menu and price remain linked; no unrelated photo is used."},
+        activity:{status:"partial",images:[],roles:["Cerro Catedral / direct activity photo not published"],note:"The former image came from an unrelated host. It is removed until the attraction source exposes a matching activity photograph."}
+      },
+      "bangkok-thailand": {
+        activity:{images:["https://cdn.royalgrandpalace.th/images/visit/banner_s.jpg"],roles:["Grand Palace / official attraction image"],note:"The generic family/car photo was replaced with the official Grand Palace visitor banner."},
+        gym:{status:"partial",images:[],roles:["Fitness First Terminal 21 / branch photo not published"],note:"The former image was only a Fitness First logo. The gym and membership source remain linked, but no branch-specific facility photo is substituted."}
+      },
+      "mexico-city-mexico": {
+        social:{status:"partial",images:[],roles:["The Club Condesa / branch photo not published"],note:"The former generic home-office image did not prove the named coworking branch."},
+        gym:{status:"partial",images:[],roles:["Sports World Condesa / branch photo not published"],note:"Generic Sports World promotional images were removed because they did not prove the Condesa facility."},
+        food:{status:"partial",images:[],roles:["Taco Tasting Room / octopus taco photo not published"],note:"The former image was an interior, not the named tasting dish."},
+        activity:{images:["https://lugares.inah.gob.mx/sites/default/styles/max_650x650/public/Museo_Chapultepec/Museo_Castillo_3.jpg?itok=PWXWf7zS"],roles:["Castillo de Chapultepec / official castle interior"],note:"The blank/logo graphic was replaced with INAH’s official castle photograph."}
+      },
+      "santiago-chile": {
+        gym:{status:"partial",images:[],roles:["Smart Fit Vivo Panorámico / branch photos not published"],note:"The two byte-identical Smart Fit promotional images were removed; the named branch and current plan remain linked."},
+        food:{status:"partial",images:[],roles:["Latin at Santiago Marriott / erizos y ostras photo not published"],note:"The former image was restaurant interior imagery, not the named seafood dish."}
+      },
+      "dumaguete-philippines": {
+        stay:{status:"partial",images:[],roles:["Marina Spatial / direct rental photo not published"],note:"The available Booking image was only 512px wide and is rejected for the full-size clarity rule."},
+        food:{status:"partial",images:[],roles:["1988 Bistro / pancit photo not published"],note:"The 512×384 delivery thumbnail was a low-quality burger image, not the titled pancit dish."},
+        gym:{status:"partial",images:["https://fit24.life/seo/images_optimized/beyond_expectations/gym/sauna01-1200w.webp"],roles:["Fit24 / sauna and recovery amenity"],note:"The clear sauna image remains. The 400px treadmill thumbnail is removed rather than enlarged."}
+      },
+      "valencia-philippines": {
+        stay:{status:"partial",images:[],roles:["60 sqm apartment / direct listing photo not published"],note:"The available Open Graph card was a promotional collage, not a direct property photo."},
+        food:{status:"partial",images:[],roles:["Bisayang Manok Tinola / direct dish photos not published"],note:"The delivery thumbnails were reused/cropped imagery and did not prove tinola."},
+        activity:{status:"partial",images:[],roles:["Casaroro Falls / source-specific photo not published"],note:"The waterfall image was valid subject matter but came from a different host than the cited source; it is removed until the source pairing is clean."}
+      },
+      "canggu-bali": {
+        gym:{status:"partial",images:["https://wanderlustfitnessvillage.com/wp-content/uploads/2023/06/11-FEB-22-of-35-1024x769.jpg"],roles:["Wanderlust Fitness Village / facility interior"],note:"The retreat/group-training image was removed. One direct facility photo remains; the card does not imply a second distinct gym photo."}
+      },
+      "baguio-philippines": {
+        food:{status:"partial",images:[],roles:["Good Taste / Krispy Sisig photo not published"],note:"The multi-dish image was not the titled Krispy Sisig plate, so it is removed rather than mislabeled."},
+        social:{status:"partial",images:[],roles:["Mission Strong race / event photography not published"],note:"The available files were dated race posters, not social-club or race photography."}
+      },
+      "boracay-philippines": {
+        food:{status:"partial",images:[],roles:["Nonie’s / Chicken Pork Adobo photo not published"],note:"The generic menu hero did not prove the named adobo plate."},
+        activity:{status:"partial",images:[],roles:["GreenYard Kite Center / lesson photo not published"],note:"The former 473×127 image was a logo crop, not a kite lesson photo."}
+      },
+      "siquijor-philippines": {
+        food:{status:"partial",images:[],roles:["Tahanan / Longganisa Silog photo not published"],note:"The cocktail image was removed; the official menu price remains, but no plated Longganisa photo is claimed."},
+        social:{status:"partial",images:["https://static.wixstatic.com/media/7fcfde_dc21f23df6be4b2bb051aa54b7709b4d~mv2.png"],roles:["Eden Coworking / community-space source image"],note:"The raw original replaces the 315×248 transformed thumbnail."}
+      },
+      "mendoza-argentina": {
+        activity:{images:["https://catenazapata.com/wp-content/uploads/2025/05/exp-family-is-everything-960.jpg"],roles:["Catena Zapata / La Familia es Todo tasting"],note:"The activity image now matches the La Familia es Todo rate lane instead of the separate Vino & Música banner."},
+        social:{status:"partial",images:[],roles:["Club Banco Mendoza / venue photo not published"],note:"The former image was a Mercado Pago payment graphic, not the social club."}
+      },
+      "tbilisi-georgia": {
+        food:{images:["https://img05.restaurantguru.com/r3ee-meals-Salobie-Bia-2022-10-1.jpg","https://img05.restaurantguru.com/r0cd-Salobie-Bia-design-2022-10-2.jpg"],roles:["Salobie Bia / lobiani-style food photo","Salobie Bia / dining-room environment"],status:"partial",note:"The menu-sheet image is gone. The first card is a real food photograph and the second is the real dining room, but the exact priced plate remains a partial match."},
+        social:{status:"verified",images:["https://fabrikatbilisi.com/wp-content/uploads/2017/06/hub-2-3.jpg","https://fabrikatbilisi.com/wp-content/uploads/2017/06/hub-2-4.jpg"],roles:["Fabrika / coworking interior","Fabrika / coworking interior"],note:"The unrelated industrial/vehicle image was replaced with a second official Fabrika coworking interior."},
+        gym:{status:"partial",images:[],roles:["Vake Pool / gym and sauna photos not published"],note:"The available images showed exterior/reception rather than gym equipment or sauna. The rate and facility source remain linked without a misleading visual."}
+      }
+    });
     const mediaEvidenceFor = (location, kind, evidence) => {
       const base = evidence || evidenceFor(location, kind);
       const override = (mediaRoleOverrides[location.slug] || {})[kind] || {};
@@ -1000,6 +1202,11 @@
       const mediaQuality = images.some(mediaQualityIssue);
       return {
         ...base,
+        ...(override.status ? {status:override.status} : {}),
+        ...(override.title ? {title:override.title} : {}),
+        ...(override.price ? {price:override.price} : {}),
+        ...(override.source ? {source:override.source} : {}),
+        ...(override.url ? {url:override.url} : {}),
         ...(Array.isArray(override.images) ? {images:override.images} : {}),
         ...(Array.isArray(override.roles) ? {imageRoles:override.roles} : {}),
         ...(override.note ? {mediaNote:override.note} : {}),
@@ -1082,7 +1289,7 @@
         {type:"activity",label:"Camp John Hay",address:"Loakan Road, Baguio",lat:16.3955,lng:120.6082,precision:"approximate",source:"https://www.jhmc.com.ph/",note:"real pine forest recreation district"}
       ],
       "boracay-philippines": [
-        {type:"stay",label:"High-Ceiling 60 sqm Family Apartment",address:"Station 3 / Sitio Ambulong beachfront area",lat:11.9520,lng:121.9285,precision:"approximate",source:"https://www.airbnb.com/rooms/1197463291301130456",note:"beachfront complex with partial sea view; exact unit masked"},
+        {type:"stay",label:"High Ceiling 60sqm Family Apartment with Partial Sea View and Kitchen",address:"Station 3 / Sitio Ambulong beachfront area",lat:11.9520,lng:121.9285,precision:"approximate",source:"https://www.booking.com/hotel/ph/high-ceiling-60sqm-family-apartment-with-partial-sea-view-and-kitchen-malay.en-gb.html",note:"Booking source matches the evidence card; exact unit/building point remains approximate"},
         {type:"gym",label:"Legacy Gym Boracay",address:"0915 Diniwid Road, Balabag",lat:11.9740,lng:121.9160,precision:"approximate",source:"https://www.legacygymphilippines.com/contact",note:"full gym plus boxing, MMA, Muay Thai, and BJJ"},
         {type:"food",label:"Nonie's Boracay",address:"Ondus Hotel, Station 3",lat:11.9515,lng:121.9280,precision:"approximate",source:"https://www.nonies.com.ph/",note:"beachfront dining and current menu"},
         {type:"social",label:"Station X",address:"Hue Hotel, Station 2 Main Road",lat:11.9607,lng:121.9265,precision:"approximate",source:"https://www.stationx.ph/our-community",note:"community/lifestyle gathering space"},
@@ -1138,14 +1345,14 @@
         {type:"activity",label:"Teatro Colón",address:"Cerrito 628",lat:-34.601086,lng:-58.383187,precision:"exact",source:"https://teatrocolon.org.ar/guided-tours/",note:"real theater and guided-tour entrance"}
       ],
       "mendoza-argentina": [
-        {type:"stay",label:"Centrally Located Apartment / Torre Leloir candidate",address:"Quinta Sección / Parque General San Martín",lat:-32.8890,lng:-68.8450,precision:"approximate",source:"https://www.airbnb.com/rooms/1131138598718915447",note:"view-focused replacement candidate advertises panoramic city/Andes views, pool, gym, and sauna"},
+        {type:"stay",label:"Centrally located apartment in the Central Park area",address:"Quinta Sección / Parque General San Martín",lat:-32.8890,lng:-68.8450,precision:"approximate",source:"https://www.airbnb.com/rooms/861824851030756915?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"map source now matches the evidence listing; Airbnb masks the exact unit address"},
         {type:"gym",label:"Gimnasio Municipal Nº1",address:"Paso de los Andes 385",lat:-32.896344,lng:-68.858590,precision:"exact",source:"https://ciudaddemendoza.gob.ar/area-municipal/direccion-de-deportes-y-recreacion/",note:"real municipal gym"},
         {type:"food",label:"Diplomatic Restaurant",address:"Belgrano 1041",lat:-32.889419,lng:-68.849660,precision:"exact",source:"https://www.diplomaticrestaurant.com/es/",note:"hotel dining with a luxury profile"},
         {type:"social",label:"Gómez Rooftop",address:"Garibaldi 7, 10th floor",lat:-32.890534,lng:-68.838795,precision:"exact",source:"https://www.isitfunky.com/mendoza/g-mez-rooftop-piso-10",note:"panoramic city views and nightlife"},
         {type:"activity",label:"Catena Zapata winery",address:"Cobos s/n, Luján de Cuyo",lat:-33.135470,lng:-68.917898,precision:"approximate",source:"https://catenazapata.com/es/contact-es/",note:"real winery; gate coordinate needs final local check"}
       ],
       "tbilisi-georgia": [
-        {type:"stay",label:"Panoramic View Designer 1BR / Vake candidate",address:"Vake / Airbnb-masked point",lat:41.692233,lng:44.803252,precision:"approximate",source:"https://www.airbnb.nl/rooms/576471721326933079",note:"view-focused replacement advertises mountain and city views; exact building masked"},
+        {type:"stay",label:"Charming Apartment in the Heart of Tbilisi",address:"Central Tbilisi / Airbnb-masked point",lat:41.6990,lng:44.7979,precision:"approximate",source:"https://www.airbnb.com/rooms/31867138?checkin=2026-10-13&checkout=2026-11-12&adults=1",note:"map source now matches the evidence listing; Airbnb masks the exact building address"},
         {type:"gym",label:"Vake Pool",address:"49B Ilia Chavchavadze Avenue",lat:41.713160,lng:44.744728,precision:"exact",source:"https://vsp.ge/about-us/",note:"Olympic pool, gym, sauna, and fitness classes"},
         {type:"food",label:"Salobie Bia",address:"17 Shota Rustaveli Avenue",lat:41.699833,lng:44.797949,precision:"exact",source:"https://ge.gaultmillau.com/en/restaurants/salobie-bia",note:"real restaurant with current menu source"},
         {type:"social",label:"Fabrika Co-Work / cultural courtyard",address:"8 Ninoshvili Street",lat:41.709540,lng:44.802723,precision:"exact",source:"https://fabrikatbilisi.com/resident/co-working/",note:"cafés, bars, events, and social courtyard"},
@@ -1181,6 +1388,7 @@
     refreshMapPin("tbilisi-georgia", "activity", {label:"Chreli-Abano sulfur baths",address:"Abano Street 2",lat:41.688600,lng:44.810641,precision:"exact",source:"https://booking.chreli-abano.ge/?lang=en",note:"official booking page publishes private-room rates"});
     refreshMapPin("tbilisi-georgia", "gym", {source:"https://vakisauzi.ge/servisebi/",note:"same named Vake Pool as the current fixed-plan rate table"});
     refreshMapPin("da-lat-vietnam", "gym", {label:"Hoàng Vũ Fitness",address:"49 Hai Bà Trưng",lat:11.9483167,lng:108.4335523,precision:"approximate",source:"https://workoutfrom.com/da-lat/hoang-vu-fitness-gym-da-lat",note:"same named gym as the current monthly-rate evidence; coordinate is approximate to the published address"});
+    refreshMapPin("da-lat-vietnam", "social", {label:"Da Lat Tech & Entrepreneurship Meetup",address:"Le Pin Dessert · Da Lat",lat:11.9445,lng:108.4380,precision:"approximate",source:"https://dalat.app/",note:"same dated meetup source as the evidence card; exact venue coordinates should be confirmed from the calendar before attending"});
     refreshMapPin("valencia-philippines", "social", {label:"Valencia AA meeting",address:"Rhed Flower Restobar · 76MV+6WF, Luna Street",source:"https://dumagueteaa.org/aa-meetings-near-me-now-in-dumaguete/",note:"current Monday/Wednesday meeting; Plus Code and Luna Street are source-backed, while the map coordinate remains approximate"});
     refreshMapPin("santiago-chile", "social", {label:"WeWork Apoquindo 5950",address:"Avenida Apoquindo 5950, Las Condes",lat:-33.4088057,lng:-70.5689862,precision:"exact",source:"https://www.wework.com/es-LA/l/coworking-space/santiago-de-chile",note:"same named community workspace as the current price evidence"});
 
@@ -1379,13 +1587,26 @@
       if (!images.length) return '<div class="hero-image"><div class="evidence-empty"><strong>NO SOURCE HERO IMAGE</strong><span>' + escapeHtml(evidence.title || location.name) + '</span><span class="image-source-note">The deck will not substitute a stock or generated image. Use the linked source buttons to inspect the live lead.</span></div><span class="hero-badge">SOURCE IMAGE MISSING</span></div>';
       return '<div class="hero-image"><button class="media-trigger" type="button" data-media-src="' + escapeHtml(images[0]) + '" data-media-caption="' + escapeHtml(evidence.title || location.name) + '"><img data-photo-kind="hero" data-photo-role="hero source image" data-evidence="' + evidenceClass(evidence) + '" src="' + escapeHtml(images[0]) + '" alt="' + escapeHtml(evidence.title || location.name) + '" loading="eager" referrerpolicy="no-referrer"></button><span class="hero-badge">SOURCE IMAGE · ' + escapeHtml(evidenceStatus(evidence)) + '</span></div>';
     };
+    const ratingSlideLegacy = (location) => {
+      const housing = housingOptionFor(location, 0);
+      const food = mediaEvidenceFor(location, "food", evidenceFor(location, "food"));
+      const activity = mediaEvidenceFor(location, "activity", evidenceFor(location, "activity"));
+      const social = mediaEvidenceFor(location, "social", evidenceFor(location, "social"));
+      const gym = mediaEvidenceFor(location, "gym", evidenceFor(location, "gym"));
+      return '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">#' + location.rank + ' · ' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(housing, "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="evidence-summary"><span class="status-pill ' + evidenceClass(housing) + '">STAY ' + escapeHtml(evidenceStatus(housing)) + '</span><span class="status-pill ' + evidenceClass(food) + '">MEAL ' + escapeHtml(evidenceStatus(food)) + '</span><span class="status-pill ' + evidenceClass(activity) + '">ACTIVITY ' + escapeHtml(evidenceStatus(activity)) + '</span><span class="status-pill ' + evidenceClass(social) + '">SOCIAL ' + escapeHtml(evidenceStatus(social)) + '</span><span class="status-pill ' + evidenceClass(gym) + '">GYM ' + escapeHtml(evidenceStatus(gym)) + '</span></div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
+    };
+
     const ratingSlide = (location) => {
       const housing = housingOptionFor(location, 0);
-      const food = evidenceFor(location, "food");
-      const activity = evidenceFor(location, "activity");
-      const social = evidenceFor(location, "social");
-      const gym = evidenceFor(location, "gym");
-      return '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">#' + location.rank + ' · ' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(housing, "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.") + '</div><div class="evidence-summary"><span class="status-pill ' + evidenceClass(housing) + '">STAY ' + escapeHtml(evidenceStatus(housing)) + '</span><span class="status-pill ' + evidenceClass(food) + '">MEAL ' + escapeHtml(evidenceStatus(food)) + '</span><span class="status-pill ' + evidenceClass(activity) + '">ACTIVITY ' + escapeHtml(evidenceStatus(activity)) + '</span><span class="status-pill ' + evidenceClass(social) + '">SOCIAL ' + escapeHtml(evidenceStatus(social)) + '</span><span class="status-pill ' + evidenceClass(gym) + '">GYM ' + escapeHtml(evidenceStatus(gym)) + '</span></div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div><div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div></div></article>';
+      const food = mediaEvidenceFor(location, "food", evidenceFor(location, "food"));
+      const activity = mediaEvidenceFor(location, "activity", evidenceFor(location, "activity"));
+      const social = mediaEvidenceFor(location, "social", evidenceFor(location, "social"));
+      const gym = mediaEvidenceFor(location, "gym", evidenceFor(location, "gym"));
+      const fitVerdict = location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.";
+      const statusSummary = '<div class="evidence-summary"><span class="status-pill ' + evidenceClass(housing) + '">STAY ' + escapeHtml(evidenceStatus(housing)) + '</span><span class="status-pill ' + evidenceClass(food) + '">MEAL ' + escapeHtml(evidenceStatus(food)) + '</span><span class="status-pill ' + evidenceClass(activity) + '">ACTIVITY ' + escapeHtml(evidenceStatus(activity)) + '</span><span class="status-pill ' + evidenceClass(social) + '">SOCIAL ' + escapeHtml(evidenceStatus(social)) + '</span><span class="status-pill ' + evidenceClass(gym) + '">GYM ' + escapeHtml(evidenceStatus(gym)) + '</span></div>';
+      const overview = '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">#' + location.rank + ' · ' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(housing, "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(fitVerdict) + '</div></div></div></div></article>';
+      const rating = '<article class="slide rating-slide" data-slide-kind="rating"><div class="slide-inner"><div class="kicker">RATING / #' + location.rank + ' · ' + escapeHtml(location.name) + '</div><h2>How the fit adds up.</h2><p class="slide-copy">These are planning scores for the life described here. The source badges below show where current housing, meal, social, gym, and activity evidence is strong or still needs a live check.</p>' + statusSummary + '<div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div><div class="evidence-card"><div><h3>Source trail</h3><p>Open the map center and current housing source before booking. Rental addresses may be masked; exact versus approximate venue points are called out on the map slide.</p></div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div></article>';
+      return overview + rating;
     };
 
     const makeMap = (location) => {
@@ -1398,6 +1619,12 @@
       const exactCount = pins.filter((pin) => pin.precision === "exact").length;
       const mapNote = "Pins are plotted from their latitude/longitude by Leaflet, so they cannot drift away from the source coordinates as the old percentage overlay did. Stay points can be approximate when a rental platform masks the door address; venue sources remain clickable.";
       return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><div class="leaflet-map" data-map-pins="' + serializedPins + '" data-map-center="' + centerLat.toFixed(5) + ',' + centerLng.toFixed(5) + '" role="application" aria-label="Interactive map with five source-backed pins for ' + escapeHtml(location.name) + '"></div></div></div><div class="map-side">' + pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type] + ' · ' + precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("") + '<a class="source-link" href="' + osmMap(centerLat, centerLng, 14) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">' + exactCount + ' of 5 pins are marked exact in the source data. ' + mapNote + '</p></div></div>';
+    };
+    const mapDetailsSlide = (location) => {
+      const pins = locationPins(location);
+      const exactCount = pins.filter((pin) => pin.precision === "exact").length;
+      const legends = pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type] + ' · ' + precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("");
+      return '<article class="slide" data-slide-kind="map-details"><div class="slide-inner"><div class="kicker">MAP LEGEND / SOURCE PINS</div><h2>Where each pin comes from.</h2><p class="slide-copy">The map slide shows the geography; this companion slide keeps all five named sources readable without stacking them under the controls.</p><div class="map-detail-grid">' + legends + '</div><p class="map-note">' + exactCount + ' of 5 pins are exact in the source data. Rental-platform stay points can be approximate because the door address is masked.</p></div></article>';
     };
 
     const money = (value) => "$" + Math.round(value).toLocaleString();
@@ -1431,7 +1658,7 @@
         : Math.min(6, Math.max(4, Array.isArray(evidence.images) ? evidence.images.filter(Boolean).length : 0));
       return Array.from({length:Math.max(4, count)}, (_, index) => "listing source image " + (index + 1));
     };
-    const slideCountFor = (location) => stayLabelsFor(location).length + 12;
+    const slideCountFor = (location) => stayLabelsFor(location).length + 14;
     const buildSlides = (location) => ratingSlide(location)
       + photoSlide(location,"stay","A house that gives the life a chance","The source card tells you whether the current place and price are verified for the selected window. Room and amenity labels are only specific when the source publishes that role.",stayLabelsFor(location),rentPrice(location))
       + photoSlide(location,"social","The people are part of the address","A dated event, venue, or community source is shown here when one was found; otherwise the card stays visibly unresolved.",["social source image 1","social source image 2"],socialPrice(location))
@@ -1439,10 +1666,11 @@
       + photoSlide(location,"gym","Train hard, recover intelligently","Gym imagery and membership price stay visibly unresolved until a current source pair is found. Sauna or cold-plunge labels require an explicit source photo or facility record.",["gym source image 1","gym source image 2"],location.gymPrice)
       + photoSlide(location,"activity","Leave room for one real adventure","The activity card is a real operator or attraction lead when available. Dates, weather, and capacity still need a final check before booking.",["activity source image 1","activity source image 2"],evidenceFor(location,"activity").price)
       + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked with real named property or venue pins. Each pin has a source link, a coordinate-based map link, and an exact/approximate label so a platform-masked rental is never mistaken for a door address.</p>' + priceChip("LOCAL MOVEMENT", "PLANNING ESTIMATE — " + movementPrice(location)) + makeMap(location) + '</div></article>'
+      + mapDetailsSlide(location)
       + budgetSlide(location)
       + daySlide(location);
 
-    const liveCategoryCount = (location) => ["stay","food","activity","social","gym"].filter((kind) => evidenceFor(location, kind).status === "verified").length;
+    const liveCategoryCount = (location) => ["stay","food","activity","social","gym"].filter((kind) => mediaEvidenceFor(location, kind, evidenceFor(location, kind)).status === "verified").length;
     const renderDirectory = () => {
       const mode = directorySort.value || "overall";
       const sortMode = directorySortModes[mode] || directorySortModes.overall;
