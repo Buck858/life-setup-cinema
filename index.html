@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
   <title>Life Setup Cinema — 21 places</title>
   <meta name="description" content="A ratings-first life setup cinema for 21 possible bases, with housing, social life, food, training, activities, budgets, and readable maps.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,7 +82,7 @@
     .cinema-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
     .cinema-title strong { font-size: 18px; letter-spacing: -.03em; }
     .cinema-title span { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .slide-viewport { flex: 1; min-height: 0; overflow: hidden; position: relative; touch-action: pan-y; }
+    .slide-viewport { flex: 1; min-height: 0; overflow: hidden; position: relative; touch-action: pan-y pinch-zoom; }
     .slide { display: none; height: 100%; min-height: 0; padding: 22px 7vw 118px; overflow: hidden; }
     .slide.is-active { display: block; animation: rise .28s ease both; }
     @keyframes rise { from { opacity: 0; } to { opacity: 1; } }
@@ -297,7 +297,7 @@
       background: rgba(5,17,13,.98);
       pointer-events: auto;
     }
-    .slide-viewport { touch-action: pan-y; }
+    .slide-viewport { touch-action: pan-y pinch-zoom; }
     .slide { padding: 12px 5vw 8px; }
     .slide-inner { justify-content: flex-start; }
     .slide[data-slide-kind="verdict"] .slide-inner { overflow: hidden; }
@@ -332,9 +332,19 @@
     .lightbox-toolbar p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.25; flex: 1; }
     .lightbox-button { min-width: 38px; height: 38px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--paper); background: rgba(255,255,255,.08); font-family: var(--mono); font-size: 14px; }
     .lightbox-button:hover, .lightbox-button:focus-visible { color: var(--ink); background: var(--mint); outline: none; }
-    .lightbox-stage { min-height: 0; flex: 1; display: grid; place-items: center; overflow: auto; padding: 12px 0; }
+    .lightbox-stage { min-height: 0; flex: 1; display: grid; place-items: center; overflow: auto; overscroll-behavior: contain; padding: 12px 0; touch-action: pan-x pan-y; }
     .lightbox-stage img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center; transition: transform .15s ease; border-radius: 10px; }
     @media (max-width: 620px) {
+      .slide-viewport {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        touch-action: pan-y pinch-zoom;
+      }
+      .slide { height: auto; min-height: 100%; padding-bottom: 24px; overflow: visible; }
+      .slide-inner { height: auto; min-height: 100%; overflow: visible; }
+      .slide[data-slide-kind="verdict"] .slide-inner { overflow: visible; }
       .cinema-header { min-height: 67px; }
       .cinema-controls { padding: 6px 10px 8px; }
       .progress-row { margin-bottom: 5px; gap: 4px; }
@@ -347,7 +357,7 @@
       .slide[data-slide-kind="verdict"] .hero-grid { gap: 7px; }
       .hero-image { height: 150px; min-height: 0; max-height: 150px; }
       .hero-panel .big-number { font-size: 29px; margin: 4px 0 0; }
-      .hero-panel .slide-copy { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-bottom: 4px; }
+      .hero-panel .slide-copy { display: block; -webkit-line-clamp: unset; overflow: visible; margin-bottom: 4px; }
       .verdict { margin: 5px 0; padding: 5px 0 5px 8px; font-size: 10px; line-height: 1.22; }
       .evidence-summary { margin-top: 5px; gap: 3px; }
       .evidence-summary .status-pill { font-size: 7px; padding: 4px 5px; }
@@ -358,7 +368,7 @@
       .rating-card strong { font-size: 16px; }
       .photo-single { gap: 6px; }
       .photo-single .photo-card img, .photo-single .evidence-empty { aspect-ratio: 16 / 8.5; max-height: 170px; min-height: 0; }
-      .photo-single-copy > .slide-copy { -webkit-line-clamp: 2; font-size: 11px; line-height: 1.18; }
+      .photo-single-copy > .slide-copy { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 11px; line-height: 1.18; }
       .photo-card figcaption { padding: 6px 8px 7px; }
       .photo-card figcaption strong { font-size: 11px; }
       .evidence-card { padding: 7px; }
@@ -367,7 +377,7 @@
       .evidence-card .source-link { font-size: 7px; padding: 5px 6px; }
       .map-layout { gap: 6px; }
       .map-frame, .map-stage, .leaflet-map { height: 235px; min-height: 235px; }
-      .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 4px; overflow: hidden; }
+      .map-side { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 4px; overflow: visible; }
       .map-legend { min-height: 47px; padding: 5px; gap: 4px; }
       .map-legend .marker { width: 20px; height: 20px; font-size: 8px; }
       .map-legend strong { font-size: 8px; }
@@ -428,7 +438,7 @@
       <div class="cinema-title"><strong id="cinema-name"></strong><span id="cinema-meta"></span></div>
       <div id="slide-counter" aria-live="polite" class="mono"></div>
     </header>
-    <div id="slide-viewport" class="slide-viewport" tabindex="0" aria-label="Slideshow. Touch and hold to pause."></div>
+    <div id="slide-viewport" class="slide-viewport" tabindex="0" aria-label="Slideshow. Scroll to read, pinch images to zoom, and touch and hold to pause."></div>
     <div class="cinema-controls">
       <div id="progress-row" class="progress-row" aria-label="Choose slide"></div>
       <div class="control-row">
@@ -437,7 +447,7 @@
         <button id="next-button" class="control-button" type="button" aria-label="Next slide">Next ›</button>
       </div>
       <div id="status-row" class="status-row" data-mode="auto">AUTO PLAYING</div>
-      <div class="hold-tip">Touch and hold the slide to pause. Press AUTO to resume.</div>
+      <div class="hold-tip">Scroll to read · pinch an image to zoom · touch and hold to pause · press AUTO to resume.</div>
     </div>
   </section>
 
@@ -1112,7 +1122,7 @@
     };
     const evidenceHasPrice = (evidence) => Boolean(evidence && evidence.status === "verified" && evidence.price && !/NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(evidence.price));
     const evidenceHasAnyPrice = (evidence) => Boolean(evidence && evidence.price && !/NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(evidence.price));
-    const evidenceStatus = (evidence) => evidence.status === "verified" ? "LIVE SOURCE VERIFIED" : evidence.status === "partial" ? "PARTIAL — RECHECK" : "NEEDS LIVE CHECK";
+    const evidenceStatus = (evidence) => evidence.status === "verified" ? "LIVE SOURCE VERIFIED" : evidence.status === "partial" ? "PARTIAL — RECHECK" : "SOURCE CHECK REQUIRED";
     const evidenceClass = (evidence) => evidence.status === "verified" ? "verified" : "needs-check";
     const evidencePriceLabel = (evidence, noun) => (evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ") + noun;
     const usdAmount = (value) => {
@@ -1343,7 +1353,16 @@
     const lightbox = document.getElementById("media-lightbox");
     const lightboxImage = document.getElementById("lightbox-image");
     const lightboxCaption = document.getElementById("lightbox-caption");
+    const lightboxStage = lightbox.querySelector(".lightbox-stage");
     let lightboxZoom = 1;
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
+    const touchDistance = (touches) => {
+      if (!touches || touches.length < 2) return 0;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    };
     const setLightboxZoom = (value) => {
       lightboxZoom = Math.max(1, Math.min(3, value));
       lightboxImage.style.transform = "scale(" + lightboxZoom + ")";
@@ -1359,7 +1378,7 @@
       if (!src) return;
       lightboxImage.src = src;
       lightboxImage.alt = trigger.dataset.mediaCaption || "Enlarged source image";
-      lightboxCaption.textContent = (trigger.dataset.mediaCaption || "Source image") + " · use − / + to zoom";
+      lightboxCaption.textContent = (trigger.dataset.mediaCaption || "Source image") + " · pinch or use − / + to zoom";
       lightbox.hidden = false;
       setLightboxZoom(1);
     };
@@ -1408,6 +1427,10 @@
     viewport.addEventListener("click", (event) => {
       const trigger = event.target.closest(".media-trigger");
       if (!trigger) return;
+      if (holdFired) {
+        holdFired = false;
+        return;
+      }
       event.preventDefault();
       event.stopPropagation();
       openLightbox(trigger);
@@ -1420,14 +1443,14 @@
       if (trigger) {
         const empty = document.createElement("div");
         empty.className = "evidence-empty";
-        empty.innerHTML = "<strong>SOURCE IMAGE FAILED</strong><span>The linked source image did not load in this browser.</span><span class=\"image-source-note\">Use the source button below to inspect the live venue/listing.</span>";
+        empty.innerHTML = "<strong>SOURCE IMAGE UNAVAILABLE</strong><span>The linked source image did not load in this browser.</span><span class=\"image-source-note\">Use the source button below to inspect the live venue/listing.</span>";
         trigger.replaceWith(empty);
       } else if (image.closest(".hero-image")) {
-        image.replaceWith(Object.assign(document.createElement("div"), { className:"evidence-empty", innerHTML:"<strong>SOURCE IMAGE FAILED</strong><span>Use the linked source below.</span>" }));
+        image.replaceWith(Object.assign(document.createElement("div"), { className:"evidence-empty", innerHTML:"<strong>SOURCE IMAGE UNAVAILABLE</strong><span>Use the linked source below.</span>" }));
       }
       if (card) {
         const pill = card.querySelector(".evidence-pill");
-        if (pill) pill.textContent = "SOURCE IMAGE FAILED";
+        if (pill) pill.textContent = "SOURCE IMAGE UNAVAILABLE";
       }
     }, true);
     document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
@@ -1435,16 +1458,51 @@
     document.getElementById("lightbox-reset").addEventListener("click", () => setLightboxZoom(1));
     document.getElementById("lightbox-plus").addEventListener("click", () => setLightboxZoom(lightboxZoom + .25));
     lightbox.addEventListener("click", (event) => { if (event.target === lightbox) closeLightbox(); });
-    const clearHold = () => { if (holdTimer) window.clearTimeout(holdTimer); holdTimer = null; };
+    lightboxStage.addEventListener("touchstart", (event) => {
+      if (event.touches.length !== 2) return;
+      pinchStartDistance = touchDistance(event.touches);
+      pinchStartZoom = lightboxZoom;
+    }, {passive:true});
+    lightboxStage.addEventListener("touchmove", (event) => {
+      if (event.touches.length !== 2 || !pinchStartDistance) return;
+      const distance = touchDistance(event.touches);
+      if (!distance) return;
+      event.preventDefault();
+      setLightboxZoom(pinchStartZoom * distance / pinchStartDistance);
+    }, {passive:false});
+    const resetPinch = () => { pinchStartDistance = 0; pinchStartZoom = lightboxZoom; };
+    lightboxStage.addEventListener("touchend", resetPinch, {passive:true});
+    lightboxStage.addEventListener("touchcancel", resetPinch, {passive:true});
+    let holdPoint = null;
+    const pointFromEvent = (event) => {
+      const touch = (event.touches && event.touches[0]) || (event.changedTouches && event.changedTouches[0]);
+      return touch ? {x: touch.clientX, y: touch.clientY} : {x: event.clientX, y: event.clientY};
+    };
+    const clearHold = () => {
+      if (holdTimer) window.clearTimeout(holdTimer);
+      holdTimer = null;
+      holdPoint = null;
+      if (holdFired) window.setTimeout(() => { holdFired = false; }, 0);
+    };
     const startHold = (event) => {
       if (event.target.closest("button,a")) return;
+      if (event.touches && event.touches.length > 1) { clearHold(); return; }
       if (holdTimer) return;
       holdFired = false;
+      holdPoint = pointFromEvent(event);
       holdTimer = window.setTimeout(() => { holdFired = true; pauseForHold(); }, 450);
+    };
+    const cancelHoldOnMove = (event) => {
+      if (!holdTimer || holdFired) return;
+      if ((event.touches && event.touches.length > 1) || (event.changedTouches && event.changedTouches.length > 1)) { clearHold(); return; }
+      const point = pointFromEvent(event);
+      if (holdPoint && Math.hypot(point.x - holdPoint.x, point.y - holdPoint.y) > 10) clearHold();
     };
     viewport.addEventListener("pointerdown", startHold);
     viewport.addEventListener("mousedown", startHold);
     viewport.addEventListener("touchstart", startHold, {passive:true});
+    viewport.addEventListener("pointermove", cancelHoldOnMove, {passive:true});
+    viewport.addEventListener("touchmove", cancelHoldOnMove, {passive:true});
     viewport.addEventListener("pointerup", clearHold);
     viewport.addEventListener("mouseup", clearHold);
     viewport.addEventListener("touchend", clearHold);
