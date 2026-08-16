@@ -337,6 +337,9 @@
     .map-side { overflow: auto; }
     .map-legend { flex: 0 0 auto; min-height: 60px; }
     .map-note { display: block !important; }
+    .map-source-strip { position: absolute; z-index: 4; top: 8px; left: 8px; right: 8px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 4px; border: 1px solid rgba(239,252,245,.32); border-radius: 10px; background: rgba(5,17,13,.88); }
+    .map-source-strip a { display: block; overflow: hidden; padding: 5px 3px; border: 1px solid rgba(201,255,229,.3); border-radius: 7px; color: var(--paper); font-family: var(--mono); font-size: 9px; line-height: 1.1; text-align: center; text-decoration: none; white-space: nowrap; }
+    .map-source-strip a:hover, .map-source-strip a:focus-visible { color: var(--ink); background: var(--mint); outline: none; }
     .budget-source { display: inline-block; margin-top: 8px; color: var(--lime); font-family: var(--mono); font-size: 8px; text-decoration: none; }
     .budget-source:hover, .budget-source:focus-visible { text-decoration: underline; outline: none; }
     .lightbox[hidden] { display: none; }
@@ -449,10 +452,16 @@
       .rating-slide .slide-inner { justify-content: flex-start; }
       .map-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-top: 8px; }
       .map-detail-grid .map-legend { padding: 5px; }
-      .map-detail-grid .map-legend strong { font-size: 7px; }
-      .map-detail-grid .map-legend span { font-size: 6px; }
-      .map-detail-grid .map-pin-source { font-size: 5px; }
-      .map-detail-grid .map-pin-note { font-size: 6px; }
+      .map-source-strip { top: 6px; left: 6px; right: 6px; gap: 3px; padding: 3px; }
+      .map-source-strip a { padding: 5px 2px; font-size: 8px; }
+      .map-detail-grid .map-legend strong { font-size: 10px; line-height: 1.15; }
+      .map-detail-grid .map-legend span { font-size: 9px; line-height: 1.15; }
+      .map-detail-grid .map-pin-source { font-size: 8px; line-height: 1.15; }
+      .map-detail-grid .map-pin-note { font-size: 9px; line-height: 1.15; }
+      .slide[data-slide-kind="budget"] .budget-line { font-size: 9px; line-height: 1.15; }
+      .slide[data-slide-kind="budget"] .budget-line strong { font-size: 10px; line-height: 1.15; }
+      .slide[data-slide-kind="day"] .day-card h3 { font-size: 10px; }
+      .slide[data-slide-kind="day"] .day-card p { font-size: 10px; line-height: 1.2; }
     }
   </style>
 </head>
@@ -482,7 +491,7 @@
 
     <section class="rule-card" aria-labelledby="rules-heading">
       <h2 id="rules-heading">The rules this remake follows</h2>
-      <p><strong>Every place gets an image-first slide set:</strong> verdict + rating, at least four stay slides (with more when a source publishes distinct housing photos), two social slides, two meal slides, two gym/recovery slides, two activity slides, a readable map with five named real property/venue pins, itemized $2K/$3K budgets, and a sample day. Live price chips are shown in U.S. dollars. A category is called <strong>LIVE SOURCE VERIFIED</strong> only when the source, dated price, and source-specific image were found together. When that exact source does not publish a clean photo, the deck shows a real, location-matched <strong>REAL LOCATION REFERENCE</strong> and names the photo source; it never presents that reference as proof of the exact rental, plate, event, or membership. Map pins carry a direct venue/property source and mark exact versus approximate coordinates; rental platforms often mask the exact apartment address. The short-stay check window is <strong>Oct 13–Nov 12, 2026 for one guest</strong>; prices and availability are snapshots, not guarantees. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
+      <p><strong>Every place gets an image-first slide set:</strong> verdict + rating, at least four stay slides (with more when a source publishes distinct housing photos), two social slides, several meal slides, two gym/recovery slides, two activity slides, a readable map with five named real property/venue pins, itemized $2K/$3K budgets, and a sample day. Live price chips are shown in U.S. dollars. A category is called <strong>SOURCE + PRICE + IMAGE VERIFIED</strong> only when the source, dated price, and source-specific image were found together; vacancy and date-window language remains visible when it still needs confirmation. When that exact source does not publish a clean photo, the deck shows a real, location-matched <strong>REAL LOCATION REFERENCE</strong> and names the photo source; it never presents that reference as proof of the exact rental, plate, event, or membership. Map pins carry a direct venue/property source and mark exact versus approximate coordinates; rental platforms often mask the exact apartment address. The short-stay check window is <strong>Oct 13–Nov 12, 2026 for one guest</strong>; prices and availability are snapshots, not guarantees. Ratings are planning scores, not review-site scores: overall fit = <strong>18% value + 18% social + 18% nature + 16% training + 12% food + 18% access</strong>. Use the linked source buttons before booking or paying.</p>
     </section>
 
     <section class="directory-head">
@@ -754,7 +763,7 @@
       },
       "krabi-thailand": {
         stay:{status:"verified",title:"Haus233/4 — modern + convenient in Ao Nang",price:"$1,095.94 / 30 nights",source:"Airbnb",url:"https://www.airbnb.com/rooms/930091042648093053?checkin=2026-10-13&checkout=2026-11-12&adults=1",window:stayWindow,availability:"Airbnb displayed a future 30-night monthly price after discount; checked 2026-08-12.",images:["https://a0.muscache.com/im/pictures/miso/Hosting-930091042648093053/original/fc318fa9-36af-4649-8067-76cc13e472fc.jpeg","https://a0.muscache.com/im/pictures/hosting/Hosting-930091042648093053/original/1da08960-99ff-41ad-adfe-3c3942777977.jpeg","https://a0.muscache.com/im/pictures/8825b9e8-fb57-4ff3-bfcc-e15dd1eaa90a.jpg","https://a0.muscache.com/im/pictures/hosting/Hosting-930091042648093053/original/8a99c6e5-fae3-4c96-ae14-da2f074231a6.jpeg"]},
-        food:{status:"verified",title:"Saffron, Banyan Tree Krabi — Pla Chuk Khrueng",price:"$17.84 · THB 590",source:"Saffron official menu",url:"https://www.taste.banyantree.com/saffron-krabi-1-1",images:["https://images.squarespace-cdn.com/content/v1/60a3687912cea21e667234da/f4da3e76-4efa-4727-964f-37786d89ea5f/20230928-0I8A6643.jpg"],availability:"Official page says available Wednesdays and Saturdays; USD conversion checked 2026-08-12."},
+        food:{status:"verified",title:"Saffron, Banyan Tree Krabi — Pla Chuk Khrueng",price:"$17.84 · THB 590",source:"Saffron official menu",url:"https://www.taste.banyantree.com/saffron-krabi-1-1",images:["https://images.squarespace-cdn.com/content/v1/65f7ad2451f9994fc7b45c79/5f4d95ad-3b60-4c3e-8a03-a5094a97fc80/20250925-R5C_5730-Edit%2B%281%29.jpg"],availability:"Official page says available Wednesdays and Saturdays; USD conversion checked 2026-08-12."},
         activity:{status:"needs-check",title:"Railay / Tonsai climbing activity",price:"NOT VERIFIED",source:"Search current operator proof",url:"https://www.google.com/search?q=Krabi+Railay+climbing+day+pass+price+official",images:[]},
         social:{status:"needs-check",title:"Ao Nang climbing / social calendar not yet date-checked",price:"NOT VERIFIED",source:"Search current meetup proof",url:"https://www.google.com/search?q=Krabi+Railay+climbing+meetup+schedule",images:[]},
         gym:{status:"needs-check",title:"Ao Nang gym membership not yet date-checked",price:"NOT VERIFIED",source:"Search current gym proof",url:"https://www.google.com/search?q=Ao+Nang+Krabi+gym+membership+price",images:[]}
@@ -772,17 +781,14 @@
       ]
     };
     const housingImagesPerOption = (location) => {
-      const options = housingOptionsBySlug[location.slug] || [];
-      return options.length ? Math.max(1, ...options.map((option) => Array.isArray(option.images) ? [...new Set(option.images.filter(Boolean))].length : 0)) : 0;
+      const options = housingOptionsFor(location);
+      return options.length ? Math.max(1, ...options.map((option) => optionImageCount(location, "stay", option))) : 0;
     };
     const housingOptionFor = (location, index) => {
-      const options = housingOptionsBySlug[location.slug];
-      if (!Array.isArray(options) || !options.length) return evidenceFor(location, "stay");
-      const perOption = housingImagesPerOption(location);
-      return options[Math.min(options.length - 1, Math.floor(Number(index || 0) / perOption))];
+      return optionAtIndex(location, "stay", index).option;
     };
     const housingOptionForBudget = (location, total) => {
-      const options = housingOptionsBySlug[location.slug] || [];
+      const options = housingOptionsFor(location);
       if (!options.length) return evidenceFor(location, "stay");
       const target = total === 3000 ? "$3K" : "$2K";
       return options.find((option) => option.budget === target) || options[0];
@@ -1188,7 +1194,7 @@
     // are replaced with a source-specific image, or with an explicit gap.
     Object.assign(mediaRoleOverrides, {
       "uluwatu-bali": {
-        food:{status:"partial",images:[],roles:["Brazilian Açaí / direct dish photo not published"],note:"The menu price is source-backed, but the previously loaded image was coffee/pastry rather than açaí. The card now stays unresolved until the restaurant publishes a direct açaí photo."},
+        food:{status:"verified",images:["https://cdn.sanity.io/images/ztiuewcj/production/89c5264ab63e213b1d7a112de274dba0dbbf7f4d-4128x5160.jpg?w=700&q=80&auto=format"],roles:["The Loft / Brazilian açaí bowl / dish close-up"],note:"Direct high-resolution açaí image from The Loft’s own current site; the menu price remains tied to the linked breakfast menu."},
         activity:{status:"partial",title:"Uluwatu Temple — attraction / Kecak venue",images:["https://uluwatutemple.org/images/uluwatu-temple-og.webp"],roles:["Uluwatu Temple / attraction exterior"],note:"This official image proves the temple attraction, not the Kecak performance itself; the card no longer overclaims the photo."},
         social:{status:"partial",images:[],roles:["Hatch weekly event / venue photo not published"],note:"The source calendar is real, but the available square graphics are event posters rather than venue photography, so they were removed from the photo viewer."},
         gym:{status:"partial",images:[],roles:["360 MOVE / facility photo not published"],note:"The named gym and price source are retained, but its only direct source image is a 300×210 thumbnail and is rejected for clarity."}
@@ -1216,7 +1222,8 @@
       },
       "florianopolis-brazil": {
         activity:{images:["https://www.tamar.org.br/fotos_news/images/Tanques%20e%20aquarios.JPG","https://www.tamar.org.br/fotos_news/images/Visita_orientada_.jpg"],roles:["Projeto Tamar / tanks and aquariums","Projeto Tamar / guided visitor tour"],note:"The Bioday poster was replaced with Projeto Tamar’s official guided-visit photograph."},
-        gym:{images:["https://believefcenter.com/assets/space/aparelhos.jpg","https://believefcenter.com/assets/space/cross.jpeg"],roles:["Believe Fitness / equipment floor","Believe Fitness / cross-training area"],note:"Both gym images now identify the actual training space rather than generic fitness-model marketing."}
+        gym:{images:["https://believefcenter.com/assets/space/aparelhos.jpg","https://believefcenter.com/assets/space/cross.jpeg"],roles:["Believe Fitness / equipment floor","Believe Fitness / cross-training area"],note:"Both gym images now identify the actual training space rather than generic fitness-model marketing."},
+        food:{status:"verified",source:"Garapuvu Café official menu and gallery",url:"https://www.garapuvucafe.com.br/es/cardapiogeral",images:["https://lirp.cdn-website.com/138690bf/dms3rep/multi/opt/142886585_705385383670289_8718961543555169862_n-c1045b63-540w.jpg","https://irp.cdn-website.com/138690bf/dms3rep/multi/opt/55-1920w.png"],roles:["Garapuvu Café / restaurant environment","Lindo Garapuvu filet mignon / dish close-up"],note:"Both images come from Garapuvu’s official menu site, and the second matches the current Lindo Garapuvu menu lead. The source link remains the verification path for menu price and venue."}
       },
       "bariloche-argentina": {
         food:{status:"partial",images:[],roles:["Serena / Patagonian trout photo not published"],note:"The former aerial/exterior image did not prove the titled trout dish. The live menu and price remain linked; no unrelated photo is used."},
@@ -1304,7 +1311,8 @@
         gym:{images:["https://www.areacambodia.com/wp-content/uploads/2023/09/Angkor-Fitness-Premier-sport-club-and-personal-training-facility-in-Siem-Reap-Watbo.jpg"],roles:["Angkor Fitness / equipment-floor reference"],source:"Area Cambodia — Angkor Fitness",url:"https://www.areacambodia.com/healthy/angkor-fitness-premier-sport-club-and-personal-training-facility-in-siem-reap/11641/",note:"Real Angkor Fitness facility photo from a Siem Reap venue guide. It proves the gym environment; the current gym/sauna price and exact amenity access remain tied to the live venue source."}
       },
       "valencia-philippines": {
-        social:{images:["https://travelistajournal.wordpress.com/wp-content/uploads/2016/10/img_0996.jpg?w=660"],roles:["Valencia, Negros Oriental / Sunday market community scene"],source:"Travelista Journal — Valencia, Negros Oriental",url:"https://travelistajournal.wordpress.com/2016/10/04/discover-valencia-negros-oriental/",note:"Real Valencia community-market reference at the destination itself. It is not presented as a photograph of the AA meeting; the meeting source remains the source for schedule details."}
+        social:{images:["https://travelistajournal.wordpress.com/wp-content/uploads/2016/10/img_0996.jpg?w=660"],roles:["Valencia, Negros Oriental / Sunday market community scene"],source:"Travelista Journal — Valencia, Negros Oriental",url:"https://travelistajournal.wordpress.com/2016/10/04/discover-valencia-negros-oriental/",note:"Real Valencia community-market reference at the destination itself. It is not presented as a photograph of the AA meeting; the meeting source remains the source for schedule details."},
+        food:{images:["https://spicyfoodhouse.com/wp-content/uploads/2026/03/Filipino-Category.webp"],roles:["Spicy Food House / official Filipino-menu reference"],source:"Spicy Food House official Filipino menu",url:"https://spicyfoodhouse.com/product-category/menu/cuisines/filipino/",note:"Real image published by the named Valencia restaurant’s official Filipino menu page. It is a menu-category reference, not a claim that it is the exact priced Beef Broccoli plate."}
       },
       "dumaguete-philippines": {
         food:{images:["https://img.restaurantguru.com/radd-Jorelyns-Roast-and-Grill-food.jpg"],roles:["Negros Oriental / pancit dish reference"],source:"RestaurantGuru — Jorelyn’s Roast & Grill",url:"https://restaurantguru.com/Jorelyns-Roast-and-Grill-Guihulngan-City",note:"Real Negros Oriental pancit photograph used as a clear local-food reference. The USD price remains tied to 1988 Bistro’s current menu, not this separate restaurant."},
@@ -1332,7 +1340,7 @@
       },
       "bariloche-argentina": {
         stay:{images:["https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_001.jpg","https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_002.jpg","https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_003.jpg","https://cdn.tecnogestion.com.ar/multimedia/TIZ/BAR/BAR4049/BAR4049_004.jpg"],roles:["B612 Pinar del Lago / living room and lake-view base","B612 Pinar del Lago / bedroom","B612 Pinar del Lago / exterior and lake setting","B612 Pinar del Lago / common amenity"],source:"Tizado Bariloche — Pinar del Lago apartment",url:"https://www.tizado.com/ficha/departamento-alquiler-3-ambientes-pinar-del-lago-bariloche-patagonia-lp787782",note:"Four real images from the source-backed Pinar del Lago long-stay apartment. This replaces the misleading three-night Booking example with a monthly-eligible housing lead; confirm the contract and total monthly costs."},
-        food:{images:["https://img.nh-hotels.net/D02W1/zAdB1L/original/NH_Edelweiss_Restaurant_Grilled_Trout_Cup_of_wine_Candle_Natural_Light.jpg?background-color=white&output-quality=80&resize=1600%3A%2A"],roles:["Bariloche / Patagonian trout plate reference"],source:"NH Edelweiss Bariloche — restaurant photo",url:"https://www.nh-hotels.com/hotel/nh-bariloche-edelweiss",note:"Real Bariloche Patagonian-trout restaurant reference. The Serena menu price remains the priced lead; the photo is not claimed as Serena’s exact plate."},
+        food:{images:["https://media.viajando.travel/p/ff172bb7bac0ee3af60d6c46b6997599/adjuntos/236/imagenes/000/651/0000651115/bariloche-trucha.jpg"],roles:["Bariloche / Patagonian plate reference"],source:"Viajando Travel — Bariloche trout photo",url:"https://argentina.viajando.travel/gastronomia/descubri-5-platos-deliciosos-bariloche-y-donde-probarlos-n58767",note:"Real Bariloche rainbow-trout reference from a local-food article. The Serena/Dejá Vu/Patacon menu price remains separate; this is not claimed as any one priced plate."},
         activity:{images:["https://www.turismobariloche.com.ar/img/nieve-bariloche.jpg"],roles:["Cerro Catedral / snow and mountain activity"],source:"Turismo Bariloche — snow activities",url:"https://www.turismobariloche.com.ar/esqui-nieve.html",note:"Real Bariloche snow-activity photo matched to the Cerro Catedral lead. Seasonal operation and the selected rate still need confirmation."}
       },
       "santiago-chile": {
@@ -1370,8 +1378,9 @@
       }
     };
     const mediaEvidenceFor = (location, kind, evidence) => {
-      const base = evidence || evidenceFor(location, kind);
-      const override = (mediaRoleOverrides[location.slug] || {})[kind] || {};
+      const primary = evidenceFor(location, kind);
+      const base = evidence || primary;
+      const override = !evidence || base.url === primary.url ? ((mediaRoleOverrides[location.slug] || {})[kind] || {}) : {};
       const rawImages = Array.isArray(override.images) ? override.images : (Array.isArray(base.images) ? base.images : []);
       const directImages = [...new Set(rawImages.filter(Boolean).filter((src) => !mediaQualityIssue(src)))];
       const reference = (referenceMediaBySlug[location.slug] || {})[kind];
@@ -1641,26 +1650,280 @@
       if (evidence) return { ...evidence, checkedAt:evidence.checkedAt || evidenceCheckedAt };
       return { status:"needs-check", title:"No current source found yet", price:"NOT VERIFIED", source:"Search current proof", url:googleSearch(location.name + " " + kind + " current price official"), images:[], checkedAt:evidenceCheckedAt };
     };
+    // These are intentionally separate from the single primary evidence record.
+    // A destination can now show multiple source-backed homes and meals without
+    // copying one listing and pretending it is a different option. The primary
+    // current record remains the fallback when an additional source is weak.
+    const housingAlternativesBySlug = {
+      "florianopolis-brazil":[
+        {budget:"$2K",status:"verified",title:"Furnished 2BR, Ingleses do Rio Vermelho",price:"$~606 / month · BRL 3,300",source:"Guru dos Imóveis",url:"https://gurudosimoveis.com.br/imovel/apartamento-aluguel-ingleses-do-rio-vermelho-florianopolis-sc-903734",availability:"Monthly availability is stated through Nov 30, 2026; seller confirmation is still required.",imageRoles:["furnished living / balcony churrasqueira","rooftop pool / view amenity"],images:[]},
+        {budget:"$3K",status:"partial",title:"Me2 CA45 rooftop pool / sea-view balcony",price:"$~1,092 / 30-night baseline · BRL 5,950.20 before discounts and taxes",source:"Me2 Rentals",url:"https://www.me2rentals.com.br/en/apartment/UC01H",availability:"28+ night rental allows monthly terms, but inventory is only exposed after dates are selected.",imageRoles:["sea-view apartment interior","rooftop pool / ocean-mountain view"],images:[]}
+      ],
+      "santiago-chile":[
+        {budget:"$3K",status:"partial",title:"Providencia El Bosque 625 furnished 2BR",price:"$~1,856 / month · CLP 1,800,000",source:"BuscoNido",url:"https://www.busconido.cl/departamentos/providencia/9794110/providencia-el-bosque-625-providencia",availability:"Monthly listing with terrace, pool, gym, and north-facing orientation; contact required because the page does not publish a move-in date.",imageRoles:["furnished living / north-facing terrace","pool and gym amenities"],images:[]},
+        {budget:"$2K",status:"partial",title:"Las Condes / El Dante furnished 1BR with terrace",price:"$~719 / month · CLP 698,000",source:"RentHero",url:"https://renthero.cl/en/listings/departamento-en-arriendo-en-las-condes-1-dormitorio-1-bano-pb3c356",availability:"Structured listing says ASAP and description says available from Jun 6, 2026; confirm current availability.",imageRoles:["furnished living / private terrace","rooftop pool and gym"],images:[]}
+      ],
+      "bangkok-thailand":[
+        {budget:"$2K",status:"partial",title:"B.U. Place Superior Studio service package",price:"$~720 / month · THB 23,900 for a one-month stay",source:"B.U. Place long-stay rates",url:"https://buplace.com/long-stay",availability:"Rates are current from Aug 2026; room vacancy requires direct contact.",imageRoles:["studio living / work surface","pool, gym, and sauna amenities"],images:[]},
+        {budget:"$3K",status:"partial",title:"ProMove high-floor 2BR Ari condo with sky pool",price:"$~994 / month · THB 33,000",source:"ProMove Bangkok",url:"https://promovebangkok.com/properties/modern-two-bed-with-wrap-around-sky-pool-in-ari/",availability:"Active listing with no explicit date-grid; agent confirmation required.",imageRoles:["high-floor living / unblocked balcony view","wrap-around sky pool / roof deck"],images:[]}
+      ],
+      "mexico-city-mexico":[
+        {budget:"$2K",status:"verified",title:"Nomad Pads top-floor studio with terrace, Roma Norte",price:"$1,650 / month",source:"Nomad Pads current listings",url:"https://www.nomadpads.mx/listings",availability:"Source says available now; 30-day minimum and 3–6 month standard terms are stated.",imageRoles:["top-floor studio / dedicated desk","terrace and Roma Norte view"],images:[]},
+        {budget:"$2K",status:"partial",title:"Nomad Bucareli 12th-floor 1BR, Juárez",price:"$~1,337 / month · MXN 25,000 August rate",source:"Propmex",url:"https://www.propmex.com.mx/en/rentals/1-bedroom-apartment-in-juarez-mexico-city",availability:"Listing showed Jun 1–Sep 5, 2026 dates; recheck because the window is near expiry.",imageRoles:["12th-floor furnished living / city view","rooftop pool, garden, gym"],images:[]}
+      ],
+      "buenos-aires-argentina":[
+        {budget:"$2K",status:"verified",title:"Charming Loft, Fitz Roy 2030, Palermo Hollywood",price:"$900 / month",source:"My Lovely Apart",url:"https://mylovelyapart.com/properties/charming-loft-in-modern-building-palermo-hollywood/",availability:"Source lists availability from Sep 2026; 6–12 month minimum, utilities and fees excluded.",imageRoles:["62m² furnished loft / work desk","pool and rooftop BBQ terrace"],images:[]},
+        {budget:"$2K",status:"verified",title:"Pampa Corner Studio, Las Cañitas / Belgrano",price:"$850 / month",source:"My Lovely Apart",url:"https://mylovelyapart.com/properties/pampa-corner-studio/",availability:"Source lists availability from Nov 2026; six-month minimum.",imageRoles:["studio with private terrace / open view","shared rooftop terrace / sun loungers"],images:[]}
+      ],
+      "tbilisi-georgia":[
+        {budget:"$2K",status:"partial",title:"Metra Park Bagebi furnished apartment",price:"$1,500 / month",source:"Korter",url:"https://korter.ge/en/apartments-for-rent-tbilisi/metra-park-bagebi/706454",availability:"Active 115m² listing updated within the research window; move-in date still needs live contact.",imageRoles:["renovated furnished living / balcony","green Bagebi setting / second balcony"],images:[]},
+        {budget:"$2K",status:"partial",title:"Lisi Veranda Complex panoramic balcony flat",price:"$1,500 / month if monthly cadence is confirmed",source:"SS.ge",url:"https://home.ss.ge/en/real-estate/3-room-Flat-For-Rent-Lisi-lake-35904336",availability:"Ad published Jul 13, 2026; term and availability require direct confirmation.",imageRoles:["furnished living / panoramic balcony","green gated complex / view"],images:["https://static.ss.ge/20260620/7_ca50dfbb-2a98-44b1-9bf6-54b8f9db37ea_Thumb.jpg","https://static.ss.ge/20260620/5_0e3eb080-5506-4d2e-9fc9-ef1b29a24ee1_Thumb.jpg"]}
+      ],
+      "bariloche-argentina":[
+        {budget:"$2K",status:"partial",title:"B612 Pinar del Lago Unit Ñ-37",price:"$~1,796 / month total estimate · USD 1,500 rent + ARS 444,114 expensas",source:"Zonaprop",url:"https://www.zonaprop.com.ar/propiedades/clasificado/alclapin-departamento-en-alquiler-en-pinar-del-lago-bariloche-57017388.html",availability:"Listed from Aug 5, 2026; that date has passed, so availability must be reconfirmed immediately.",imageRoles:["2BR furnished living / lake-forest view","building amenity / bedroom"],images:[]},
+        {budget:"$2K",status:"partial",title:"Moreno 600 Centro furnished lake-view apartment",price:"$~1,000 / month · USD source price",source:"Zonaprop",url:"https://www.zonaprop.com.ar/propiedades/clasificado/alclapin-departamento-en-centro-59791754.html?n_pg=1&n_pos=18&n_src=Listado",availability:"One-year contract stated; active page has no explicit move-in date.",imageRoles:["furnished 1BR / lake view","central new-build interior"],images:[]}
+      ],
+      "mendoza-argentina":[
+        {budget:"$2K",status:"partial",title:"Premium Tower furnished 2BR with pool, gym, and sauna",price:"$~759 total estimate · ARS 950,000 rent + ARS 150,000 expensas",source:"Zonaprop",url:"https://www.zonaprop.com.ar/propiedades/clasificado/alclapin-alquilamos-departamento-de-2-dorm.-amoblado-en-premium-59468164.html",availability:"Active furnished listing; two-year contract and move-in cadence require confirmation.",imageRoles:["8th-floor furnished living / balcony","pool, gym, sauna, and security amenities"],images:[]},
+        {budget:"$2K",status:"partial",title:"Amoblado en Chile 1720, Primera Sección",price:"$~556 total estimate · ARS 720,000 rent + ARS 86,000 expensas",source:"Zonaprop",url:"https://www.zonaprop.com.ar/propiedades/clasificado/alclappa-departamento-amoblado-en-alquiler-59526324.html",availability:"6–12 month term and weekly cleaning stated; move-in date requires confirmation.",imageRoles:["furnished 1BR / balcony","central living and work area"],images:[]}
+      ],
+      "krabi-thailand":[
+        {budget:"$2K",status:"partial",title:"Krabi Apartment Hotel 1BR pool-view monthly apartment",price:"$~1,229 / month · THB 40,000 low-season monthly rate for 2 pax",source:"Krabi Apartment Hotel official rates",url:"https://krabi-apartment.com/accom.html",availability:"Official monthly table lists the Apr 21–Oct 31 low-season rate; confirm the requested dates, room, and current quote before booking.",imageRoles:["1BR apartment / terrace and kitchenette","pool-view amenity"],images:[]},
+        {budget:"$3K",status:"partial",title:"The Pelican Krabi 110m² Two-Bedroom Sky Pool Suite",price:"$~1,996 / month · THB 65,000 low-season rate",source:"The Pelican Krabi official monthly rate PDF",url:"https://www.thepelicankrabi.in.th/doc/The-Pelican-Krabi-For-Rent.pdf",availability:"Official rate table lists the May 1–Oct 31 low-season figure; exact unit/date, utilities, and updated seasonal pricing need confirmation.",imageRoles:["two-bedroom suite / terrace","sky pool and fitness amenity"],images:[]}
+      ],
+      "canggu-bali":[
+        {budget:"$2K",status:"partial",title:"Kayu Tulang 1BR villa with office and private pool",price:"$1,400 / month · IDR 25,000,000",source:"BaliHousing",url:"https://balihousing.com/en/canggu/rent-77779-villa-1-bedroom-pool-parking",availability:"Source says available after Aug 23, 2026 but warns it may already be booked; reconfirm.",imageRoles:["1BR living / private office","private pool / rooftop sunset area"],images:["https://i.balihousing.com/media/2310x1540_avif/77779_27.avif","https://i.balihousing.com/media/2310x1540_avif/77779_0.avif"]},
+        {budget:"$2K",status:"partial",title:"Brand-new 2BR Canggu villa with private pool",price:"$1,390 / month · IDR 25,000,000",source:"BaliHousing",url:"https://balihousing.com/en/canggu/rent-76014-villa-2-bedrooms-pool-parking",availability:"Monthly price is exposed; listing warns it may already be booked, so check inventory.",imageRoles:["enclosed living / kitchen","private pool / quiet neighborhood"],images:["https://i.balihousing.com/media/2310x1540_avif/76014_13.avif","https://i.balihousing.com/media/2310x1540_avif/76014_0.avif"]}
+      ],
+      "siem-reap-cambodia":[
+        {budget:"$2K",status:"partial",title:"Cheata Residence Western-style 1BR with pool access",price:"$500 / month negotiable",source:"Khmer24 + Cheata Residence",url:"https://m.khmer24.com/en/western-style-1-bedroom-apartment-for-rent-pool-access-cheata-residence-siem-reap-adid-13273000",availability:"Listing said now available on Mar 18, 2026; current vacancy must be reconfirmed.",imageRoles:["furnished 1BR / private balcony","pool and garden amenity"],images:["https://www.cheataresidence.com/userfiles/Whole-room-view.jpg","https://www.cheataresidence.com/userfiles/mobiles/Swimming-pool.jpg"]},
+        {budget:"$2K",status:"partial",title:"Aqua Residence Executive King Residence",price:"$1,000 / month · official source also shows $90/night",source:"Aqua Residence",url:"https://aqua-residence.com/room-detail.html?type=Executive+king+Room",availability:"Live booking form and monthly rate; date-specific inventory requires inquiry.",imageRoles:["executive room / kitchen and desk","rooftop pool / garden and gym"],images:["https://aqua-residence.com/userfiles/img_0603.jpg","https://aqua-residence.com/userfiles/living_room.jpg"]}
+      ],
+      "uluwatu-bali":[
+        {budget:"$2K",status:"partial",title:"Bukit / Uluwatu 1BR villa with private pool and work desk",price:"$1,790 / month · IDR 32,000,000",source:"BaliHousing",url:"https://balihousing.com/en/uluwatu/rent-76857-villa-1-bedroom-pool-parking",availability:"Listing updated Jul 10, 2026 but warns it may already be booked; reconfirm.",imageRoles:["1BR living / work desk","private pool / bathtub and view"],images:["https://i.balihousing.com/media/2310x1540_avif/76857_35.avif","https://i.balihousing.com/media/2310x1540_avif/76857_0.avif"]},
+        {budget:"$3K",status:"partial",title:"Padang Padang 2BR private-pool villa near Bingin",price:"$~1,490 / month · IDR 25,000,000",source:"Rumah123 active monthly villa listing",url:"https://www.rumah123.com/en/property/badung-uluwatu/for-lease-monthly-3-bedroom-villas-close-to-padang-padang-dreamland-beach-in-uluwatu-each-villa-has-its-own-private-vlr44809/",availability:"Listing updated Jul 26, 2026; source states furnished 2BR villas near Bingin/Padang Padang with private pool, Wi-Fi, cleaning, and pool/garden care. Confirm the exact unit and current availability.",imageRoles:["furnished 2BR villa / living and kitchen","private pool / garden amenity"],images:[]}
+      ],
+      "da-lat-vietnam":[
+        {budget:"$2K",status:"partial",title:"Nhatot furnished central 20m² apartment",price:"$~133 / month · VND 3,500,000",source:"Nhatot",url:"https://www.nhatot.com/thue-phong-tro-thanh-pho-da-lat-lam-dong/132775618.htm",availability:"Listing updated hours before research; exact unit and dates remain unknown.",imageRoles:["furnished room / balcony","central long-stay base"],images:["https://cdn.chotot.com/-VgNhr-OXwh-yOIBlt09W5ce-RVLnai2kCaGXKs7aGs/preset%3Aview/plain/d9a721fa2e2dc20963ce7fb48eb9f2d3-2996891780548173686.jpg","https://cdn.chotot.com/VTCnG1opXvPJwsWiS7dEYGa9oIF66NbvjCxF0zy2PVg/preset%3Aview/plain/2b94d314f0c60e0167289dca3e830784-2996891779913216541.jpg"]},
+        {budget:"$2K",status:"partial",title:"Nhatot furnished serviced apartment with street-front view",price:"$~171 / month · VND 4,500,000",source:"Nhatot",url:"https://www.nhatot.com/thue-phong-tro-thanh-pho-da-lat-lam-dong/130989655.htm",availability:"Listing updated 11 days before research; exact dates require contact.",imageRoles:["serviced apartment / kitchen and washer","street-front view / work base"],images:["https://cdn.chotot.com/YoXn9VSGa6PsVUVdTTqLrtRLdWQg_pvlmeEq9wNDhpQ/preset%3Aview/plain/88734ad73cfd0427e878d016858a66e9-2973929291663159511.jpg","https://cdn.chotot.com/dpYmSVA6-M2JaIQt5-Cg_5KCXn9OtY_joKF86uJKlp8/preset%3Aview/plain/2bbea6bfb504eb55bc7c5292e0b40e03-2973929291509925173.jpg"]}
+      ],
+      "boracay-philippines":[
+        {budget:"$2K",status:"partial",title:"The Fairway Frame BPMS high-floor 1BR",price:"$~690 / month · PHP 40,000",source:"BPMS Property",url:"https://www.bpmsproperty.com/properties/the-fairway-frame-modern-1br-w-pool-beach-access-38hj",availability:"Current For Rent listing; exact dates require Check Availability or contact.",imageRoles:["high-floor living / golf-course view","pool, gym, and beach-access amenity"],images:["https://www.bpmsproperty.com/_next/image?q=75&url=https%3A%2F%2Fiikhwxfzlwlfzuoowwvu.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproperty-images%2Flistings%2F88d675fb-ff13-4af8-bf60-15db4c354fd5.jpeg&w=1920","https://www.bpmsproperty.com/_next/image?q=75&url=https%3A%2F%2Fiikhwxfzlwlfzuoowwvu.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproperty-images%2Flistings%2F1088469f-982e-4ac0-a071-c84918a175f0.jpeg&w=1920"]},
+        {budget:"$2K",status:"partial",title:"BPMS Top Floor 1BR sunrise / sunset sea-view unit",price:"$~862 / month · PHP 50,000",source:"BPMS Property",url:"https://www.bpmsproperty.com/properties/top-floor-1-br-w-sunrise-and-sunset-sea-view-8dxs",availability:"Current For Rent listing; exact dates require Check Availability or contact.",imageRoles:["7th-floor furnished corner / ocean-golf view","sunrise-sunset balcony / pool and gym"],images:["https://www.bpmsproperty.com/_next/image?q=75&url=https%3A%2F%2Fiikhwxfzlwlfzuoowwvu.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproperty-images%2Flistings%2F758b0867-7330-469e-8e2d-df9245f21ffb.jpeg&w=1920","https://www.bpmsproperty.com/_next/image?q=75&url=https%3A%2F%2Fiikhwxfzlwlfzuoowwvu.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproperty-images%2Flistings%2Fbce3603b-f0b7-4601-b7b7-3e4bce36237a.jpeg&w=1920"]}
+      ],
+      "dumaguete-philippines":[
+        {budget:"$2K",status:"partial",title:"Dumaguete Springs City Apartments 1BR",price:"$~407 / month · PHP 23,600 plus utilities and internet",source:"Dumaguete Springs",url:"https://dumaguetesprings.com/apartments/",availability:"Page currently says 11 apartments available; exact 1BR/date requires inquiry.",imageRoles:["furnished 1BR / equipped kitchen","tenant pool and terrace amenity"],images:[]},
+        {budget:"$2K",status:"partial",title:"Marina Spatial 10th-floor condo with mountain view",price:"$~431 / month · PHP 25,000",source:"DotProperty",url:"https://www.dotproperty.com.ph/ads/2-bedroom-condo-for-rent-in-piapi-negros-oriental_ad07ffce5ee7-12bf-6b72-e22f-e01ab089",availability:"Live listing says move-in ready; viewing and exact date require confirmation.",imageRoles:["10th-floor living / mountain-west view","pool, gym, kitchen, and washer"],images:[]}
+      ],
+      "siargao-philippines":[
+        {budget:"$2K",status:"partial",title:"Communal Coliving private studio apartment",price:"$~1,034 / month · PHP 60,000 for 30 days / 29 nights",source:"Communal Coliving",url:"https://www.communalcoliving.com/spaces-rates",availability:"Current rate and booking/request option are shown; exact dates require inquiry.",imageRoles:["private studio / ergonomic desk","garden patio / coworking access"],images:["https://static.wixstatic.com/media/bc19ee_1e728053ba644c5186f7fe687c0ffd6e~mv2.jpg/v1/fill/w_980%2Ch_653%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/BECreatives_CommunalColiving-9.jpg","https://static.wixstatic.com/media/bc19ee_1ec4ab0b1e3243d8964348d4fd29f6c7~mv2.jpg/v1/fill/w_980%2Ch_653%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/BECreatives_CommunalColiving-11.jpg"]},
+        {budget:"$2K",status:"partial",title:"Northwave Asia furnished 1BR, General Luna",price:"$~603 / month · PHP 35,000",source:"Northwave Asia",url:"https://northwaveasia.com/property/nwa-092/",availability:"For Rent / move-in ready page; no dated calendar, so tour or agent confirmation is required.",imageRoles:["separate bedroom and living room","kitchenette / quiet neighborhood work base"],images:["https://northwaveasia.com/wp-content/uploads/2025/04/IMG_9302.jpg","https://northwaveasia.com/wp-content/uploads/2025/04/IMG_9303.jpg"]}
+      ],
+      "kuta-lombok":[
+        {budget:"$2K",status:"partial",title:"VIP Villas 1BR private-pool villa",price:"$~1,515 / month · IDR 25,000,000",source:"Villas in Lombok",url:"https://villasinlombok.com/",availability:"Real monthly price and gallery, but source availability/pricing is stale (Jan–Feb 2025); re-quote required.",imageRoles:["private-pool villa / enclosed living","kitchen and work desks"],images:[]},
+        {budget:"$3K",status:"partial",title:"VIP Villas 2BR private-pool villa",price:"$~1,939 / month · IDR 32,000,000",source:"Villas in Lombok",url:"https://villasinlombok.com/",availability:"Real monthly price and gallery, but source availability/pricing is stale (Jan–Feb 2025); re-quote required.",imageRoles:["2BR villa / enclosed kitchen and living","private pool / furnished base"],images:[]}
+      ],
+      "baguio-philippines":[
+        {budget:"$2K",status:"partial",title:"Baguio Vacation Apartments 2BR long-term unit",price:"$~431 / month · PHP 25,000",source:"Baguio Vacation Apartments",url:"https://www.findglocal.com/PH/Baguio-City/1577719832476783/Baguio-Vacation-Apartments",availability:"2026-dated long-term price post; specific unit and date require contact.",imageRoles:["furnished apartment / balcony","mountain-pine view"],images:["https://img5.findglocal.com/968/340/993369859683401.jpg","https://img5.findglocal.com/635/007/993369766350077.jpg"]},
+        {budget:"$2K",status:"partial",title:"iMessiah Megatower studio with balcony",price:"$~517 / month · PHP 30,000 for two persons",source:"iMessiah Properties",url:"https://bacunotjoel.wixsite.com/imessiahproperties/room-monthly-rental",availability:"Exact price is exposed; unit availability and one-year contract fit need confirmation.",imageRoles:["Megatower studio / room","balcony and city access"],images:["https://static.wixstatic.com/media/4b84d1_03209a96a6e54fba814badb2aee88888~mv2.jpg/v1/fill/w_720%2Ch_405%2Cal_c%2Cq_80%2Cenc_avif%2Cquality_auto/4b84d1_03209a96a6e54fba814badb2aee88888~mv2.jpg"]}
+      ],
+      "phu-quoc-vietnam":[
+        {budget:"$2K",status:"partial",title:"Sabrina Homestay long-term studio with pool",price:"$350 / month",source:"Sabrina Homestay",url:"https://sabrina-homestay-phu-quoc.com/pricing",availability:"Live monthly pricing page; exact dates require direct WhatsApp quote.",imageRoles:["40m² studio / kitchen and desk","pool and laundry amenity"],images:[]},
+        {budget:"$2K",status:"partial",title:"Phu Quoc Apartment 1BR with balcony",price:"$450 / month low season or $600 high season; $400/$550 at 3 months",source:"Phu Quoc Apartment",url:"https://phuquoc-apartment.com/en/apartments/1-bedroom",availability:"Live seasonal monthly rates; specific unit inventory requires a quote.",imageRoles:["1BR living / full kitchen and desk","balcony / island view"],images:["https://phuquoc-apartment.com/img/apartments/1-bedroom/1bed-main.webp","https://phuquoc-apartment.com/img/apartments/1-bedroom/1bed-balcony.webp"]}
+      ],
+      "siquijor-philippines":[
+        {budget:"$2K",status:"partial",title:"Beachfront House Siquijor, Larena",price:"$~328 / month · PHP 19,000",source:"FazWaz",url:"https://www.fazwaz.ph/property-rent/1-bedroom-house-for-rent-in-larena-central-visayas-u5624916",availability:"Listing updated about three weeks before research; Available From is N/A, so vacancy is unknown. The listing gallery is linked; a stable real Siquijor beachfront reference is shown when the platform thumbnail is too small.",imageRoles:["furnished 1BR / sea-garden terrace","beachfront view"],images:[]},
+        {budget:"$2K",status:"partial",title:"Callachuchi rooftop-view bungalow",price:"$~1,448 arithmetic for 30 nights · PHP 2,800/night; no monthly discount published",source:"Callachuchi",url:"https://callachuchi.com/",availability:"Booking link exists but selected-date inventory is not exposed; the 30-night figure is arithmetic, not a quoted monthly rate.",imageRoles:["bungalow / rooftop sunrise-sunset view","pool and rock-beach setting"],images:["https://assets.zyrosite.com/cdn-cgi/image/format%3Dauto%2Cw%3D768%2Ch%3D419%2Cfit%3Dcrop/Y4LVXnV3BOhBDgaK/d18651fe-662c-471d-9072-76cc544d701e-ALpngjg03nUenO1Z.jpeg","https://assets.zyrosite.com/cdn-cgi/image/format%3Dauto%2Cw%3D768%2Ch%3D761%2Cfit%3Dcrop/Y4LVXnV3BOhBDgaK/20240204_175129-d95KnlpegpuqOL3x.jpg"]}
+      ],
+      "valencia-philippines":[
+        {budget:"$2K",status:"partial",title:"Hassaram Residences furnished mountain-setting 3BR",price:"$~690 / month · PHP 40,000 plus utilities",source:"Hassaram Properties",url:"https://www.hassaramproperties.com/",availability:"Official site advertises short/long-term lease and available units, but unit-specific vacancy is unconfirmed; six-month minimum and PHP 10,000 reservation fee apply.",imageRoles:["furnished living / mountain setting","bedroom / house exterior reference"],images:["https://images.squarespace-cdn.com/content/v1/56b9fb5ee707eb34c51c2190/1455349475944-4DNFHYVWV1V811M41LS6/DSC_0254.JPG","https://images.squarespace-cdn.com/content/v1/56b9fb5ee707eb34c51c2190/1455349744299-RJWC1DODBPZ2WKYOIENK/DSC_0143.jpg"]},
+        {budget:"$2K",status:"partial",title:"Newly Built 2BR House for Rent, Luzurriaga",price:"$~569 / month · PHP 33,000",source:"OnePropertee listing + matching listing video",url:"https://onepropertee.com/newly-built-2bedroom-house-rent-valencia-property",availability:"Listing is marked in demand and updated recently; owner confirmation is required. The source states a 12-month minimum, one month advance, and two months deposit. The photo is the listing’s own video thumbnail; open the source for the complete photo set and viewing details.",imageRoles:["2BR house / listing video exterior reference"],images:["https://i.ytimg.com/vi/w5C_t26Me9I/sddefault.jpg"]}
+      ]
+    };
+    const foodOptionsBySlug = {
+      "florianopolis-brazil":[
+        {status:"verified",title:"Rosso Cozinha do Mar — Polvo à Rosso",price:"$~53 · BRL 289 · serves 2",source:"Rosso Cozinha do Mar official menu",url:"https://rossorestaurante.com.br/",availability:"Official menu lists the current dish and the portion serves two; venue photo gallery is linked from the same source.",imageRoles:["Polvo à Rosso / plated dish"],images:["https://rossorestaurante.com.br/img/polvo-rosso-2.jpg"]},
+        {status:"partial",title:"Berlin Floripa — Risoto de Camarões",price:"$~18 · BRL 98",source:"Berlin Floripa official menu",url:"https://berlinfloripa.com.br/b/gastronomia-cardapio/",availability:"Official menu lists the dish and price; direct food/interior image endpoints were not stable during research, so the card uses a real source reference when needed.",imageRoles:["shrimp risotto / dish close-up","Berlin Floripa restaurant environment"],images:[]}
+      ],
+      "santiago-chile":[
+        {status:"partial",title:"Peumayén — Camarón al chascu",price:"$~16 · CLP 15,900",source:"Peumayén official menu",url:"https://api.peumayenchile.cl/media/archivos/MENU_PEUMAYEN_ES.pdf",availability:"Official menu price is current; the source publishes a food/interior gallery but not a clean direct image of this exact plate.",imageRoles:["ancestral Chilean food / dish reference","Peumayén dining room"],images:[]},
+        {status:"partial",title:"Donde La Mami — Lomo a lo pobre de la Mami",price:"$~9 · CLP 8,900",source:"Donde La Mami official menu",url:"https://www.dondelamami.cl/",availability:"Official site exposes the current menu item and price; direct role-specific photo endpoint was not exposed.",imageRoles:["lomo a lo pobre / dish reference","neighborhood restaurant interior"],images:[]}
+      ],
+      "bangkok-thailand":[
+        {status:"partial",title:"Supanniga Eating Room Thonglor — Gaeng Massaman Gai",price:"$~8.40 · THB 280 before 10% service and 7% VAT",source:"Supanniga official menu",url:"https://supannigaeatingroom.com/SER_menu.pdf",availability:"Official menu is current; the available direct photo is a named restaurant interior reference rather than a captioned image of this exact curry.",imageRoles:["Supanniga dining environment","Gaeng Massaman Gai / menu dish reference"],images:["https://luywhuerompyghkjskay.supabase.co/storage/v1/object/public/place-images/places/45a81894-2147-43cf-bc72-0f1268af77a9/google/3d6a31b6-83b9-4e09-8fac-e8d3c87be5da.jpg"]},
+        {status:"partial",title:"sala rattanakosin — Pad Thai Goong Mae Nam",price:"$~57 · THB 1,895 before 10% service and 7% VAT",source:"sala rattanakosin official June 2026 dinner menu",url:"https://www.salahospitality.com/rattanakosin-bangkok/wp-content/uploads/sites/4/2026/06/SRK-DINNER-MENU-JUNE_compressed.pdf",availability:"Menu is dated June 2026; direct photos show the real river-view venue, while the exact dish photo is not published.",imageRoles:["Wat Arun river-view restaurant","sala rattanakosin dining environment"],images:["https://www.pelago.com/img/products/TH-Thailand/bangkok-sala-rattanakosin-restaurant-lunch-dinner-wat-arun-view/b932eaf2-23bb-42e7-a1be-1955887c8c40_bangkok-sala-rattanakosin-restaurant-lunch-dinner-wat-arun-view.jpg","https://www.pelago.com/img/products/TH-Thailand/bangkok-sala-rattanakosin-restaurant-lunch-dinner-wat-arun-view/6f70d6e4-a58b-48ff-ada4-26d268d8d5c4_bangkok-sala-rattanakosin-restaurant-lunch-dinner-wat-arun-view.jpg"]}
+      ],
+      "mexico-city-mexico":[
+        {status:"verified",title:"Contramar — Ceviche Contramar, 140g",price:"$~19.50 · MXN 365 incl. 16% IVA",source:"Contramar official menu",url:"https://contramar.com.mx/",availability:"Official menu and Roma Norte address are current; price includes IVA.",imageRoles:["Contramar ceviche / dish close-up"],images:["https://roadbook.com/wp-content/uploads/2022/07/Ceviche-Contramar-Cortesia-de-Contramar-%C2%A9%EF%B8%8F-1366x2048.jpg"]},
+        {status:"verified",title:"Tacos Los Alexis Roma Norte — Costra Especial",price:"$~4.40 · MXN 82",source:"Tacos Los Alexis official menu",url:"https://www.tacoslosalexis.com/roma-norte",availability:"Official Roma Norte menu and branch page expose the current item and price.",imageRoles:["Costra Especial / taco dish close-up"],images:["https://img.chilango.com/2024/08/tacos-los-alexis-cmdx-8-683x1024.jpg"]}
+      ],
+      "buenos-aires-argentina":[
+        {status:"partial",title:"La Estancia — Bife de Chorizo Mariposa",price:"$~38 · ARS 55,000",source:"La Estancia official menu",url:"https://laestancia.shop/menu",availability:"Official current menu exposes the item and price; source gallery has food and venue photos but no stable direct role-specific image.",imageRoles:["bife de chorizo / dish reference","Buenos Aires parrilla environment"],images:[]},
+        {status:"partial",title:"Alma Gaucha Parrilla — Ojo de Bife",price:"$~24.50 · ARS 35,500",source:"Alma Gaucha Parrilla official menu",url:"https://almagauchaparrilla.com.ar/",availability:"Official page exposes the item and price; direct dish image endpoint was not exposed.",imageRoles:["ojo de bife / dish reference","parrilla dining environment"],images:[]}
+      ],
+      "tbilisi-georgia":[
+        {status:"partial",title:"Unfound Restaurant — beef tenderloin with potato gratin",price:"$~21 · GEL 57",source:"Unfound official menu",url:"https://restaurant.unfounddoor.ge/",availability:"Official menu and address are current; gallery photo roles are not separately captioned for this dish.",imageRoles:["beef tenderloin / dish reference","Unfound dining room"],images:[]},
+        {status:"partial",title:"St.Bunny — trout with fresh green mix",price:"$~15.60 · GEL 42",source:"St.Bunny official menu",url:"https://www.famoustbilisi.com/menu",availability:"Official menu page exposes current item and price; direct dish endpoint was not exposed.",imageRoles:["trout plate / dish reference","St.Bunny restaurant environment"],images:[]}
+      ],
+      "bariloche-argentina":[
+        {status:"partial",title:"Dèjá Vu — grilled trout with carrot purée",price:"$~24 · ARS 35,000",source:"Dèjá Vu Bariloche official menu",url:"https://dejavubariloche.com.ar/menu/",availability:"Official hotel menu exposes the current dish and price; direct plated image was not exposed.",imageRoles:["grilled trout / dish reference","lake-area hotel dining"],images:[]},
+        {status:"partial",title:"El Patacon — Tomahawk Hereford",price:"$~90 · ARS 130,000",source:"El Patacon official menu",url:"https://cartaes.patacon.ar/",availability:"Official menu exposes current featured dish and price; source gallery is linked but direct dish endpoint was not extracted.",imageRoles:["Tomahawk Hereford / steak reference","Bustillo restaurant environment"],images:[]}
+      ],
+      "mendoza-argentina":[
+        {status:"partial",title:"La Cabrera Mendoza — Bife de Chorizo 400g",price:"$~45 · ARS 65,000",source:"La Cabrera Mendoza official 2026 menu",url:"https://lacabreramendoza.ar/wp-content/uploads/2026/05/La-Cabrera-2026.pdf",availability:"Official 2026 menu lists the current steak price; venue gallery is linked, but a clean direct dish image was not exposed.",imageRoles:["400g bife de chorizo / dish reference","Hualta Winery Hotel restaurant"],images:[]},
+        {status:"partial",title:"ÑAM Gourmet — Clásica burger with fries",price:"$~7.50 · ARS 10,900",source:"ÑAM Gourmet official menu",url:"https://nam-gourmet.com/carta/",availability:"Official menu has the item and price; the site says branch prices should be reconfirmed.",imageRoles:["classic burger / food close-up","ÑAM neighborhood interior"],images:[]}
+      ],
+      "krabi-thailand":[
+        {status:"partial",title:"Govinda’s Ao Nang — Masala Dosa",price:"$~6 · THB 200",source:"Govinda’s Ao Nang official menu",url:"https://www.govindasaonang.com/menu-1",availability:"Official menu clearly exposes the current dish and price; source gallery is supplied instead of inventing a direct plate match.",imageRoles:["masala dosa / dish reference","Ao Nang restaurant environment"],images:[]},
+        {status:"verified",title:"Risky Business Restaurant — fish and chips",price:"$~9.50 · THB 320",source:"Risky Business official menu",url:"https://riskybusinessaonang.com/",availability:"Official site exposes the current menu item and price, and the dish photo is a direct source image.",imageRoles:["fish and chips / dish close-up"],images:["https://riskybusinessaonang.com/images/fish-chips.jpg"]}
+      ],
+      "canggu-bali":[
+        {status:"verified",title:"Kasto Bali — Margherita vegan pizza",price:"$~6 · IDR 99,000 before 17% tax/service",source:"Kasto Bali official menu",url:"https://www.kastobali.com/",availability:"Official current menu exposes the item and price; direct dish image is supplied.",imageRoles:["Margherita vegan pizza / dish close-up"],images:["https://www.kastobali.com/images/uploads/kasto-margherita.webp"]},
+        {status:"partial",title:"Bokashi Berawa — tuna poke bowl",price:"$~7 · IDR 115,000 before 7% service and 10% tax",source:"Bokashi Berawa official menu",url:"https://bokashibali.com/berawa-menu/",availability:"Official menu exposes current item and price; venue gallery is linked but direct dish endpoint was not exposed.",imageRoles:["tuna poke bowl / dish reference","Bokashi Berawa café environment"],images:[]}
+      ],
+      "siem-reap-cambodia":[
+        {status:"partial",title:"Kroya by Chef Chanrith — Khmer green curry",price:"$10 before 10% service and 10% VAT",source:"Kroya official menu",url:"https://kroya.restaurant/our-menu",availability:"Official menu exposes current dish and price; source gallery is linked but direct dish endpoint was not exposed.",imageRoles:["Khmer green curry / dish reference","Kroya dining room"],images:[]},
+        {status:"verified",title:"Sambo Siem Reap — traditional fish amok",price:"$5.50 · USD menu price",source:"Sambo official menu",url:"https://sambosiemreap.com/food-drink/",availability:"Official menu exposes current USD price and the real Wat Damnak address; direct fish-amok photo is supplied.",imageRoles:["traditional fish amok / dish close-up"],images:["https://sambosiemreap.com/wp-content/uploads/2026/01/Fish-Amok.jpg"]}
+      ],
+      "uluwatu-bali":[
+        {status:"partial",title:"Double Ikat Renaissance Bali Uluwatu — Ikan Bakar Jimbaran",price:"$~16 · IDR 265,000 before 21% tax/service",source:"Double Ikat official menu",url:"https://www.doubleikatrestaurant.com/our-menus",availability:"Official menu exposes current dish price; venue gallery is linked but direct exact-plate image is not exposed.",imageRoles:["grilled snapper / dish reference","Renaissance Bali Uluwatu dining environment"],images:[]},
+        {status:"verified",title:"The Loft Uluwatu — Brazilian açaí bowl",price:"$~9.70 · IDR 160,000 before 7% service and 10.7% government tax",source:"The Loft Bali official breakfast menu",url:"https://www.theloft-bali.com/breakfast",availability:"Official current menu exposes item and price; direct venue/food image is supplied.",imageRoles:["Brazilian açaí bowl / dish close-up"],images:["https://cdn.sanity.io/images/ztiuewcj/production/89c5264ab63e213b1d7a112de274dba0dbbf7f4d-4128x5160.jpg?w=700&q=80&auto=format"]}
+      ],
+      "da-lat-vietnam":[
+        {status:"partial",title:"Taste Eatery — Mỳ Tagliatelle cua",price:"$~10.50 · VND 275,000 before 10% VAT and 5% service",source:"Taste Eatery official menu",url:"https://www.tasteeatery.vn/",availability:"Official menu and address are current; direct images show food/menu and the interior, but the exact plated match is not separately captioned.",imageRoles:["Tagliatelle cua / dish close-up","Taste Eatery interior"],images:["https://www.tasteeatery.vn/images/menu-preview.jpg","https://www.tasteeatery.vn/images/about-interior.jpg"]},
+        {status:"verified",title:"Chefs Dalat — Spaghetti Carbonara",price:"$~7.40 · VND 195,000",source:"Chefs Dalat official menu",url:"https://chefsdalat.com/menu-en/",availability:"Official current menu exposes the item and price; direct food and restaurant images are supplied.",imageRoles:["Spaghetti Carbonara / dish close-up","Chefs Dalat restaurant environment"],images:["https://i0.wp.com/chefsdalat.com/wp-content/uploads/2025/02/Hi-Van1750-scaled.jpg?fit=2560%2C2099&ssl=1","https://i0.wp.com/chefsdalat.com/wp-content/uploads/2025/08/best-dalat-restaurant.webp?fit=696%2C1024&ssl=1"]}
+      ],
+      "boracay-philippines":[
+        {status:"partial",title:"Sirena Seafood Restaurant — grilled tuna steak",price:"$~35.30 · PHP 2,050 before 10% service and 2.2% local tax",source:"Shangri-La Boracay official May 2026 menu",url:"https://www.shangri-la.com/-/media/Shangri-La/boracay_boracayresort/dining/restaurants/sirena/Sirena-Menu-May-2026.pdf",availability:"Menu is dated May 16, 2026; official venue gallery is supplied because an exact tuna image is not published.",imageRoles:["clifftop seafood restaurant environment","Sirena sea-view dining"],images:["https://cdn.tatlerasia.com/tatlerasia/i/2025/03/16072606-sirena-seafood-restaurant-and-clifftop-bar-tatler-best-2025_cover_1593x1195.jpg"]},
+        {status:"partial",title:"Eden Bar & Restaurant — twice-cooked chicken pork adobo",price:"$~6.90 · PHP 400",source:"Boracay Haven official July 2026 menu",url:"https://boracayhaven-resort.com/wp-content/uploads/sites/2/2026/07/Eden-Menu-2026-reduced.pdf",availability:"Official July 2026 menu exposes the current item and price; supplied images show the real resort dining environment rather than claiming an exact adobo plate.",imageRoles:["Eden restaurant environment","Boracay Haven dining room"],images:["https://boracayhaven-resort.com/wp-content/uploads/sites/2/2024/01/Boracay-Haven-Resort-Photos07.jpg","https://boracayhaven-resort.com/wp-content/uploads/sites/2/2024/01/Boracay-Haven-Resort-Photos08.jpg"]}
+      ],
+      "dumaguete-philippines":[
+        {status:"verified",title:"Bakugo Ramen — Red Dragon Ramen",price:"$~6.40 · PHP 370",source:"Bakugo Ramen official menu",url:"https://bakugoramen.com/menu",availability:"Official current menu and Hibbard Avenue address are live; direct dish image is supplied.",imageRoles:["Red Dragon Ramen / dish close-up"],images:["https://bakugoramen.com/_next/image?dpl=dpl_5bk8XvvkZrHo7MWcqSryUTnnTvZE&q=75&url=%2Fimages%2Fred-dragon-hero.jpg&w=3840"]},
+        {status:"partial",title:"Sans Rival Bistro — Ube Silvanas",price:"$~4.80 · PHP 280",source:"Sans Rival Bistro official menu",url:"https://sansrivalbistro.shop/menu",availability:"Official current menu exposes the item and price; gallery photos are real but not separately captioned as the exact Silvanas.",imageRoles:["Ube Silvanas / dessert reference","Sans Rival Bistro environment"],images:["https://sansrivalbistro.shop/public/media/sansrivalbistro-shop/photo-1.jpg","https://sansrivalbistro.shop/public/media/sansrivalbistro-shop/photo-2.jpg"]}
+      ],
+      "siargao-philippines":[
+        {status:"verified",title:"NĀGA Siargao — Gambas Al Ajillo",price:"$~10.20 · PHP 590",source:"NĀGA official menu",url:"https://www.nagaconcepts.co/menus",availability:"Official current menu and General Luna address are live; direct food and venue images are supplied.",imageRoles:["Gambas Al Ajillo / dish close-up","NĀGA restaurant environment"],images:["https://static.wixstatic.com/media/c32b63_2663afeb365b45819182f163b8f4a4ad~mv2.jpg/v1/fill/w_482%2Ch_603%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/c32b63_2663afeb365b45819182f163b8f4a4ad~mv2.jpg","https://static.wixstatic.com/media/c32b63_f1ec3d599ee54f04bff47b8bed3c2388~mv2.jpg/v1/fill/w_980%2Ch_653%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/c32b63_f1ec3d599ee54f04bff47b8bed3c2388~mv2.jpg"]},
+        {status:"partial",title:"The Ohm Café & Bistro — 6-inch naan pizza",price:"$~6.60 · PHP 380",source:"The Ohm Café current menu listing",url:"https://www.tripadvisor.com.au/Restaurant_Review-g2048776-d27743139-Reviews-The_Ohm_Cafe_Bistro-General_Luna_Siargao_Island_Surigao_del_Norte_Province_Mind.html",availability:"Current claimed menu and venue source; direct CDN was throttled, so images are presented as real interior/venue references.",imageRoles:["The Ohm café interior","The Ohm resort dining environment"],images:["https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2d/47/3a/6a/all-natural-interiors.jpg?h=500&s=1&w=900","https://dynamic-media-cdn.tripadvisor.com/media/photo-o/31/7d/3a/b7/caption.jpg?h=1100&s=1&w=1100"]}
+      ],
+      "kuta-lombok":[
+        {status:"partial",title:"Honey Jack — smoked salmon bagel",price:"$~7.90 · IDR 130,000",source:"Honey Jack official menu",url:"https://honeyjacklombok.com/menus/food/",availability:"Official live menu exposes the current dish and price; gallery is linked but direct image was not exposed.",imageRoles:["smoked salmon bagel / dish reference","Honey Jack café environment"],images:[]},
+        {status:"partial",title:"The Spot — Mediterranean salad with pulled chicken",price:"$~6.40 · IDR 105,000",source:"The Spot Lombok official menu",url:"https://thespotlombok.com/food",availability:"Official live menu exposes the item and price; source page provides food and venue gallery.",imageRoles:["Mediterranean salad / dish reference","The Spot restaurant environment"],images:[]}
+      ],
+      "baguio-philippines":[
+        {status:"partial",title:"Gray Area Resto — Crispy Kare-Kare",price:"$~6.90 regular / $~5.50 promo · PHP 398 / 318.40",source:"Foodpanda live menu",url:"https://www.foodpanda.ph/restaurant/qg48/gray-area-resto-upper-east-camp-7",availability:"Live delivery menu exposes the item and price; the only direct thumbnail is too small, so a real local food reference is used instead of enlarging it.",imageRoles:["Crispy Kare-Kare / dish reference","Gray Area Resto venue source"],images:[]},
+        {status:"partial",title:"Bruno’s Restaurant — Batil Patong",price:"$~3.90 regular / $~3.10 promo · PHP 225 / 180",source:"Foodpanda live menu",url:"https://www.foodpanda.ph/restaurant/e8c9/brunos-restaurant-leonila-hill",availability:"Live delivery menu exposes the item and price; the direct thumbnail is too small for a clear slide, so the card stays visibly partial.",imageRoles:["Batil Patong / dish reference","Bruno’s restaurant source"],images:[]}
+      ],
+      "phu-quoc-vietnam":[
+        {status:"partial",title:"Mango Bay On The Rock — crispy Phu Quoc squid",price:"$~8 · VND 210,000, prices inclusive",source:"Mango Bay official 2026 menu",url:"https://mangobayphuquoc.com/wp-content/uploads/2026/05/ENG-MOBILE-5.5.pdf",availability:"Official 2026 menu exposes the current item and price; official dining gallery is linked but direct dish image was not exposed.",imageRoles:["crispy Phu Quoc squid / dish reference","Mango Bay beachfront dining"],images:[]},
+        {status:"verified",title:"Lisa Coffee & Dimsum — special shrimp dumplings",price:"$~2.30 · VND 60,000",source:"Lisa Phu Quoc official menu",url:"https://lisaphuquoc.com/Product",availability:"Official menu exposes item, price, location, and direct food and kitchen images.",imageRoles:["special shrimp dumplings / dish close-up","Lisa Coffee & Dimsum kitchen / venue"],images:["https://lisaphuquoc.com/assets/menu/1771488211_7527fbf2.png","https://lisaphuquoc.com/assets/kitchen.jpg"]}
+      ],
+      "siquijor-philippines":[
+        {status:"partial",title:"Tahanan Resort — fish kinilaw",price:"$~6.70 · PHP 390",source:"Tahanan Resort official dining menu",url:"https://tahananresort.com/dining/",availability:"Official menu exposes current dish and price; resort/gallery photos are real but not a clean exact-plate match.",imageRoles:["fish kinilaw / dish reference","Tahanan beachfront dining"],images:[]},
+        {status:"partial",title:"Warung Balay — Island Noodle Bowl",price:"$~3.80 · PHP 220",source:"Warung Balay official menu and gallery",url:"https://warungbalay.com/",availability:"Official venue site exposes dish, price, and food/venue imagery; exact photo role is not separately captioned.",imageRoles:["island noodle bowl / dish reference","Paliton Beach restaurant environment"],images:[]}
+      ],
+      "valencia-philippines":[
+        {status:"partial",title:"Spicy Food House — Beef Broccoli with Rice",price:"$~6.80 · PHP 395",source:"Spicy Food House official menu",url:"https://spicyfoodhouse.com/product-category/menu/cuisines/filipino/",availability:"Official menu lists the current price and Valencia address; dish stock can change. The exact Beef Broccoli photo was not exposed as a stable direct asset, so the slide uses an explicitly labeled official Filipino-menu reference rather than mismatched chicken or seafood photos.",imageRoles:["Spicy Food House / official Filipino-menu reference"],images:["https://spicyfoodhouse.com/wp-content/uploads/2026/03/Filipino-Category.webp"],mediaReferenceOnly:true,mediaReferenceSource:"Spicy Food House official Filipino menu",mediaReferenceUrl:"https://spicyfoodhouse.com/product-category/menu/cuisines/filipino/",mediaNote:"Real image from the named restaurant’s official Filipino menu page; it is a menu-category reference, not the exact priced Beef Broccoli plate."},
+        {status:"verified",title:"The Bistro at TM Fitness Hub — Chicken Adobo with Rice",price:"$~3.60 · PHP 210",source:"TM Fitness Hub Bistro official menu",url:"https://tmfitnesshub.com/bistro/",availability:"Official page lists current menu, Valencia address, and walk-in hours; menu warns items and prices can change.",imageRoles:["Bistro menu / Chicken Adobo and chili photo","TM Fitness Hub Bistro interior"],images:["https://tmfitnesshub.com/assets/images/bistro/menu/bistro-menu-adobo-chili-con-carne-tm-fitness-hub-valencia-negros-oriental-768w.webp","https://tmfitnesshub.com/assets/images/bistro/bistro-tm-fitness-hub-valencia-negros-oriental-1024w.webp"]}
+      ]
+    };
+    const optionKey = (option) => String(option && (option.url || option.title || "")).trim().toLowerCase();
+    const uniqueOptions = (options) => {
+      const seen = new Set();
+      return options.filter((option) => {
+        const key = optionKey(option);
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
+    const optionWithFallbackMedia = (location, kind, option) => {
+      const direct = Array.isArray(option && option.images) ? option.images.filter(Boolean) : [];
+      if (direct.length) return option;
+      const fallback = mediaEvidenceFor(location, kind, evidenceFor(location, kind));
+      const fallbackImages = Array.isArray(fallback.images) ? fallback.images.filter(Boolean) : [];
+      if (!fallbackImages.length) return option;
+      return {
+        ...option,
+        images:fallbackImages.slice(0, 2),
+        imageRoles:Array.isArray(fallback.imageRoles) && fallback.imageRoles.length ? fallback.imageRoles.slice(0, 2) : [kind + " reference image"],
+        mediaReferenceOnly:true,
+        mediaReferenceSource:fallback.mediaReferenceSource || (fallback.source || "primary source photo reference"),
+        mediaReferenceUrl:fallback.mediaReferenceUrl || fallback.url || "",
+        mediaNote:"Real location/source photo reference from the primary lead; it is not claimed as an exact photo of this alternate option. Open the listing/menu gallery for the option’s own images."
+      };
+    };
+    const housingHasMonthlyQuote = (option) => {
+      const label = String(option && option.price || "");
+      if (!label || /NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(label)) return false;
+      if (/\b(?:weekly|week|daily|per day|day pass|nightly|per night)\b/i.test(label)) return false;
+      const shortStay = label.match(/\b(\d+)\s*[-/]?\s*(?:night|nights|day|days)\b/i);
+      return !(shortStay && Number(shortStay[1]) <= 7);
+    };
+    const housingOptionsFor = (location) => {
+      const explicit = Array.isArray(housingOptionsBySlug[location.slug]) ? housingOptionsBySlug[location.slug] : [];
+      const alternatives = Array.isArray(housingAlternativesBySlug[location.slug]) ? housingAlternativesBySlug[location.slug] : [];
+      const primary = explicit.length ? [] : [evidenceFor(location, "stay")];
+      const candidates = uniqueOptions(primary.concat(explicit, alternatives));
+      const quotedMonthly = candidates.filter(housingHasMonthlyQuote);
+      const selected = alternatives.length && quotedMonthly.length ? quotedMonthly : candidates;
+      return selected.map((option) => optionWithFallbackMedia(location, "stay", option));
+    };
+    const foodOptionsFor = (location) => {
+      const primary = [evidenceFor(location, "food")];
+      const alternatives = Array.isArray(foodOptionsBySlug[location.slug]) ? foodOptionsBySlug[location.slug] : [];
+      return uniqueOptions(primary.concat(alternatives)).map((option) => optionWithFallbackMedia(location, "food", option));
+    };
+    const optionImageCount = (location, kind, option) => {
+      const evidence = mediaEvidenceFor(location, kind, option);
+      return new Set(Array.isArray(evidence.images) ? evidence.images.filter(Boolean) : []).size;
+    };
+    const foodImagesPerOption = (location) => {
+      const options = foodOptionsFor(location);
+      return options.length ? Math.max(1, ...options.map((option) => optionImageCount(location, "food", option))) : 0;
+    };
+    const foodOptionFor = (location, index) => {
+      return optionAtIndex(location, "food", index).option;
+    };
+    const optionAtIndex = (location, kind, index) => {
+      const options = kind === "stay" ? housingOptionsFor(location) : foodOptionsFor(location);
+      if (!options.length) return {option:evidenceFor(location, kind), mediaIndex:Number(index || 0)};
+      let cursor = 0;
+      const requested = Math.max(0, Number(index || 0));
+      for (const option of options) {
+        const count = Math.max(1, optionImageCount(location, kind, option));
+        if (requested < cursor + count) return {option, mediaIndex:requested - cursor};
+        cursor += count;
+      }
+      const last = options[options.length - 1];
+      return {option:last, mediaIndex:Math.max(0, optionImageCount(location, kind, last) - 1)};
+    };
     const evidenceHasPrice = (evidence) => Boolean(evidence && evidence.status === "verified" && evidence.price && !/NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(evidence.price));
     const evidenceHasAnyPrice = (evidence) => Boolean(evidence && evidence.price && !/NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(evidence.price));
-    const evidenceStatus = (evidence) => evidence.mediaReferenceOnly ? "REAL LOCATION REFERENCE" : evidence.mediaQualityIssue ? "IMAGE QUALITY CHECK REQUIRED" : evidence.status === "verified" ? "LIVE SOURCE VERIFIED" : evidence.status === "partial" ? "PARTIAL — RECHECK" : "SOURCE CHECK REQUIRED";
+    const evidenceStatus = (evidence) => evidence.mediaReferenceOnly ? "REAL LOCATION REFERENCE" : evidence.mediaQualityIssue ? "IMAGE QUALITY CHECK REQUIRED" : evidence.status === "verified" ? "SOURCE + PRICE + IMAGE VERIFIED" : evidence.status === "partial" ? "PARTIAL — RECHECK" : "SOURCE CHECK REQUIRED";
     const evidenceClass = (evidence) => evidence.mediaQualityIssue || evidence.status !== "verified" ? "needs-check" : "verified";
     const evidencePriceLabel = (evidence, noun) => (evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ") + noun;
-    const usdAmounts = (value) => [...String(value || "").matchAll(/\$([0-9][0-9,]*(?:\.[0-9]+)?)/g)].map((match) => Number(match[1].replace(/,/g, ""))).filter((amount) => Number.isFinite(amount) && amount > 0);
+    const usdAmounts = (value) => [...String(value || "").matchAll(/(?:US)?\$\s*~?\s*([0-9][0-9,]*(?:\.[0-9]+)?)/g)].map((match) => Number(match[1].replace(/,/g, ""))).filter((amount) => Number.isFinite(amount) && amount > 0);
+    const monthlyHousingAmounts = (value) => {
+      const label = String(value || "");
+      const monthly = [...label.matchAll(/(?:US)?\$\s*~?\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*(?=\/\s*(?:month|30\s*nights)|\bmonthly\b|\bmonth\b)/gi)].map((match) => Number(match[1].replace(/,/g, ""))).filter((amount) => Number.isFinite(amount) && amount > 0);
+      if (monthly.length) return monthly;
+      if (/\b(?:per|each|a)\s*night\b|\/\s*nights?\b|\bnightly\b/i.test(label) && !/30\s*nights?/i.test(label)) return [];
+      return usdAmounts(label);
+    };
     const usdAmount = (value) => usdAmounts(value)[0] || 0;
     const housingPriceForBudget = (evidence, total) => {
       const label = String(evidence && evidence.price || "");
       const shortStay = label.match(/\b(\d+)\s*(?:night|nights|day|days)\b/i);
       if (!evidence || /NOT VERIFIED|NOT EXPOSED|PRICE NOT/i.test(label) || /\b(?:weekly|week|per day|day pass)\b/i.test(label) || (shortStay && Number(shortStay[1]) <= 7)) return 0;
-      const amounts = usdAmounts(label);
+      const amounts = monthlyHousingAmounts(label);
       if (!amounts.length) return 0;
       const maximum = Math.max(...amounts);
       return maximum <= total ? maximum : 0;
     };
     const formatUsd = (value) => "$" + Math.round(value).toLocaleString();
     const housingPriceValues = (location) => {
-      const sourcedPrices = (housingOptionsBySlug[location.slug] || []).flatMap((option) => usdAmounts(option.price));
-      const evidencePrices = usdAmounts(evidenceFor(location, "stay").price);
+      const sourcedPrices = housingOptionsFor(location).flatMap((option) => monthlyHousingAmounts(option.price));
+      const evidencePrices = monthlyHousingAmounts(evidenceFor(location, "stay").price);
       const planningPrices = Array.isArray(location.rent) ? location.rent.map(Number).filter((value) => Number.isFinite(value) && value > 0) : [];
       const values = sourcedPrices.length ? sourcedPrices : evidencePrices.length ? evidencePrices : planningPrices;
       if (!values.length) return {min:null, max:null, source:"unpriced"};
@@ -1751,41 +2014,43 @@
       const statusText = evidenceStatus(evidence);
       const statusType = evidenceClass(evidence);
       const role = label || mediaRoleFor(location, kind, evidence, index);
-      const alt = (evidence.title || location.name) + " — " + role;
+      const displayRole = evidence.mediaReferenceOnly ? "REFERENCE IMAGE ONLY · " + role : role;
+      const alt = (evidence.title || location.name) + " — " + displayRole;
       const imageSource = evidence.mediaReferenceOnly ? (evidence.mediaReferenceSource || "real location reference") : (evidence.source || "the linked source");
-      const caption = (evidence.title || location.name) + " — " + role;
+      const caption = (evidence.title || location.name) + " — " + displayRole;
       const emptyMarkup = (reason, detail) => '<figure class="photo-card"><div class="evidence-empty" data-photo-kind="' + kind + '" data-photo-role="' + escapeHtml(role) + '" data-evidence="' + reason + '"><strong>' + (reason === "low-quality" ? "SOURCE IMAGE REJECTED" : "SOURCE IMAGE NOT PUBLISHED") + '</strong><span>' + escapeHtml(evidence.title || role) + '</span><span class="image-source-note">' + escapeHtml(detail) + '</span></div><figcaption><strong>' + escapeHtml(role) + '</strong><span>' + escapeHtml(imageSource) + '</span><br><span class="evidence-pill needs-check">' + escapeHtml(reason === "low-quality" ? "IMAGE TOO SMALL / TRANSFORMED" : "SOURCE IMAGE NOT PUBLISHED") + '</span></figcaption></figure>';
       if (!images[index]) return emptyMarkup("missing", "A direct source-specific image was not available for this card. The source link remains below.");
       const src = images[index];
       if (mediaQualityIssue(src)) return emptyMarkup("low-quality", "The source URL serves a thumbnail or blurred transformation. It was rejected instead of enlarging a blurry image.");
-      return '<figure class="photo-card"><button class="media-trigger" type="button" data-media-src="' + escapeHtml(src) + '" data-media-caption="' + escapeHtml(caption) + '" aria-label="Enlarge ' + escapeHtml(caption) + '"><img data-photo-kind="' + kind + '" data-photo-role="' + escapeHtml(role) + '" data-evidence="' + statusType + '" src="' + escapeHtml(src) + '" alt="' + escapeHtml(alt) + '" loading="eager" referrerpolicy="no-referrer"></button><figcaption><strong>' + escapeHtml(role) + '</strong><span>' + escapeHtml(imageSource) + '</span><br><span class="evidence-pill ' + statusType + '">' + escapeHtml(statusText) + '</span></figcaption></figure>';
+      return '<figure class="photo-card"><button class="media-trigger" type="button" data-media-src="' + escapeHtml(src) + '" data-media-caption="' + escapeHtml(caption) + '" aria-label="Enlarge ' + escapeHtml(caption) + '"><img data-photo-kind="' + kind + '" data-photo-role="' + escapeHtml(displayRole) + '" data-evidence="' + statusType + '" src="' + escapeHtml(src) + '" alt="' + escapeHtml(alt) + '" loading="eager" referrerpolicy="no-referrer"></button><figcaption><strong>' + escapeHtml(displayRole) + '</strong><span>' + escapeHtml(imageSource) + '</span><br><span class="evidence-pill ' + statusType + '">' + escapeHtml(statusText) + '</span></figcaption></figure>';
     };
     const evidenceCard = (location, kind, label, evidenceOverride) => {
       const evidence = evidenceOverride || mediaEvidenceFor(location, kind);
-      const verified = evidence.status === "verified" && !evidence.mediaQualityIssue;
+      const verified = evidence.status === "verified" && !evidence.mediaQualityIssue && !evidence.mediaReferenceOnly;
       const baseNote = evidence.availability || evidence.window || (verified ? "Source and price checked on " + evidenceCheckedAt + "." : "No current source, price, and image have been verified together yet. Do not book or budget from this slide.");
       const mediaNote = evidence.mediaQualityIssue || evidence.mediaImageIssue || evidence.mediaNote || "Role labels stay neutral when the source does not publish a room or subject caption.";
       const note = baseNote + " " + mediaNote;
       return '<div class="evidence-card ' + (verified ? 'is-verified' : '') + '"><div><h3>' + escapeHtml(evidence.title || label) + '</h3><p><strong>' + escapeHtml(evidenceStatus(evidence)) + '</strong> · ' + escapeHtml(note) + ' Checked ' + escapeHtml(evidence.checkedAt || evidenceCheckedAt) + '.</p></div><div class="source-row">' + sourceButtons(location, kind, evidence) + '</div></div>';
     };
     const photoSlide = (location, kind, title, copy, labels, price) => {
-      const optionSet = kind === "stay" ? (housingOptionsBySlug[location.slug] || []) : [];
-      const representative = mediaEvidenceFor(location, kind, kind === "stay" ? housingOptionFor(location, 0) : evidenceFor(location, kind));
-      const publishedImages = optionSet.length ? optionSet.reduce((count, option) => count + new Set(Array.isArray(option.images) ? option.images.filter(Boolean) : []).size, 0) : new Set(Array.isArray(representative.images) ? representative.images.filter(Boolean) : []).size;
+      const optionSet = kind === "stay" ? housingOptionsFor(location) : kind === "food" ? foodOptionsFor(location) : [];
+      const representative = mediaEvidenceFor(location, kind, kind === "stay" ? housingOptionFor(location, 0) : kind === "food" ? foodOptionFor(location, 0) : evidenceFor(location, kind));
+      const publishedImages = optionSet.length ? optionSet.reduce((count, option) => count + optionImageCount(location, kind, option), 0) : new Set(Array.isArray(representative.images) ? representative.images.filter(Boolean) : []).size;
       const slideLabels = publishedImages ? labels.slice(0, Math.min(labels.length, publishedImages)) : labels.slice(0, 1);
       return slideLabels.map((label, index) => {
-      const rawEvidence = kind === "stay" ? housingOptionFor(location, index) : evidenceFor(location, kind);
+      const mappedOption = (kind === "stay" || kind === "food") && optionSet.length ? optionAtIndex(location, kind, index) : {option:evidenceFor(location, kind), mediaIndex:index};
+      const rawEvidence = mappedOption.option;
       const baseEvidence = mediaEvidenceFor(location, kind, rawEvidence);
-      const budgetOptions = kind === "stay" ? (housingOptionsBySlug[location.slug] || []) : [];
-      const mediaIndex = kind === "stay" && budgetOptions.length ? index % housingImagesPerOption(location) : index;
+      const budgetOptions = kind === "stay" ? housingOptionsFor(location) : [];
+      const mediaIndex = mappedOption.mediaIndex;
       const evidence = mediaEvidenceAt(baseEvidence, mediaIndex);
       const livePrice = evidenceHasAnyPrice(evidence) ? evidence.price : "USD PRICE NOT VERIFIED — open source";
       const qualifier = evidence.status === "verified" ? "LIVE " : evidence.status === "partial" ? "PARTIAL " : "UNVERIFIED ";
       const chipLabel = qualifier + (kind === "stay" ? "HOUSING" : kind === "social" ? "SOCIAL" : kind === "food" ? "MEAL" : kind === "gym" ? "GYM" : "ACTIVITY");
       const stayPin = kind === "stay" ? locationPins(location).find((pin) => pin.type === "stay") : null;
       const viewFocus = stayPin && stayPin.note ? '<div class="view-focus">VIEW / LUXURY SIGNAL · ' + escapeHtml(stayPin.note) + '</div>' : '';
-      const slideTitle = kind === "stay" ? evidence.title : title;
-      const slideCopy = kind === "stay" ? ((evidence.budget ? evidence.budget + " lane. " : "") + (evidence.availability || copy)) : ("Source-backed lead: " + (evidence.title || title) + ". " + copy);
+      const slideTitle = kind === "stay" || kind === "food" ? evidence.title : title;
+      const slideCopy = kind === "stay" ? ((evidence.budget ? evidence.budget + " lane. " : "") + (evidence.availability || copy)) : kind === "food" ? ("Menu-priced lead: " + (evidence.title || title) + ". " + (evidence.availability || copy)) : ("Source-backed lead: " + (evidence.title || title) + ". " + copy);
       const role = mediaRoleFor(location, kind, evidence, mediaIndex);
       return '<article class="slide photo-slide" data-slide-kind="' + kind + '" data-photo-number="' + (index + 1) + '"><div class="slide-inner"><div class="kicker">' + escapeHtml(kind === "social" ? "SOCIAL / MEETUP" : kind.toUpperCase()) + ' • ' + (index + 1) + ' / ' + slideLabels.length + '</div><div class="photo-single"><div class="photo-single-media">' + imageMarkup(location, kind, role, mediaIndex, evidence) + '</div><div class="photo-single-copy"><h2>' + escapeHtml(slideTitle) + '</h2>' + priceChip(chipLabel, livePrice) + viewFocus + '<p class="slide-copy">' + escapeHtml(slideCopy) + '</p>' + evidenceCard(location, kind, role, evidence) + '</div></div></div></article>';
       }).join("");
@@ -1804,7 +2069,7 @@
     };
     const ratingSlideLegacy = (location) => {
       const housing = housingOptionFor(location, 0);
-      const food = mediaEvidenceFor(location, "food", evidenceFor(location, "food"));
+      const food = mediaEvidenceFor(location, "food", foodOptionFor(location, 0));
       const activity = mediaEvidenceFor(location, "activity", evidenceFor(location, "activity"));
       const social = mediaEvidenceFor(location, "social", evidenceFor(location, "social"));
       const gym = mediaEvidenceFor(location, "gym", evidenceFor(location, "gym"));
@@ -1813,13 +2078,13 @@
 
     const ratingSlide = (location) => {
       const housing = housingOptionFor(location, 0);
-      const food = mediaEvidenceFor(location, "food", evidenceFor(location, "food"));
+      const food = mediaEvidenceFor(location, "food", foodOptionFor(location, 0));
       const activity = mediaEvidenceFor(location, "activity", evidenceFor(location, "activity"));
       const social = mediaEvidenceFor(location, "social", evidenceFor(location, "social"));
       const gym = mediaEvidenceFor(location, "gym", evidenceFor(location, "gym"));
       const fitVerdict = location.scores.budget2k >= 8 ? "This can work at $2K if you keep the housing honest." : location.scores.budget3k >= 8 ? "This is a much better $3K life than a $2K life." : "This is a fit-first choice: the lifestyle is the point, not the cheapest month.";
       const statusSummary = '<div class="evidence-summary"><span class="status-pill ' + evidenceClass(housing) + '">STAY ' + escapeHtml(evidenceStatus(housing)) + '</span><span class="status-pill ' + evidenceClass(food) + '">MEAL ' + escapeHtml(evidenceStatus(food)) + '</span><span class="status-pill ' + evidenceClass(activity) + '">ACTIVITY ' + escapeHtml(evidenceStatus(activity)) + '</span><span class="status-pill ' + evidenceClass(social) + '">SOCIAL ' + escapeHtml(evidenceStatus(social)) + '</span><span class="status-pill ' + evidenceClass(gym) + '">GYM ' + escapeHtml(evidenceStatus(gym)) + '</span></div>';
-      const overview = '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">#' + location.rank + ' · ' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(housing, "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(fitVerdict) + '</div></div></div></div></article>';
+      const overview = '<article class="slide is-active" data-slide-kind="verdict"><div class="slide-inner"><div class="hero-grid">' + heroMarkup(location) + '<div class="hero-panel"><div class="kicker">#' + location.rank + ' · ' + escapeHtml(location.country + " • " + location.area) + '</div><h2>' + escapeHtml(location.name) + '</h2><p class="slide-copy">' + escapeHtml(location.verdict) + '</p>' + priceChip(evidencePriceLabel(housing, "HOUSING"), rentPrice(location)) + '<div class="big-number">' + lifeScore(location) + '<small> / 10 weighted fit</small></div><div class="verdict">' + escapeHtml(fitVerdict) + '</div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(housing.url || osmMap(location.coords[0], location.coords[1], 13)) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div></div></article>';
       const rating = '<article class="slide rating-slide" data-slide-kind="rating"><div class="slide-inner"><div class="kicker">RATING / #' + location.rank + ' · ' + escapeHtml(location.name) + '</div><h2>How the fit adds up.</h2><p class="slide-copy">These are planning scores for the life described here. The source badges below show where current housing, meal, social, gym, and activity evidence is strong or still needs a live check.</p>' + statusSummary + '<div class="rating-grid">' + scoreCard("Value",location.scores.value) + scoreCard("Social",location.scores.social) + scoreCard("Nature",location.scores.nature) + scoreCard("Training",location.scores.training) + scoreCard("Food",location.scores.food) + scoreCard("Access",location.scores.access) + '</div><div class="evidence-card"><div><h3>Source trail</h3><p>Open the map center and current housing source before booking. Rental addresses may be masked; exact versus approximate venue points are called out on the map slide.</p></div><div class="source-row"><a class="source-link" href="' + osmMap(location.coords[0], location.coords[1], 13) + '" target="_blank" rel="noopener noreferrer">Open map center ↗</a><a class="source-link secondary" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">Open housing source ↗</a></div></div></div></article>';
       return overview + rating;
     };
@@ -1833,7 +2098,8 @@
       const serializedPins = escapeHtml(JSON.stringify(pins));
       const exactCount = pins.filter((pin) => pin.precision === "exact").length;
       const mapNote = "Pins are plotted from their latitude/longitude by Leaflet, so they cannot drift away from the source coordinates as the old percentage overlay did. Stay points can be approximate when a rental platform masks the door address; venue sources remain clickable.";
-      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><div class="leaflet-map" data-map-pins="' + serializedPins + '" data-map-center="' + centerLat.toFixed(5) + ',' + centerLng.toFixed(5) + '" role="application" aria-label="Interactive map with five source-backed pins for ' + escapeHtml(location.name) + '"></div></div></div><div class="map-side">' + pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type] + ' · ' + precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("") + '<a class="source-link" href="' + osmMap(centerLat, centerLng, 14) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">' + exactCount + ' of 5 pins are marked exact in the source data. ' + mapNote + '</p></div></div>';
+      const mapSourceStrip = '<div class="map-source-strip" aria-label="Direct source links for the five map pins">' + pins.map((pin) => pin.source ? '<a href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer" aria-label="Open ' + escapeHtml(pinLabel[pin.type]) + ' source">' + escapeHtml(pinLabel[pin.type]) + ' ↗</a>' : '').join("") + '</div>';
+      return '<div class="map-layout"><div class="map-frame"><div class="map-stage" aria-label="Readable geographic map for ' + escapeHtml(location.name) + '"><div class="leaflet-map" data-map-pins="' + serializedPins + '" data-map-center="' + centerLat.toFixed(5) + ',' + centerLng.toFixed(5) + '" role="application" aria-label="Interactive map with five source-backed pins for ' + escapeHtml(location.name) + '"></div></div>' + mapSourceStrip + '</div><div class="map-side">' + pins.map((pin) => { const precision = pin.precision === "approximate" ? "APPROX. MAP POINT" : pin.precision === "exact" ? "EXACT VENUE POINT" : "PLANNING POINT"; const sourceLink = pin.source ? '<a class="map-pin-source" href="' + escapeHtml(pin.source) + '" target="_blank" rel="noopener noreferrer">Open venue/property source ↗</a>' : ''; const note = pin.note ? '<small class="map-pin-note">' + escapeHtml(pin.note) + '</small>' : ''; return '<div class="map-legend"><i class="marker" style="--marker:' + pinColors[pin.type] + '">' + pinLetter[pin.type] + '</i><div><strong>' + escapeHtml(pinLabel[pin.type] + ' · ' + precision) + '</strong><span>' + escapeHtml(pin.label + (pin.address ? " · " + pin.address : "")) + '</span>' + note + sourceLink + '</div></div>'; }).join("") + '<a class="source-link" href="' + osmMap(centerLat, centerLng, 14) + '" target="_blank" rel="noopener noreferrer">Open full map ↗</a><p class="map-note">' + exactCount + ' of 5 pins are marked exact in the source data. ' + mapNote + '</p></div></div>';
     };
     const mapDetailsSlide = (location) => {
       const pins = locationPins(location);
@@ -1852,32 +2118,43 @@
       const gym = location.gymMonthly;
       const phone = 50;
       const medical = 500;
-      const buffer = liveRent ? Math.max(0, total - liveRent - food - transport - gym - phone - medical) : null;
+      const buffer = liveRent ? total - liveRent - food - transport - gym - phone - medical : null;
       const housingValue = liveRent ? money(liveRent) : "NOT COMPUTED";
-      const bufferValue = buffer === null ? "NOT COMPUTED" : money(buffer);
+      const bufferValue = buffer === null ? "NOT COMPUTED" : buffer < 0 ? "OVER BY " + money(Math.abs(buffer)) : money(buffer);
       const housingNote = housing.url ? '<a class="budget-source" href="' + escapeHtml(housing.url) + '" target="_blank" rel="noopener noreferrer">open housing source ↗</a>' : '';
       return '<div class="budget-card"><h3><span>$' + total.toLocaleString() + '</span><span>' + (total === 2000 ? location.scores.budget2k.toFixed(1) : location.scores.budget3k.toFixed(1)) + '/10</span></h3><div class="budget-lines"><div class="budget-line"><span>' + rentLabel + '</span><strong>' + housingValue + '</strong></div><div class="budget-line"><span>food / cafes plan</span><strong>' + money(food) + '</strong></div><div class="budget-line"><span>transport plan · same baseline</span><strong>' + money(transport) + '</strong></div><div class="budget-line"><span>gym / training estimate</span><strong>' + money(gym) + '</strong></div><div class="budget-line"><span>phone + misc estimate</span><strong>' + money(phone) + '</strong></div><div class="budget-line"><span>medical reserve</span><strong>' + money(medical) + '</strong></div><div class="budget-line remaining"><span>trips / buffer / housing upgrade</span><strong>' + bufferValue + '</strong></div></div>' + housingNote + '</div>';
     };
     const budgetSlide = (location) => {
-      const options = housingOptionsBySlug[location.slug] || [];
-      const housingNote = options.length > 1 ? "This destination has separate source-backed $2K and $3K housing lanes." : "No separate source-backed housing upgrade was found; both budgets use the same monthly source when its highest displayed rate fits the budget. Partial listings stay source-backed · recheck; unresolved or over-budget housing stays NOT COMPUTED.";
+      const options = housingOptionsFor(location);
+      const hasTwoLanes = options.some((option) => option.budget === "$2K") && options.some((option) => option.budget === "$3K");
+      const housingNote = hasTwoLanes ? "This destination has separate source-backed $2K and $3K housing lanes." : options.length > 1 ? "Several source-backed housing choices are shown; the budget card selects the closest source-backed fit and leaves any over-budget choice out of the computed plan." : "No separate source-backed housing upgrade was found; both budgets use the same monthly source when its highest displayed rate fits the budget. Partial listings stay source-backed · recheck; unresolved or over-budget housing stays NOT COMPUTED.";
       return '<article class="slide" data-slide-kind="budget"><div class="slide-inner"><div class="kicker">$2K / $3K SCENARIOS</div><h2>Make the fantasy legible.</h2><p class="slide-copy">' + escapeHtml(housingNote) + ' Food, transport, training, phone/misc, and medical are planning estimates. The transport baseline stays the same in both budgets; extra $3K margin remains available for a better verified home or a buffer instead of being silently spent on getting around.</p>' + priceChip("MONTHLY PLAN", "$2,000 and $3,000 shown in USD") + '<div class="budget-grid">' + budgetCard(location,2000) + budgetCard(location,3000) + '</div><p class="photo-note">Scores answer “how much margin remains?” They are planning scores, not guarantees. Every source-backed housing figure still needs a final seller/platform confirmation before payment.</p></div></article>';
     };
     const daySlide = (location) => '<article class="slide" data-slide-kind="day"><div class="slide-inner"><div class="kicker">A DAY THAT MAKES SENSE</div><h2>The version that feels sustainable.</h2><p class="slide-copy">The score is only useful if the geography supports a repeatable day. This is the loop the map is trying to protect: nature first, work in a comfortable base, training without a cross-city ordeal, then one good social or food anchor.</p>' + priceChip("DERIVED / PLANNING", sampleDayPrice(location)) + '<div class="day-grid"><div class="day-card"><h3>Morning / nature</h3><p>Walk, run, surf, climb, or ride through <strong>' + escapeHtml(location.activity) + '</strong>.</p></div><div class="day-card"><h3>Midday / home</h3><p>Work and read from a furnished base in <strong>' + escapeHtml(location.area) + '</strong>.</p></div><div class="day-card"><h3>Late / training</h3><p>Train at <strong>' + escapeHtml(location.gym) + '</strong>; keep the effort close to the social lane.</p></div><div class="day-card"><h3>Night / people</h3><p>Eat at <strong>' + escapeHtml(location.restaurant) + '</strong> or follow the <strong>' + escapeHtml(location.social) + '</strong> lead.</p></div></div><p class="loop-note"><strong>Logistics honesty:</strong> ' + escapeHtml(location.logistics || "The map shows the planning relationship; verify local travel time and operating hours before choosing the address.") + '</p><div class="evidence-card"><div><h3>The honest fit</h3><p>' + escapeHtml(location.schedule) + ' This setup is a lead to test against the live source cards, not a promise printed in a deck.</p></div><div class="source-row"><a class="source-link" href="' + cityMap(location.name + " " + location.activity) + '" target="_blank" rel="noopener noreferrer">Map the day ↗</a><a class="source-link secondary" href="' + escapeHtml(evidenceFor(location,"activity").url) + '" target="_blank" rel="noopener noreferrer">Open activity source ↗</a></div></div></div></article>';
 
     const stayLabelsFor = (location) => {
-      const options = housingOptionsBySlug[location.slug] || [];
+      const options = housingOptionsFor(location);
       const evidence = mediaEvidenceFor(location, "stay", evidenceFor(location, "stay"));
       const count = options.length
-        ? options.reduce((sum, option) => sum + Math.min(4, Array.isArray(option.images) ? [...new Set(option.images.filter(Boolean))].length : 0), 0)
+        ? options.reduce((sum, option) => sum + Math.min(4, optionImageCount(location, "stay", option)), 0)
         : Math.min(6, Math.max(4, Array.isArray(evidence.images) ? evidence.images.filter(Boolean).length : 0));
       return Array.from({length:Math.max(4, count)}, (_, index) => "listing source image " + (index + 1));
     };
-    const slideCountFor = (location) => stayLabelsFor(location).length + 14;
+    const foodLabelsFor = (location) => {
+      const options = foodOptionsFor(location);
+      const count = options.reduce((sum, option) => sum + Math.min(2, optionImageCount(location, "food", option)), 0);
+      return Array.from({length:Math.max(2, count)}, (_, index) => "meal source image " + (index + 1));
+    };
+    const fixedPhotoCountFor = (location, kind) => {
+      const evidence = mediaEvidenceFor(location, kind, evidenceFor(location, kind));
+      const imageCount = new Set(Array.isArray(evidence.images) ? evidence.images.filter(Boolean) : []).size;
+      return imageCount ? Math.min(2, imageCount) : 1;
+    };
+    const slideCountFor = (location) => stayLabelsFor(location).length + foodLabelsFor(location).length + fixedPhotoCountFor(location, "social") + fixedPhotoCountFor(location, "gym") + fixedPhotoCountFor(location, "activity") + 6;
     const buildSlides = (location) => ratingSlide(location)
       + photoSlide(location,"stay","A house that gives the life a chance","The source card tells you whether the current place and price are verified for the selected window. Room and amenity labels are only specific when the source publishes that role.",stayLabelsFor(location),rentPrice(location))
       + photoSlide(location,"social","The people are part of the address","A dated event, venue, or community source is shown here when one was found; otherwise the card stays visibly unresolved.",["social source image 1","social source image 2"],socialPrice(location))
-      + photoSlide(location,"food","Good food without turning every meal into a project","The meal card carries the source menu price in USD when available. Dish and restaurant-environment roles are kept separate when the source publishes both.",["meal source image 1","meal source image 2"],location.dishPrice)
+      + photoSlide(location,"food","Good food without turning every meal into a project","The meal card carries the source menu price in USD when available. Dish and restaurant-environment roles are kept separate when the source publishes both.",foodLabelsFor(location),location.dishPrice)
       + photoSlide(location,"gym","Train hard, recover intelligently","Gym imagery and membership price stay visibly unresolved until a current source pair is found. Sauna or cold-plunge labels require an explicit source photo or facility record.",["gym source image 1","gym source image 2"],location.gymPrice)
       + photoSlide(location,"activity","Leave room for one real adventure","The activity card is a real operator or attraction lead when available. Dates, weather, and capacity still need a final check before booking.",["activity source image 1","activity source image 2"],evidenceFor(location,"activity").price)
       + '<article class="slide" data-slide-kind="map"><div class="slide-inner"><div class="kicker">MAP / THE LIFE LOOP</div><h2>Everything that needs to be close.</h2><p class="slide-copy">Stay, food, social, gym, and activity are all marked with real named property or venue pins. Each pin has a source link, a coordinate-based map link, and an exact/approximate label so a platform-masked rental is never mistaken for a door address.</p>' + priceChip("LOCAL MOVEMENT", "PLANNING ESTIMATE — " + movementPrice(location)) + makeMap(location) + '</div></article>'
@@ -1885,7 +2162,7 @@
       + budgetSlide(location)
       + daySlide(location);
 
-    const liveCategoryCount = (location) => ["stay","food","activity","social","gym"].filter((kind) => mediaEvidenceFor(location, kind, evidenceFor(location, kind)).status === "verified").length;
+    const liveCategoryCount = (location) => ["stay","food","activity","social","gym"].filter((kind) => mediaEvidenceFor(location, kind, kind === "stay" ? housingOptionFor(location, 0) : kind === "food" ? foodOptionFor(location, 0) : evidenceFor(location, kind)).status === "verified").length;
     const renderDirectory = () => {
       const mode = directorySort.value || "overall";
       const sortMode = directorySortModes[mode] || directorySortModes.overall;
